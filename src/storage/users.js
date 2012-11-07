@@ -5,17 +5,27 @@ module.exports =
 }
 
 var users = {}
+  , Q = require('q')
 
 function add(data) {
 	users[data.username] = data
-	return data
+	return Q.resolve(data)
 }
 
 function get(username) {
-	return users[username]
+	var user = users[username]
+	if(user) {
+		return Q.resolve(user)
+	} else {
+		return Q.reject(new Error('unknown user'))
+	}
 }
 
 function auth(username, password) {
-	var user = get(username)
-	return user && user.password == password
+	return get(username).then(function(user) {
+		if(user && user.password == password) {
+			return true
+		}
+		throw new Error('unknown credentials')
+	})
 }

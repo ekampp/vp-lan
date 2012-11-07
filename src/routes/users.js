@@ -15,7 +15,9 @@ var auth = require('../middleware/auth')
 
 function createUser(req, res) {
 	storage.users.add(req.body)
-	res.send(200)
+		.then(function() {
+			res.send(200)
+		})
 }
 function getUser(req, res) {
 	res.send(200)
