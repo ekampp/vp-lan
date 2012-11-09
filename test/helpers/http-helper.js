@@ -1,13 +1,13 @@
 module.exports =
 { createBasicHttpAuthHeader: createBasicHttpAuthHeader
 , createHelper: createHelper
-, setupDatabase: setupDatabase
 , parse: parse
 }
 
 var request = require('request')
   , util = require('util')
   , btoa = require('btoa')
+  , Q = require('q')
 
 function parse(str) {
 	try {
@@ -37,20 +37,6 @@ function createHelper(defaults, options) {
 		)
 	}
 
-	function statusError(callback, url) {
-		return function statusError(err, response, body) {
-			if(err) return callback(err)
-			if(response.headers['content-type'].match(/application\/.*json.*/)) {
-				try {
-					body = parse(body)
-				} catch(e) {
-					return callback(e, response, body)
-				}
-			}
-			callback(err, response, body)
-		}
-	}
-
 	return { get: get
 	       , put: put
 	       , post: post
@@ -69,62 +55,55 @@ function createHelper(defaults, options) {
 		return out
 	}
 
+	function req(method, url, opts, callback) {
+		if(!callback && typeof(opts) === 'function') {
+			callback = opts
+			opts = null
+		}
+		opts = merge(options, opts)
+		if(opts.data) {
+			if(method == 'post') {
+				opts.form = opts.data
+			} else {
+				opts.body = objToBody(opts.data)
+			}
+			delete opts.data
+		}
+		url = defaults.url + url
+		opts.uri = url
+
+		var promise = Q.ncall(request[method.toLowerCase()], req, opts)
+			.then(function(args) {
+				var response = args[0]
+				  , body = args[1]
+				if(response.headers['content-type'].match(/application\/.*json.*/)) {
+					body = parse(body)
+				}
+				return [ response, body ]
+			})
+		if(callback) {
+			promise.then(function(args) {
+				args.unshift(null)
+				callback.apply(null, args)
+			}, callback)
+		}
+		return promise
+	}
+
 	function get(url, opts, callback) {
-		if(!callback) {
-			callback = opts
-			opts = null
-		}
-		opts = merge(options, opts)
-		url = defaults.url + url
-		opts.uri = url
-		return request.get(opts, statusError(callback, url))
+		return req('get', url, opts, callback)
 	}
-
 	function head(url, opts, callback) {
-		if(!callback) {
-			callback = opts
-			opts = null
-		}
-		opts = merge(options, opts)
-		url = defaults.url + url
-		opts.uri = url
-		return request.head(opts, statusError(callback, url))
+		return req('head', url, opts, callback)
 	}
-
 	function del(url, opts, callback) {
-		if(!callback) {
-			callback = opts
-			opts = null
-		}
-		opts = merge(options, opts)
-		url = defaults.url + url
-		opts.uri = url
-		return request.del(opts, statusError(callback, url))
+		return req('del', url, opts, callback)
 	}
-
 	function put(url, opts, callback) {
-		if(!callback) {
-			callback = opts
-			opts = null
-		}
-		url = defaults.url + url
-		opts = merge(options, opts)
-		opts.body = objToBody(opts.data)
-		delete opts.data
-		opts.uri = url
-		return request.put(opts, statusError(callback, url))
+		return req('put', url, opts, callback)
 	}
 	function post(url, opts, callback) {
-		if(!callback) {
-			callback = opts
-			opts = null
-		}
-		url = defaults.url + url
-		opts = merge(options, opts)
-		opts.form = opts.data
-		delete opts.data
-		opts.uri = url
-		return request.post(opts, statusError(callback, url))
+		return req('post', url, opts, callback)
 	}
 }
 
@@ -136,22 +115,4 @@ function objToBody(obj) {
 		var val = obj[key]
 		return util.format('%s=%s', key, val)
 	}).join('&')
-}
-
-function setupDatabase(db, done) {
-	var options =
-	    { headers: createBasicHttpAuthHeader(settings.auth.username, settings.auth.password)
-	    }
-	request.get(
-	  settings.url+'/debug/setup/?action=' + db
-	, options
-	, onFetch
-	)
-
-	function onFetch(err, response, body) {
-		if(response && response.statusCode >= 300) {
-			return done(new Error(util.format('Unexpected HTTP response (%s)', response.statusCode)))
-		}
-		done(err)
-	}
 }

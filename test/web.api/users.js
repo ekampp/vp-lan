@@ -24,10 +24,10 @@ describe('web.api/users.js', function() {
 			      , password: '1'
 			      }
 			    }
-			helper.post('/users', options, function(err, resp, body) {
-				response = resp
+			helper.post('/users', options).then(function(args) {
+				response = args[0]
 				done()
-			})
+			}).fail(done)
 		})
 		it('should return code 200', function() {
 			expect(response.statusCode).to.equal(200)
@@ -35,10 +35,11 @@ describe('web.api/users.js', function() {
 		describe('and getting /user', function() {
 			it('should return status 200', function(done) {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
-				helper.get('/user', { headers: auth }, function(err, resp, body) {
+				helper.get('/user', { headers: auth }).then(function(args) {
+					var resp = args[0]
 					expect(resp.statusCode).to.equal(200)
 					done()
-				})
+				}).fail(done)
 			})
 			it('should reject other users', function(done) {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
