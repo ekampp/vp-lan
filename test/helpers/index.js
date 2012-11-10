@@ -1,9 +1,11 @@
 var httpHelper = require('./http-helper')
   , server = require('./server')
+  , storage = require('../../src/storage')
 
 module.exports =
 { httpHelper: httpHelper
 , server: server
+, storage: storage
 , common:
   { setup: setup
   }

@@ -17,45 +17,42 @@ describe('web.api/users.js', function() {
 
 	describe('When posting without login', function() {
 		var response
-		beforeEach(function(done) {
+		beforeEach(function() {
 			var options =
 			    { data:
 			      { username: 'a'
 			      , password: '1'
 			      }
 			    }
-			helper.post('/users', options).then(function(args) {
+			return helper.post('/users', options).then(function(args) {
 				response = args[0]
-				done()
-			}).fail(done)
+			})
 		})
 		it('should return code 200', function() {
 			expect(response.statusCode).to.equal(200)
 		})
 		describe('and getting /user', function() {
-			it('should return status 200', function(done) {
+			it('should return status 200', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
-				helper.get('/user', { headers: auth }).then(function(args) {
+				return helper.get('/user', { headers: auth }).then(function(args) {
 					var resp = args[0]
 					expect(resp.statusCode).to.equal(200)
-					done()
-				}).fail(done)
+				})
 			})
-			it('should reject other users', function(done) {
+			it('should reject other users', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
-				helper.get('/user', { headers: auth }, function(err, resp, body) {
+				return helper.get('/user', { headers: auth }, function(err, resp, body) {
 					expect(resp.statusCode).to.equal(401)
-					done()
 				})
 			})
 		})
 	})
 
 	function assertStatus(method, url, status) {
-		return function(done) {
-			helper[method](url, function(err, response, body) {
+		return function() {
+			return helper[method](url).then(function(args) {
+				var response = args[0]
 				expect(response.statusCode).to.equal(status)
-				done()
 			})
 		}
 	}
