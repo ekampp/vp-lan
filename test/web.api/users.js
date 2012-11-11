@@ -60,6 +60,12 @@ describe('web.api/users.js', function() {
 			assertStatus('get', '/users/c', 404))
 	})
 
+	describe('When posting without login and no username is given', function() {
+		it('should return status 400', function() {
+			return expect(helper.post('/users').get(0).get('statusCode'))
+				.to.eventually.equal(400)
+		})
+	})
 	describe('When posting without login', function() {
 		var response
 		beforeEach(function() {
