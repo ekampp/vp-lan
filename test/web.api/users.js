@@ -71,6 +71,14 @@ describe('web.api/users.js', function() {
 		it('should have updated the existing user', function() {
 			return expect(helpers.storage.users.get('a')).to.be.rejected
 		})
+		it('should have updated the user', function() {
+			var expected =
+			    { username: 'b'
+			    , password: '2'
+			    }
+			return expect(helpers.storage.users.get('b'))
+				.to.eventually.approximate(expected)
+		})
 	})
 
 	function assertStatus(method, url, status) {
