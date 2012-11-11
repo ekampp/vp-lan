@@ -2,10 +2,16 @@ module.exports =
 { add: add
 , get: get
 , auth: auth
+, reset: reset
 }
 
 var users = {}
   , Q = require('q')
+
+function reset() {
+	users = {}
+	return Q.resolve()
+}
 
 function add(data) {
 	users[data.username] = data
@@ -24,7 +30,7 @@ function get(username) {
 function auth(username, password) {
 	return get(username).then(function(user) {
 		if(user && user.password == password) {
-			return true
+			return user
 		}
 		throw new Error('unknown credentials')
 	})

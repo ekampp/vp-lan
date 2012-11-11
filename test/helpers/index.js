@@ -18,7 +18,7 @@ function setup(mocha) {
 	mocha.after(function(done) {
 		server.stop(done)
 	})
-	mocha.beforeEach(function(done) {
-		server.reset(done)
+	mocha.beforeEach(function() {
+		return server.reset()
 	})
 }
