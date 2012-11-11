@@ -1,6 +1,7 @@
 module.exports =
 { add: add
 , get: get
+, getAll: getAll
 , update: update
 , auth: auth
 , reset: reset
@@ -26,6 +27,10 @@ function update(user, data) {
 	})
 	users[user.username] = user
 	return Q.resolve(user)
+}
+
+function getAll() {
+	return Q.resolve(Object.keys(users).map(function(key) { return users[key] }))
 }
 
 function get(username) {

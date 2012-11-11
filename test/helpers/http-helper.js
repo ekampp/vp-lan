@@ -42,7 +42,12 @@ function createHelper(defaults, options) {
 	       , post: post
 	       , head: head
 	       , del: del
+	       , options: setOptions
 	       }
+
+	function setOptions(opts) {
+		options = merge(options, opts)
+	}
 
 	function merge(a, b) {
 		var out = {}

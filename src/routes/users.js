@@ -30,7 +30,11 @@ function createUser(req, res) {
 		})
 }
 function getUser(req, res) {
-	res.send(200)
+	res.send(req.user)
 }
-function getUsers() {}
+function getUsers(req, res) {
+	storage.users.getAll().then(function(users) {
+		res.send(users)
+	})
+}
 function updateUser() {}

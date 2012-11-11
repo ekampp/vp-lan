@@ -1,5 +1,7 @@
 describe('web.api/users.js', function() {
 	var helper
+	  , Q = require('q')
+
 	helpers.common.setup(this)
 	beforeEach(function() {
 		helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
@@ -13,6 +15,38 @@ describe('web.api/users.js', function() {
 	describe('When putting without login', function() {
 		it('should return 401 for /user', assertStatus('put', '/user', 401))
 		it('should return 401 for /users/:id', assertStatus('put', '/users/1', 401))
+	})
+
+	describe('When getting while logged in', function() {
+		beforeEach(function() {
+			helper.options({
+				headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+			})
+			return Q.all(
+				[ helpers.storage.users.add({ username: 'a', password: '1', extra: 'c' })
+				, helpers.storage.users.add({ username: 'b', password: '2' })
+				]
+			)
+		})
+		it('should return 200 for /users', assertStatus('get', '/users', 200))
+		it('should return a list of users for /users', function() {
+			var expected =
+			    [ { username: 'a', password: '1' }
+			    , { username: 'b', password: '2' }
+			    ]
+			return expect(helper.get('/users').get(1))
+				.to.eventually.approximate(expected)
+		})
+		it('should return 200 for /user', assertStatus('get', '/user', 200))
+		it('should return the current user for /user', function() {
+			var expected =
+			    { username: 'a'
+			    , password: '1'
+			    , extra: 'c'
+			    }
+			return expect(helper.get('/user').get(1))
+				.to.eventually.approximate(expected)
+		})
 	})
 
 	describe('When posting without login', function() {
