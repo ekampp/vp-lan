@@ -30,6 +30,16 @@ function createUser(req, res) {
 		})
 }
 function getUser(req, res) {
+	if(req.params.id) {
+		storage.users.get(req.params.id)
+			.then(function(user) {
+				res.send(user)
+			},
+			function() {
+				res.send(404)
+			})
+		return
+	}
 	res.send(req.user)
 }
 function getUsers(req, res) {

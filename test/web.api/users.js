@@ -47,6 +47,17 @@ describe('web.api/users.js', function() {
 			return expect(helper.get('/user').get(1))
 				.to.eventually.approximate(expected)
 		})
+		it('should return 200 for /users/:id', assertStatus('get', '/users/b', 200))
+		it('should return the specified user for /users/:id', function() {
+			var expected =
+			    { username: 'b'
+			    , password: '2'
+			    }
+			return expect(helper.get('/users/b').get(1))
+				.to.eventually.approximate(expected)
+		})
+		it('should return 404 for an unknown user at /users/:id',
+			assertStatus('get', '/users/c', 404))
 	})
 
 	describe('When posting without login', function() {
