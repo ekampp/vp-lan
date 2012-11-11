@@ -8,9 +8,13 @@ var express = require('express')
   , app = express()
   , server = http.createServer(app)
 
-  , routes = require('./routes')
+  , routes = require('../routes')
 
 function start(settings, done) {
+	app.use(express.cookieParser())
+	app.use(require('./render').middleware)
+	app.engine('mustache', require('consolidate').hogan)
+	app.set('view engine', 'mustache')
 	routes.setup(app)
 	server.listen(settings.port, done)
 }

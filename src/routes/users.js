@@ -26,6 +26,9 @@ function createUser(req, res) {
 			return storage.users.add(req.body)
 				.then(function() {
 					res.send(200)
+				},
+				function() {
+					res.send(400)
 				})
 		})
 }

@@ -16,6 +16,9 @@ function reset() {
 }
 
 function add(data) {
+	if(!data.username) {
+		return Q.reject('no username')
+	}
 	users[data.username] = data
 	return Q.resolve(data)
 }
