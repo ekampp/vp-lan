@@ -1,6 +1,7 @@
 module.exports =
 { add: add
 , get: get
+, update: update
 , auth: auth
 , reset: reset
 }
@@ -16,6 +17,15 @@ function reset() {
 function add(data) {
 	users[data.username] = data
 	return Q.resolve(data)
+}
+
+function update(user, data) {
+	delete users[user.username]
+	Object.keys(data).forEach(function(key) {
+		user[key] = data[key]
+	})
+	users[user.username] = user
+	return Q.resolve(user)
 }
 
 function get(username) {

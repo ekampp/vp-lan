@@ -47,6 +47,31 @@ describe('web.api/users.js', function() {
 			})
 		})
 	})
+	describe('When posting while logged in', function() {
+		var response
+		beforeEach(function() {
+			return helpers.server.setData('basic')
+				.then(function() {
+					var opts =
+					{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+					, data:
+					  { username: 'b'
+					  , password: '2'
+					  }
+					}
+					return helper.post('/users', opts)
+				})
+				.then(function(args) {
+					response = args[0]
+				})
+		})
+		it('should return code 200', function() {
+			expect(response.statusCode).to.equal(200)
+		})
+		it('should have updated the existing user', function() {
+			return expect(helpers.storage.users.get('a')).to.be.rejected
+		})
+	})
 
 	function assertStatus(method, url, status) {
 		return function() {
