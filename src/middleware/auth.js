@@ -8,8 +8,11 @@ var users = require('../storage').users
   , Q = require('q')
 
 function promise(req) {
-	var data = req.header('Authorization')
-	if(data) {
+	var data
+	if(req.cookies && req.cookies['x-user-token']) {
+		return users.get(req.cookies['x-user-token'])
+	}
+	if(data = req.header('Authorization')) {
 		data = atob(data.match(/.*? (.*)/)[1]).split(':')
 		return users.auth(data[0], data[1])
 	}

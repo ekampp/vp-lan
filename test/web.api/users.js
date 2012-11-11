@@ -1,10 +1,40 @@
 describe('web.api/users.js', function() {
 	var helper
 	  , Q = require('q')
+	  , request = require('request')
 
 	helpers.common.setup(this)
 	beforeEach(function() {
 		helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
+	})
+
+	describe('When posting to login', function() {
+		beforeEach(function() {
+			return helpers.storage.users.add({ username: 'a', password: '1' })
+		})
+		it('should return 401 when the creds does not match', function() {
+			var data = { username: 'b', password: '2' }
+			return expect(helper.post('/login', { data: data }).get(0).get('statusCode'))
+				.to.eventually.equal(401)
+		})
+		describe('and the creds match', function() {
+			var response
+			beforeEach(function() {
+				helper.options({ jar: request.jar() })
+				return helper.post('/login', { data: { username: 'a', password: '1' }})
+					.get(0).then(function(resp) {
+						response = resp
+					})
+			})
+			it('should return 302', function() {
+				expect(response.statusCode)
+					.to.equal(302)
+			})
+			it('should set a cookie for future requests', function() {
+				return expect(helper.get('/user').get(0).get('statusCode'))
+					.to.eventually.equal(200)
+			})
+		})
 	})
 
 	describe('When getting without login', function() {
