@@ -30,11 +30,17 @@ function createHelper(defaults, options) {
 	if(!options) {
 		options = {}
 	}
+	if(!options.headers) {
+		options.headers = {}
+	}
+	if(!hasKey(options.headers, 'accept')) {
+		options.headers.accept = 'application/json';
+	}
 	if(!options.skipAuth) {
-		options.headers = createBasicHttpAuthHeader(
+		options.headers = merge(options.headers, createBasicHttpAuthHeader(
 		  defaults.auth.username
 		, defaults.auth.password
-		)
+		))
 	}
 
 	return { get: get
@@ -110,6 +116,11 @@ function createHelper(defaults, options) {
 	function post(url, opts, callback) {
 		return req('post', url, opts, callback)
 	}
+}
+
+function hasKey(obj, key) {
+	return Object.keys(obj)
+		.some(function(k) { return k.toLowerCase() == key })
 }
 
 function objToBody(obj) {
