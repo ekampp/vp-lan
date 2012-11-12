@@ -98,19 +98,26 @@ describe('web.api/users.js', function() {
 	})
 	describe('When posting without login', function() {
 		var response
+		  , jar
 		beforeEach(function() {
+			jar = request.jar()
 			var options =
 			    { data:
 			      { username: 'a'
 			      , password: '1'
 			      }
+			    , jar: jar
 			    }
 			return helper.post('/users', options).then(function(args) {
 				response = args[0]
 			})
 		})
-		it('should return code 200', function() {
-			expect(response.statusCode).to.equal(200)
+		it('should redirect', function() {
+			expect(response.statusCode).to.equal(302)
+		})
+		it('should allow subsequent requests', function() {
+			return expect(helper.get('/user', { jar: jar }).get(0).get('statusCode'))
+				.to.eventually.equal(200)
 		})
 		describe('and getting /user', function() {
 			it('should return status 200', function() {
@@ -146,8 +153,8 @@ describe('web.api/users.js', function() {
 					response = args[0]
 				})
 		})
-		it('should return code 200', function() {
-			expect(response.statusCode).to.equal(200)
+		it('should return code 302', function() {
+			expect(response.statusCode).to.equal(302)
 		})
 		it('should have updated the existing user', function() {
 			return expect(helpers.storage.users.get('a')).to.be.rejected

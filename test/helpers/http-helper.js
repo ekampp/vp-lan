@@ -81,7 +81,7 @@ function createHelper(defaults, options) {
 			.then(function(args) {
 				var response = args[0]
 				  , body = args[1]
-				if(response.headers['content-type'].match(/application\/.*json.*/)) {
+				if(response.headers['content-type'] && response.headers['content-type'].match(/application\/.*json.*/)) {
 					body = parse(body)
 				}
 				return [ response, body ]

@@ -19,13 +19,14 @@ function createUser(req, res) {
 		function(user) {
 			return storage.users.update(user, req.body)
 				.then(function() {
-					res.send(200)
+					res.redirect('/')
 				})
 		},
 		function() {
 			return storage.users.add(req.body)
-				.then(function() {
-					res.send(200)
+				.then(function(user) {
+					res.cookie('x-user-token', user.username)
+					res.redirect('/')
 				},
 				function() {
 					res.send(400)
