@@ -8,8 +8,8 @@ global.helpers = require('./helpers')
 global.settings =
 { server: require('../settings.json')
 , auth:
-  { username: 'abc'
-  , password: 'def'
+  { username: 'a'
+  , password: '1'
   }
 }
 settings.url = 'http://localhost:8081'
