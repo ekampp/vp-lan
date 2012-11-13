@@ -8,8 +8,9 @@ module.exports =
 
 var events =
     [ { id: 1
-      , start: '2012-12-05T19:00:00'
-      , end: '2012-12-07T14:00:00'
+      , name: 'December 2012'
+      , start: '2012-12-07T19:00:00'
+      , end: '2012-12-09T14:00:00'
       }
     ]
   , Q = require('q')

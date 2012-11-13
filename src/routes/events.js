@@ -7,9 +7,14 @@ module.exports = function setup(app) {
 }
 
 var storage = require('../storage')
+  , format = require('util').format
 
 function getEvents(req, res) {
 	storage.events.getAll().then(function(events) {
+		if(req.accepts('html')) {
+			res.render('events/list', { events: events.map(transformEvent) })
+			return
+		}
 		res.send(events)
 	})
 }
@@ -17,3 +22,19 @@ function addEvent() {}
 
 function updateEvent() {}
 function getEvent() {}
+
+function transformEvent(event) {
+	var from = new Date(event.start)
+	  , to = new Date(event.end)
+	  , sameMonth = from.getMonth() == to.getMonth()
+	event['friendly-when'] = format(
+		  '%s/%s - %s/%s'
+		, from.getDate()
+		, from.getMonth()+1
+		, to.getDate()
+		, to.getMonth()+1)
+	event.seats = function() {
+		return '5 seats left'
+	}
+	return event
+}
