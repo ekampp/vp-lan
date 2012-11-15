@@ -10,9 +10,20 @@ describe('integration/storage/users.js', function() {
 				.then(function() {
 					return storage.users.add({ username: 'b', password: 'bb' })
 				})
-				.then(function() {
-					return storage.users.getAll()
-				})
+				.then(storage.users.getAll)
+			).to.eventually.approximate(
+				[ { id: 1, username: 'a' }
+				, { id: 2, username: 'b' }
+				]
+			)
+		})
+		it('should be possible to pass multiple users as params', function() {
+			return expect(
+				storage.users.add(
+					  { id: 1, username: 'a', password: 'aa' }
+					, { username: 'b', password: 'bb' }
+				)
+				.then(storage.users.getAll)
 			).to.eventually.approximate(
 				[ { id: 1, username: 'a' }
 				, { id: 2, username: 'b' }

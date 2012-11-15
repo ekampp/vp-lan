@@ -13,10 +13,16 @@ var Q = require('q')
 
 function reset() {
 	users = {}
+	nextId = 1
 	return Q.resolve()
 }
 
 function add(data) {
+	if(arguments.length > 1) {
+		return Q.all(Array.prototype.map.call(arguments, function(user) {
+			return add(user)
+		}))
+	}
 	if(!data.username) {
 		return Q.reject('no username')
 	}
