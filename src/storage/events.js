@@ -14,6 +14,19 @@ function add(event) {
 	if(!event.id) {
 		event.id = nextId++
 	}
+	if(event.seats) {
+		event.seats.find = function(func) {
+			var itm
+			if(!this.some(function(item) {
+				itm = item
+				return func(item)
+			}))
+			{
+				itm = null
+			}
+			return itm
+		}
+	}
 	events[event.id] = event
 	return Q.resolve(event)
 }

@@ -40,6 +40,10 @@ function setData() {
 	        , position: [ 0, 1 ]
 	        , facing: 0
 	        }
+	      , { id: 3
+	        , position: [ 0, 2 ]
+	        , facing: 0
+	        }
 	      ]
 	    }
 	  )
