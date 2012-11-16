@@ -13,7 +13,7 @@ function login(req, res) {
 	storage.users.auth(data.username, data.password)
 		.then(
 			function(user) {
-				res.cookie('x-user-token', user.username)
+				res.cookie('x-user-token', user.id)
 				res.redirect('/')
 			},
 			function() {

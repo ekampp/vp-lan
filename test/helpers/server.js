@@ -1,9 +1,7 @@
 var server = require('../../index')
   , storage = require('../../src/storage')
   , Q = require('q')
-  , dataSetters =
-    { basic: setDataBasic
-    }
+  , dataSetters = require('./test-data')
 
 module.exports =
 { start: server.start
@@ -17,18 +15,5 @@ function reset() {
 }
 
 function setData(type) {
-	var setter = dataSetters[type]
-	if(!setter) {
-		throw new Error('Unknown data setter: ' + type)
-	}
-	return reset().then(setter)
-}
-
-function setDataBasic() {
-	storage.users.add(
-	  { username: 'a'
-	  , password: '1'
-	  }
-	)
-	return Q.resolve()
+	return reset().then(dataSetters.bind(null, type))
 }

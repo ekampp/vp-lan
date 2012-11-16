@@ -21,7 +21,15 @@ function getEvents(req, res) {
 function addEvent() {}
 
 function updateEvent() {}
-function getEvent() {}
+function getEvent(req, res) {
+	storage.events.get(req.params.id).then(function(event) {
+		if(req.accepts('html')) {
+			res.render('events/item', transformEvent(event))
+			return
+		}
+		res.send(event)
+	})
+}
 
 function transformEvent(event) {
 	var from = new Date(event.start)
@@ -33,8 +41,11 @@ function transformEvent(event) {
 		, from.getMonth()+1
 		, to.getDate()
 		, to.getMonth()+1)
-	event.seats = function() {
-		return '5 seats left'
+	event['seats-left'] = function() {
+		var left = this.seats.filter(function(seat) {
+			return !!seat.occupant
+		}).length
+		return left == 1 ? '1 seat left' : left + ' seats left'
 	}
 	return event
 }

@@ -25,7 +25,7 @@ function createUser(req, res) {
 		function() {
 			return storage.users.add(req.body)
 				.then(function(user) {
-					res.cookie('x-user-token', user.username)
+					res.cookie('x-user-token', user.id)
 					res.redirect('/')
 				},
 				function() {
@@ -35,7 +35,10 @@ function createUser(req, res) {
 }
 function getUser(req, res) {
 	if(req.params.id) {
-		storage.users.get(req.params.id)
+		var search = +req.params.id
+			? +req.params.id
+			: { username: req.params.id }
+		storage.users.get(search)
 			.then(function(user) {
 				res.send(user)
 			},

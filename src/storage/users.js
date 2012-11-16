@@ -7,19 +7,30 @@ module.exports =
 , reset: reset
 }
 
-var users = {}
-  , Q = require('q')
+var Q = require('q')
+  , users = {}
+  , nextId = 1
 
 function reset() {
 	users = {}
+	nextId = 1
 	return Q.resolve()
 }
 
 function add(data) {
+	if(arguments.length > 1) {
+		return Q.all(Array.prototype.map.call(arguments, function(user) {
+			return add(user)
+		}))
+	}
 	if(!data.username) {
 		return Q.reject('no username')
 	}
-	users[data.username] = data
+	if(!data.id) {
+		data.id = nextId
+	}
+	nextId = Math.max(data.id, nextId) + 1
+	users[data.id] = data
 	return Q.resolve(data)
 }
 
@@ -36,8 +47,22 @@ function getAll() {
 	return Q.resolve(Object.keys(users).map(function(key) { return users[key] }))
 }
 
-function get(username) {
-	var user = users[username]
+function get(data) {
+	var user
+	if(data.username) {
+		return getAll().then(function(users) {
+			var user
+			if(!users.some(function(u) {
+				user = u
+				return u.username === data.username
+			})) {
+				throw new Error('unknown user')
+			}
+			return user
+		})
+	} else {
+		user = users[data.id || data]
+	}
 	if(user) {
 		return Q.resolve(user)
 	} else {
@@ -46,7 +71,7 @@ function get(username) {
 }
 
 function auth(username, password) {
-	return get(username).then(function(user) {
+	return get({ username: username }).then(function(user) {
 		if(user && user.password == password) {
 			return user
 		}

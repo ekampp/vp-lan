@@ -23,6 +23,7 @@
   , "chai-as-promised": "3.2.3"
   , "request": "2.11.4"
   , "btoa": "1.1.0"
+  , "underscore": "1.4.2"
   }
 , "optionalDependencies":
   {
