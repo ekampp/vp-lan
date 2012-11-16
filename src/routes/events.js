@@ -21,7 +21,15 @@ function getEvents(req, res) {
 function addEvent() {}
 
 function updateEvent() {}
-function getEvent() {}
+function getEvent(req, res) {
+	storage.events.get(req.params.id).then(function(event) {
+		if(req.accepts('html')) {
+			res.render('events/item', transformEvent(event))
+			return
+		}
+		res.send(event)
+	})
+}
 
 function transformEvent(event) {
 	var from = new Date(event.start)
