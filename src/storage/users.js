@@ -10,6 +10,7 @@ module.exports =
 var Q = require('q')
   , users = {}
   , nextId = 1
+  , User = require('../models').User
 
 function reset() {
 	users = {}
@@ -44,7 +45,9 @@ function update(user, data) {
 }
 
 function getAll() {
-	return Q.resolve(Object.keys(users).map(function(key) { return users[key] }))
+	return Q.all(Object.keys(users).map(function(key) {
+		return new User(users[key]).resolveDependencies()
+	}))
 }
 
 function get(data) {
@@ -58,13 +61,13 @@ function get(data) {
 			})) {
 				throw new Error('unknown user')
 			}
-			return user
+			return new User(user).resolveDependencies()
 		})
 	} else {
 		user = users[data.id || data]
 	}
 	if(user) {
-		return Q.resolve(user)
+		return new User(user).resolveDependencies()
 	} else {
 		return Q.reject(new Error('unknown user'))
 	}

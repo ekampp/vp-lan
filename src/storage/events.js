@@ -7,6 +7,7 @@ module.exports =
 }
 
 var Q = require('q')
+  , Event = require('../models').Event
   , events = {}
   , nextId = 1
 
@@ -28,17 +29,19 @@ function add(event) {
 		}
 	}
 	events[event.id] = event
-	return Q.resolve(event)
+	return new Event(event).resolveDependencies()
 }
 function get(id) {
-	var event = events[id]
+	var event = new Event(events[id])
 	if(!event) {
-		Q.reject()
+		Q.reject('not found')
 	}
-	return Q.resolve(event)
+	return event.resolveDependencies()
 }
 function getAll() {
-	return Q.resolve(Object.keys(events).map(function(key) {return events[key]}))
+	return Q.all(Object.keys(events).map(function(key) {
+		return new Event(events[key]).resolveDependencies()
+	}))
 }
 function update() {}
 function reset() {
