@@ -1,6 +1,7 @@
 var Backbone = require('backbone')
   , _ = require('underscore')
   , Q = require('q')
+  , Seats = require('./Seats')
   , defineGetSetters = require('./utils').defineGetSetters
 
 module.exports = Backbone.Model.extend(
@@ -11,5 +12,9 @@ module.exports = Backbone.Model.extend(
 defineGetSetters(module.exports.prototype, ['start', 'end', 'seats'])
 
 function resolveDependencies() {
-	return Q.resolve(this)
+	this.seats = new Seats(this.seats)
+	return this.seats.resolveDependencies()
+		.then(function() {
+			return this
+		}.bind(this))
 }
