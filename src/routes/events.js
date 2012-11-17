@@ -43,7 +43,7 @@ function transformEvent(event) {
 		, to.getMonth()+1)
 	event['seats-left'] = function() {
 		var left = this.seats.filter(function(seat) {
-			return !!seat.occupant
+			return !seat.occupant
 		}).length
 		return left == 1 ? '1 seat left' : left + ' seats left'
 	}

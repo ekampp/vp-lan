@@ -11,6 +11,7 @@ var express = require('express')
   , routes = require('../routes')
 
 function start(settings, done) {
+	app.use(express.static('./client'))
 	app.use(express.cookieParser())
 	app.use(require('./render').middleware)
 	app.engine('mustache', require('consolidate').hogan)
