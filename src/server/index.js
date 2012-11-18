@@ -11,6 +11,10 @@ var express = require('express')
   , routes = require('../routes')
 
 function start(settings, done) {
+	if(!settings.port) {
+		throw new Error('Port should be given.')
+	}
+
 	app.use(express.static('./client'))
 	app.use(express.cookieParser())
 	app.use(require('./render').middleware)
