@@ -1,7 +1,11 @@
 var server = require('./src/server')
 
 if(require.main === module) {
-	server.start(require('./settings.json'))
+	var settings =
+	    { port: process.env.PORT || 8080
+	    }
+
+	server.start(settings)
 	require('./test/helpers/server').setData('basic')
 }
 

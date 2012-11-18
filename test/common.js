@@ -6,11 +6,12 @@ require('./helpers/chai/compare').addMethod(chai)
 
 global.helpers = require('./helpers')
 global.settings =
-{ server: require('../settings.json')
+{ server:
+  { port: 8081
+  }
+, url: 'http://localhost:8081'
 , auth:
   { username: 'a'
   , password: '1'
   }
 }
-settings.url = 'http://localhost:8081'
-settings.server.port = 8081
