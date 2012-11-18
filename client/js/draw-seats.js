@@ -14,7 +14,7 @@ function drawSeats(canvas, seats) {
 function drawLegend(canvas) {
 	var ctx = canvas.getContext('2d')
 	drawSeat(ctx, { occupant: true, position: [ 0, 0 ], 'occupant-name': 'Occupied' })
-	drawSeat(ctx, { occupant: true, position: [ 2, 0 ], 'occupant-name': 'Empty' })
+	drawSeat(ctx, { occupant: false, position: [ 2, 0 ], 'occupant-name': 'Empty' })
 }
 
 function drawSeat(ctx, seat) {
