@@ -21,6 +21,7 @@
   , "hogan.js": "2.0.0"
   , "consolidate": "0.5.0"
   , "backbone": "0.9.2"
+  , "underscore": "1.4.2"
   , "ender": "0.8.11"
   , "bonzo": "1.2.x"
   , "bean": "1.0.1"
