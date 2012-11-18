@@ -1,5 +1,5 @@
 { "name": "vp-lan"
-, "version": "0.0.0"
+, "version": "0.1.0"
 , "description": "Website for VP lan."
 , "main": "index.js"
 , "scripts":
@@ -9,6 +9,10 @@
 , "repository":
   { "type": "git"
   , "url": "git://github.com/fizker/vplan.git"
+  }
+, "engines":
+  { "node": "0.8.x"
+  , "npm": "1.1.x"
   }
 , "dependencies":
   { "express": "3.0.1"
