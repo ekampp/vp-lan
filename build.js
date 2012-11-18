@@ -7,7 +7,7 @@ var ender = require('ender')
     , 'q'
     ]
   , options =
-    { output: 'static/js/ender'
+    { output: 'client/js/ender'
     }
 
 ender.build(packages, options, function() {
