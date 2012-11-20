@@ -12,11 +12,11 @@ module.exports =
 }
 
 function setup(mocha) {
-	mocha.before(function(done) {
-		server.start(settings.server, done)
+	mocha.before(function() {
+		return server.start(settings.server)
 	})
-	mocha.after(function(done) {
-		server.stop(done)
+	mocha.after(function() {
+		return server.stop()
 	})
 	mocha.beforeEach(function() {
 		return server.reset()
