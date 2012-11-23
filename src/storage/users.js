@@ -8,14 +8,17 @@ module.exports =
 }
 
 var Q = require('q')
-  , users = {}
+  , db = require('./db')
   , nextId = 1
   , User = require('../models').User
 
+function collection() {
+	return db.collection('users')
+}
+
 function reset() {
-	users = {}
 	nextId = 1
-	return Q.resolve()
+	return collection().invoke('remove')
 }
 
 function add(data) {
@@ -31,46 +34,57 @@ function add(data) {
 		data.id = nextId
 	}
 	nextId = Math.max(data.id, nextId) + 1
-	users[data.id] = data
-	return Q.resolve(data)
+	return collection()
+		.invoke('insert', data)
+		.then(function(data) {
+			return new User(data[0]).resolveDependencies()
+		})
 }
 
 function update(user, data) {
-	delete users[user.username]
-	Object.keys(data).forEach(function(key) {
-		user[key] = data[key]
-	})
-	users[user.username] = user
-	return Q.resolve(user)
+	var query = { id: user.id }
+	  , sort = []
+	  , update = { $set: data }
+	  , options = { new: true }
+	return collection()
+		.invoke(
+			  'findAndModify'
+			, query
+			, sort
+			, update
+			, options
+		)
+		.then(function(data) {
+			return new User(data[0]).resolveDependencies()
+		})
 }
 
 function getAll() {
-	return Q.all(Object.keys(users).map(function(key) {
-		return new User(users[key]).resolveDependencies()
-	}))
+	return collection()
+		.invoke('find')
+		.invoke('toArray')
+		.then(function(u) {
+			return Q.all(u.map(function(user) {
+				return new User(user).resolveDependencies()
+			}))
+		})
 }
 
 function get(data) {
-	var user
+	var query
 	if(data.username) {
-		return getAll().then(function(users) {
-			var user
-			if(!users.some(function(u) {
-				user = u
-				return u.username === data.username
-			})) {
+		query = { username: data.username }
+	} else {
+		query = { id: +(data.id || data) }
+	}
+	return collection()
+		.invoke('findOne', query)
+		.then(function(user) {
+			if(!user) {
 				throw new Error('unknown user')
 			}
 			return new User(user).resolveDependencies()
 		})
-	} else {
-		user = users[data.id || data]
-	}
-	if(user) {
-		return new User(user).resolveDependencies()
-	} else {
-		return Q.reject(new Error('unknown user'))
-	}
 }
 
 function auth(username, password) {

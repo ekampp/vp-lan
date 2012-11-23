@@ -98,15 +98,13 @@ describe('web.api/users.js', function() {
 	})
 	describe('When posting without login', function() {
 		var response
-		  , jar
 		beforeEach(function() {
-			jar = request.jar()
+			helper.options({ jar: request.jar() })
 			var options =
 			    { data:
 			      { username: 'a'
 			      , password: '1'
 			      }
-			    , jar: jar
 			    }
 			return helper.post('/users', options).then(function(args) {
 				response = args[0]
@@ -116,7 +114,7 @@ describe('web.api/users.js', function() {
 			expect(response.statusCode).to.equal(302)
 		})
 		it('should allow subsequent requests', function() {
-			return expect(helper.get('/user', { jar: jar }).get(0).get('statusCode'))
+			return expect(helper.get('/user').get(0).get('statusCode'))
 				.to.eventually.equal(200)
 		})
 		describe('and getting /user', function() {
@@ -164,7 +162,7 @@ describe('web.api/users.js', function() {
 			    { username: 'b'
 			    , password: '2'
 			    }
-			return expect(helpers.storage.users.get('b'))
+			return expect(helpers.storage.users.get(1))
 				.to.eventually.approximate(expected)
 		})
 	})

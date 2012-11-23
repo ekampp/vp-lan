@@ -10,7 +10,11 @@ global.settings =
   { web:
     { port: 8081
     }
-  , database: null
+  , database:
+    { name: 'finc-vp-lan-test'
+    , host: 'localhost'
+    , port: 27017
+    }
   }
 , url: 'http://localhost:8081'
 , auth:

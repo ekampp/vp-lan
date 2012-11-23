@@ -4,7 +4,7 @@ module.exports =
 }
 
 var server = require('./src/server')
-  , mongo = require('mongodb')
+  , mongo = require('q-mongodb')
   , Q = require('q')
   , db
   , storage = require('./src/storage/db')
@@ -33,19 +33,18 @@ if(require.main === module) {
 function start(settings) {
 	var promises = []
 	if(settings.database) {
-		var dbserv = new mongo.Server(
-			  settings.database.host
-			, settings.database.port
-			, { auto_reconnect: true }
-			)
-		  , database = new mongo.Db(settings.database.name, dbserv)
-		db = database
-		promises.push(Q.ninvoke(database, 'open').then(function() {
+		var dbPromise = mongo.db(
+		      settings.database.name
+		    , settings.database.host
+		    , settings.database.port
+		    )
+		promises.push(dbPromise.then(function(database) {
+			db = database
 			storage.setConnection(database)
 			return Q.resolve()
 		}))
 	} else {
-		db = { close: function() { return Q.resolve() } }
+		return Q.reject('no database given')
 	}
 	promises.push(server.start(settings.web))
 	return Q.all(promises)
@@ -54,7 +53,7 @@ function start(settings) {
 function stop() {
 	return Q.all(
 		[ server.stop()
-		, db.database ? Q.ninvoke(db.database, 'close') : Q.resolve()
+		, db.database ? mongo.closeAll() : Q.resolve()
 		]
 	)
 }

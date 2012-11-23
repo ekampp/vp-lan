@@ -1,5 +1,5 @@
 module.exports =
-{ connection: connection
+{ collection: collection
 , setConnection: setConnection
 }
 
@@ -7,20 +7,21 @@ var Q = require('q')
   , unresolved = []
   , conn
 
-function connection() {
+function collection(name) {
 	if(conn) {
-		return Q.resolve(conn)
+		return conn.collection(name)
 	}
 
 	var deferred = Q.defer()
-	unresolved.push(deferred)
+	unresolved.push({ deferred: deferred, name: name })
 	return deferred.promise
 }
+
 function setConnection(c) {
 	conn = c
 	if(c) {
-		unresolved.forEach(function(deferred) {
-			deferred.resolve(conn)
+		unresolved.forEach(function(obj) {
+			obj.deferred.promise.resolve(conn.collection(obj.name))
 		})
 		unresolved = []
 	}

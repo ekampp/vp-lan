@@ -1,5 +1,7 @@
 describe('integration/storage/users.js', function() {
 	var storage = require('../../../src/storage')
+
+	helpers.common.setup(this)
 	beforeEach(function() {
 		return storage.reset()
 	})
@@ -65,8 +67,7 @@ describe('integration/storage/users.js', function() {
 		})
 		it('should automatically attach an id if none are given', function() {
 			var user =
-			    { id: 1
-			    , username: 'a'
+			    { username: 'a'
 			    , password: 'b'
 			    }
 			return expect(
