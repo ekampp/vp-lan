@@ -5,6 +5,7 @@ module.exports =
 
 var express = require('express')
   , http = require('http')
+  , Q = require('q')
   , app = express()
   , server = http.createServer(app)
 
@@ -21,8 +22,8 @@ function start(settings, done) {
 	app.engine('mustache', require('consolidate').hogan)
 	app.set('view engine', 'mustache')
 	routes.setup(app)
-	server.listen(settings.port, done)
+	return Q.ninvoke(server, 'listen', settings.port)
 }
-function stop(done) {
-	server.close(done)
+function stop() {
+	return Q.ninvoke(server, 'close')
 }

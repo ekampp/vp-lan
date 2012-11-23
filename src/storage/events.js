@@ -7,44 +7,45 @@ module.exports =
 }
 
 var Q = require('q')
+  , db = require('./db')
   , Event = require('../models').Event
-  , events = {}
   , nextId = 1
+
+function collection() {
+	return db.collection('events')
+}
 
 function add(event) {
 	if(!event.id) {
 		event.id = nextId++
 	}
-	if(event.seats) {
-		event.seats.find = function(func) {
-			var itm
-			if(!this.some(function(item) {
-				itm = item
-				return func(item)
-			}))
-			{
-				itm = null
-			}
-			return itm
-		}
-	}
-	events[event.id] = event
-	return new Event(event).resolveDependencies()
+	return collection()
+		.invoke('insert', event)
+		.then(function(data) {
+			return new Event(data).resolveDependencies()
+		})
 }
 function get(id) {
-	var event = new Event(events[id])
-	if(!event) {
-		Q.reject('not found')
-	}
-	return event.resolveDependencies()
+	return collection()
+		.invoke('findOne', { id: +id })
+		.then(function(event) {
+			if(!event) {
+				throw new Error('not found')
+			}
+			return new Event(event).resolveDependencies()
+		})
 }
 function getAll() {
-	return Q.all(Object.keys(events).map(function(key) {
-		return new Event(events[key]).resolveDependencies()
-	}))
+	return collection()
+		.invoke('find')
+		.invoke('toArray')
+		.then(function(events) {
+			return Q.all(events.map(function(event) {
+				return new Event(event).resolveDependencies()
+			}))
+		})
 }
 function update() {}
 function reset() {
-	events = {}
-	return Q.resolve()
+	return collection().invoke('remove')
 }

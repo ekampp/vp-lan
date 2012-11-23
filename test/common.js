@@ -7,7 +7,14 @@ require('./helpers/chai/compare').addMethod(chai)
 global.helpers = require('./helpers')
 global.settings =
 { server:
-  { port: 8081
+  { web:
+    { port: 8081
+    }
+  , database:
+    { name: 'finc-vp-lan-test'
+    , host: 'localhost'
+    , port: 27017
+    }
   }
 , url: 'http://localhost:8081'
 , auth:

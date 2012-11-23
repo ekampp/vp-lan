@@ -17,6 +17,7 @@ function getEvents(req, res) {
 		}
 		res.send(events)
 	})
+	.done()
 }
 function addEvent() {}
 
@@ -29,6 +30,7 @@ function getEvent(req, res) {
 		}
 		res.send(event)
 	})
+	.done()
 }
 
 function transformEvent(event) {
