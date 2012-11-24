@@ -14,11 +14,7 @@ if(require.main === module) {
 	    { web:
 	      { port: process.env.PORT || 8080
 	      }
-	    , database:
-	      { port: process.env.MONGO_NODE_DRIVER_PORT || 27017
-	      , host: process.env.MONGO_NODE_DRIVER_HOST || 'localhost'
-	      , name: process.env.DB_NAME || 'finc-vp-lan'
-	      }
+	    , database: process.env.MONGO_URL || 'mongodb://localhost:27017/finc-vp-lan'
 	    }
 	start(settings)
 		.then(function() {
@@ -33,12 +29,7 @@ if(require.main === module) {
 function start(settings) {
 	var promises = []
 	if(settings.database) {
-		var dbPromise = mongo.db(
-		      settings.database.name
-		    , settings.database.host
-		    , settings.database.port
-		    )
-		promises.push(dbPromise.then(function(database) {
+		promises.push(mongo.connect(settings.database).then(function(database) {
 			db = database
 			storage.setConnection(database)
 			return Q.resolve()
