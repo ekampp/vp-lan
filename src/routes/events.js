@@ -1,12 +1,13 @@
 module.exports = function setup(app) {
 	app.get('/events', getEvents)
-	app.post('/events', addEvent)
+	app.post('/events', bodyParser(), addEvent)
 
 	app.get('/events/:id', getEvent)
 	app.put('/events/:id', updateEvent)
 }
 
 var storage = require('../storage')
+  , bodyParser = require('express').urlencoded
   , format = require('util').format
 
 function getEvents(req, res) {
@@ -19,7 +20,14 @@ function getEvents(req, res) {
 	})
 	.done()
 }
-function addEvent() {}
+
+function addEvent(req, res) {
+	storage.events.add(req.body)
+		.then(function(event) {
+			res.send(200, event)
+		})
+		.done()
+}
 
 function updateEvent() {}
 function getEvent(req, res) {

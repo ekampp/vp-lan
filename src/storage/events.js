@@ -17,10 +17,20 @@ function collection() {
 
 function add(event) {
 	if(!event.id) {
-		event.id = nextId++
+		event.id = nextId
 	}
+	if(event.seats) {
+		event.seats = event.seats.map(function(seat) {
+			seat.position = seat.position.map(function(p) { return +p })
+			seat.facing = +seat.facing
+			return seat
+		})
+	}
+	nextId = Math.max(event.id, nextId) + 1
 	return collection()
 		.invoke('insert', event)
+		// insert always returns arrays
+		.get(0)
 		.then(function(data) {
 			return new Event(data).resolveDependencies()
 		})

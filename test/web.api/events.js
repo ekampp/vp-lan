@@ -7,6 +7,73 @@ describe('web.api/events.js', function() {
 		return helpers.server.setData('basic')
 	})
 
+	describe('When posting to /events', function() {
+		var response
+		  , body
+		beforeEach(function() {
+			var data =
+			    { start: '2012-12-05T12:00+01:00'
+			    , end: '2012-12-07T15:00+01:00'
+			    , seats:
+			      [ { position: [ 0, 0 ]
+			        , facing: 0
+			        }
+			      , { position: [ 0, 1 ]
+			        , facing: 0
+			        }
+			      , { position: [ 0, 2 ]
+			        , facing: 0
+			        }
+			      , { position: [ 1, 0 ]
+			        , facing: 0
+			        }
+			      , { position: [ 1, 1 ]
+			        , facing: 0
+			        }
+			      , { position: [ 1, 2 ]
+			        , facing: 0
+			        }
+			      ]
+			    }
+			return client.post('/events', { data: data })
+				.then(function(args) {
+					response = args[0]
+					body = args[1]
+				})
+		})
+		it('should return code 200', function() {
+			expect(response.statusCode).to.equal(200)
+		})
+		it('should create a new event', function() {
+			var expected =
+			    { start: '2012-12-05T12:00+01:00'
+			    , end: '2012-12-07T15:00+01:00'
+			    , seats:
+			      [ { position: [ 0, 0 ]
+			        , facing: 0
+			        }
+			      , { position: [ 0, 1 ]
+			        , facing: 0
+			        }
+			      , { position: [ 0, 2 ]
+			        , facing: 0
+			        }
+			      , { position: [ 1, 0 ]
+			        , facing: 0
+			        }
+			      , { position: [ 1, 1 ]
+			        , facing: 0
+			        }
+			      , { position: [ 1, 2 ]
+			        , facing: 0
+			        }
+			      ]
+			    }
+			expect(body).to.contain.key('id')
+			return expect(client.get('/events/' + body.id).get(1))
+				.to.eventually.approximate(expected)
+		})
+	})
 	describe('When getting /events', function() {
 		it('returns a list of events', function() {
 			var expected =
