@@ -9,7 +9,7 @@ module.exports =
 var Q = require('q')
   , db = require('./db')
   , Event = require('../models').Event
-  , nextId = 1
+  , nextId = 0
 
 function collection() {
 	return db.collection('events')
@@ -26,7 +26,20 @@ function vetEvent(event) {
 	return event
 }
 
+function updateNextId() {
+	return db.nextId('events')
+		.then(function(id) {
+			nextId = id
+		})
+}
+
 function add(event) {
+	if(!nextId) {
+		return updateNextId()
+			.then(function() {
+				return add(event)
+			})
+	}
 	if(event.id) {
 		event.id = +event.id
 		nextId = Math.max(event.id, nextId) + 1
@@ -79,6 +92,6 @@ function update(id, event) {
 		})
 }
 function reset() {
-	nextId = 1
+	nextId = 0
 	return collection().invoke('remove')
 }

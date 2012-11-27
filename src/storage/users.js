@@ -9,7 +9,7 @@ module.exports =
 
 var Q = require('q')
   , db = require('./db')
-  , nextId = 1
+  , nextId = 0
   , User = require('../models').User
 
 function collection() {
@@ -17,11 +17,25 @@ function collection() {
 }
 
 function reset() {
-	nextId = 1
+	nextId = 0
 	return collection().invoke('remove')
 }
 
+function updateNextId() {
+	return db.nextId('users')
+		.then(function(id) {
+			nextId = id
+		})
+}
+
 function add(data) {
+	var allData = arguments
+	if(!nextId) {
+		return updateNextId()
+			.then(function() {
+				return add.apply(null, allData)
+			})
+	}
 	if(arguments.length > 1) {
 		return Q.all(Array.prototype.map.call(arguments, function(user) {
 			return add(user)
