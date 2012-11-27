@@ -2,6 +2,8 @@ module.exports = function setup(app) {
 	app.get('/events', getEvents)
 	app.post('/events', bodyParser(), auth.middleware, addEvent)
 
+	app.get('/events/add', auth.middleware, showEventForm)
+
 	app.get('/events/:id', getEvent)
 	app.put('/events/:id', bodyParser(), auth.middleware, updateEvent)
 }
@@ -20,6 +22,10 @@ function getEvents(req, res) {
 		res.send(events)
 	})
 	.done()
+}
+
+function showEventForm(req, res) {
+	res.render('events/form')
 }
 
 function addEvent(req, res) {

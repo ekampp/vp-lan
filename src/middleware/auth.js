@@ -25,6 +25,15 @@ function middleware(req, res, next) {
 			req.user = user
 			return next()
 		}, function(err) {
+			if(req.accepts('html')) {
+				return res.render(
+					  'users/access-form'
+					, { action: 'login', 'btn-text': 'Login' }
+					, function(err, html) {
+						res.send(401, html)
+					}
+				)
+			}
 			res.send(401)
 		})
 }

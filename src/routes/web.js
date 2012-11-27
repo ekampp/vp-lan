@@ -20,7 +20,7 @@ function login(req, res) {
 			},
 			function() {
 				res.render(
-				  'signup'
+				  'users/access-form'
 				, { action: 'login', 'btn-text': 'Login', msg: 'Login failed' }
 				, function(err, html) { res.send(401, html) }
 				)
