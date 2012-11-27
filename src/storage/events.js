@@ -15,10 +15,7 @@ function collection() {
 	return db.collection('events')
 }
 
-function add(event) {
-	if(!event.id) {
-		event.id = nextId
-	}
+function vetEvent(event) {
 	if(event.seats) {
 		event.seats = event.seats.map(function(seat) {
 			seat.position = seat.position.map(function(p) { return +p })
@@ -26,6 +23,19 @@ function add(event) {
 			return seat
 		})
 	}
+	return event
+}
+
+function add(event) {
+	if(event.id) {
+		event.id = +event.id
+		nextId = Math.max(event.id, nextId) + 1
+		return update(event.id, event)
+	}
+	if(!event.id) {
+		event.id = nextId
+	}
+	vetEvent(event)
 	nextId = Math.max(event.id, nextId) + 1
 	return collection()
 		.invoke('insert', event)
@@ -56,20 +66,19 @@ function getAll() {
 		})
 }
 function update(id, event) {
+	vetEvent(event)
 	var query = { id: +id }
-	  , options = { new: true }
+	  , options = { new: true, upsert: true }
 	  , sort = []
 	  , data = { $set: event }
 	return collection()
 		.invoke('findAndModify', query, sort, data, options)
 		.get(0)
 		.then(function(event) {
-			if(!event) {
-				throw new Error('not found')
-			}
 			return new Event(event).resolveDependencies()
 		})
 }
 function reset() {
+	nextId = 1
 	return collection().invoke('remove')
 }
