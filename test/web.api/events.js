@@ -7,10 +7,30 @@ describe('web.api/events.js', function() {
 		return helpers.server.setData('basic')
 	})
 
+	describe('When not logged in', function() {
+		describe('and putting to /events/:id', function() {
+			it('should return code 401', function() {
+				return expect(client.put('/events/1', { json: {} })
+					.get(0).get('statusCode')
+				).to.eventually.equal(401)
+			})
+		})
+		describe('and posting to /events', function() {
+			it('should return code 401', function() {
+				return expect(client.post('/events', { json: {} })
+					.get(0).get('statusCode')
+				).to.eventually.equal(401)
+			})
+		})
+	})
+
 	describe('When putting to /events/:id', function() {
 		var response
 		  , body
 		  , expected
+		beforeEach(function() {
+			client = helpers.httpHelper.createHelper(settings)
+		})
 		beforeEach(function() {
 			var data =
 			    { end: '2012-12-09T16:00+01:00'
@@ -55,6 +75,9 @@ describe('web.api/events.js', function() {
 	describe('When posting to /events', function() {
 		var response
 		  , body
+		beforeEach(function() {
+			client = helpers.httpHelper.createHelper(settings)
+		})
 		beforeEach(function() {
 			var data =
 			    { start: '2012-12-05T12:00+01:00'
