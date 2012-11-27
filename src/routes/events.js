@@ -3,11 +3,11 @@ module.exports = function setup(app) {
 	app.post('/events', bodyParser(), addEvent)
 
 	app.get('/events/:id', getEvent)
-	app.put('/events/:id', updateEvent)
+	app.put('/events/:id', bodyParser(), updateEvent)
 }
 
 var storage = require('../storage')
-  , bodyParser = require('express').urlencoded
+  , bodyParser = require('express').bodyParser
   , format = require('util').format
 
 function getEvents(req, res) {
@@ -29,7 +29,19 @@ function addEvent(req, res) {
 		.done()
 }
 
-function updateEvent() {}
+function updateEvent(req, res) {
+	storage.events.update(req.params.id, req.body)
+		.then(function(event) {
+			res.send(event)
+		})
+		.fail(function(err) {
+			if(err.message == 'not found') {
+				return res.send(404)
+			}
+			res.send(500)
+		})
+}
+
 function getEvent(req, res) {
 	storage.events.get(req.params.id).then(function(event) {
 		if(req.accepts('html')) {

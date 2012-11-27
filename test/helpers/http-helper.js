@@ -10,6 +10,9 @@ var request = require('request')
   , Q = require('q')
 
 function parse(str) {
+	if(typeof str != 'string') {
+		return str
+	}
 	try {
 		return JSON.parse(str)
 	} catch(e) {

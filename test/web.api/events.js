@@ -7,6 +7,51 @@ describe('web.api/events.js', function() {
 		return helpers.server.setData('basic')
 	})
 
+	describe('When putting to /events/:id', function() {
+		var response
+		  , body
+		  , expected
+		beforeEach(function() {
+			var data =
+			    { end: '2012-12-09T16:00+01:00'
+			    , seats:
+			      [ { position: [ 0, 0 ]
+			        , facing: 0
+			        }
+			      , { position: [ 0, 1 ]
+			        , facing: 0
+			        }
+			      ]
+			    }
+			expected =
+			{ start: '2012-12-07T19:00:00+01:00'
+			, end: '2012-12-09T16:00+01:00'
+			, seats:
+			  [ { position: [ 0, 0 ]
+			    , facing: 0
+			    }
+			  , { position: [ 0, 1 ]
+			    , facing: 0
+			    }
+			  ]
+			}
+			return client.put('/events/1', { json: data })
+				.then(function(args) {
+					response = args[0]
+					body = args[1]
+				})
+		})
+		it('should return status 200', function() {
+			expect(response.statusCode).to.equal(200)
+		})
+		it('should return the updated event', function() {
+			expect(body).to.approximate(expected)
+		})
+		it('should update the event', function() {
+			return expect(client.get('/events/1').get(1))
+				.to.eventually.approximate(expected)
+		})
+	})
 	describe('When posting to /events', function() {
 		var response
 		  , body

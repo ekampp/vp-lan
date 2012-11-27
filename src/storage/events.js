@@ -55,7 +55,21 @@ function getAll() {
 			}))
 		})
 }
-function update() {}
+function update(id, event) {
+	var query = { id: +id }
+	  , options = { new: true }
+	  , sort = []
+	  , data = { $set: event }
+	return collection()
+		.invoke('findAndModify', query, sort, data, options)
+		.get(0)
+		.then(function(event) {
+			if(!event) {
+				throw new Error('not found')
+			}
+			return new Event(event).resolveDependencies()
+		})
+}
 function reset() {
 	return collection().invoke('remove')
 }
