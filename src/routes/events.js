@@ -52,7 +52,7 @@ function updateEvent(req, res) {
 function getEvent(req, res) {
 	storage.events.get(req.params.id).then(function(event) {
 		if(req.accepts('html')) {
-			res.render('events/item', transformEvent(event))
+			res.render('events/item', transformEvent(event), { seats: 'events/seats' })
 			return
 		}
 		res.send(event)
@@ -76,5 +76,20 @@ function transformEvent(event) {
 		}).length
 		return left == 1 ? '1 seat left' : left + ' seats left'
 	}
+	event['seats-arr'] = (function(seats) {
+		var rows = []
+		seats.forEach(function(seat) {
+			arrAtRow(seat.position[1]).seats[seat.position[0]] = seat
+		})
+		return rows
+
+		function arrAtRow(idx) {
+			if(!rows[idx]) {
+				rows[idx] = { seats: [] }
+			}
+			return rows[idx]
+		}
+	})(event.seats)
+
 	return event
 }

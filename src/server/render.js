@@ -4,41 +4,84 @@ module.exports =
 }
 
 var Q = require('q')
+  , hogan = require('hogan.js')
+  , fs = require('fs')
+  , path = require('path')
   , format = require('util').format
 
-function middleware(req, res, next) {
-	res.render = render.bind(null, req, res, Q.nbind(res.render, res))
-	next()
+  , views
+
+function middleware(app) {
+	views = app.get('views')
+	return function(req, res, next) {
+		res.render = render.bind(res)
+		next()
+	}
 }
 
-function render(req, res, _realRender, view /*, ...args*/) {
-	var args = Array.prototype.slice.call(arguments, 2)
+function render(req, res, view /*, ...args*/) {
+	var args = Array.prototype.slice.call(arguments, 3)
 	  , callback = args.pop()
 	  , options
+	  , partials
+	  , partialKeys
 	if(typeof(callback) != 'function') {
 		args.push(callback)
 		callback = null
 	}
-	options = args.pop() || {}
+	options = args.shift() || {}
+	partials = args.shift()
 
 	options.l10n = l10n
 
-	_realRender.call(this, view, options)
-		.then(function(html) {
+	if(partials) {
+		partialKeys = Object.keys(partials)
+		partials = Q
+			.all(partialKeys.map(function(key) {
+				return Q.ninvoke(fs, 'readFile', path.join(views, partials[key] + '.mustache'), 'utf8')
+			}))
+			.then(function(p) {
+				var obj = {}
+				partialKeys.forEach(function(key, idx) {
+					obj[key] = p[idx]
+				})
+				return obj
+			})
+	} else {
+		partials = Q.resolve()
+	}
+
+	Q.all(
+	[ Q.ninvoke(fs, 'readFile', path.join(views, 'layout.mustache'), 'utf8')
+	, Q.ninvoke(fs, 'readFile', path.join(views, view + '.mustache'), 'utf8')
+	, partials
+	])
+		.then(function(files) {
+			return files
+				.filter(function(content) { return !!content })
+				.map(function(content) {
+					if(typeof(content) !== 'string') {
+						return content
+					}
+					return hogan.compile(content)
+				})
+		})
+		.then(function(templates) {
 			var data =
-			    { body: html
+			    { body: templates[1].render(options, templates[2])
 			    , l10n: l10n
 			    , minify: minify
 			    }
-
 			if(req.currentPage) {
 				data['is-' + req.currentPage] = true
 			}
-
-			return _realRender.call(this, 'layout', data)
+			return templates[0].render(data)
 		})
-		.nodeify(callback || function(err, html) {
-			res.send(html)
+		.then(function(rendered) {
+			if(callback) {
+				return callback(null, rendered)
+			}
+			return res.send(rendered)
 		})
 }
 
