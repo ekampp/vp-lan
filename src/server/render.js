@@ -7,13 +7,12 @@ var Q = require('q')
   , format = require('util').format
 
 function middleware(req, res, next) {
-	res.render = render.bind(res, Q.nbind(res.render, res))
+	res.render = render.bind(null, req, res, Q.nbind(res.render, res))
 	next()
 }
 
-function render(_realRender, view /*, ...args*/) {
+function render(req, res, _realRender, view /*, ...args*/) {
 	var args = Array.prototype.slice.call(arguments, 2)
-	  , res = this
 	  , callback = args.pop()
 	  , options
 	if(typeof(callback) != 'function') {
@@ -26,12 +25,17 @@ function render(_realRender, view /*, ...args*/) {
 
 	_realRender.call(this, view, options)
 		.then(function(html) {
-			return _realRender.call(this, 'layout',
-				{ body: html
-				, l10n: l10n
-				, minify: minify
-				}
-			)
+			var data =
+			    { body: html
+			    , l10n: l10n
+			    , minify: minify
+			    }
+
+			if(req.currentPage) {
+				data['is-' + req.currentPage] = true
+			}
+
+			return _realRender.call(this, 'layout', data)
 		})
 		.nodeify(callback || function(err, html) {
 			res.send(html)

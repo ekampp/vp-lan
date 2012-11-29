@@ -18,9 +18,6 @@ if(require.main === module) {
 	    }
 	start(settings)
 		.then(function() {
-			return require('./test/helpers/server').setData('basic')
-		})
-		.then(function() {
 			console.log('Web server running at port %s', settings.web.port)
 		})
 		.done()

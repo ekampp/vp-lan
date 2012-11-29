@@ -1,6 +1,7 @@
 exports = module.exports =
 { users: require('./users')
 , events: require('./events')
+, static: require('./static')
 , reset: reset
 }
 
@@ -10,5 +11,6 @@ function reset() {
 	return Q.all(
 	[ exports.users.reset()
 	, exports.events.reset()
+	, exports.static.reset()
 	])
 }
