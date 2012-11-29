@@ -1,12 +1,12 @@
 {{#seats-arr}}
 	<div class="event-seats__row">
 	{{#seats}}
-		<span data-occupant={{occupant}} data-facing={{facing}}
+		<span {{#occupant}}data-occupant={{occupant}}{{/occupant}} data-facing={{facing}}
 			class="
 				event-seats__row__seat
 				event-seats__row__seat--facing-{{facing}}
 				{{#occupant}}event-seats__row__seat--occupied{{/occupant}}
-			">{{id}}</span>
+			">{{occupant-name}}</span>
 	{{/seats}}
 	</div>
 {{/seats-arr}}

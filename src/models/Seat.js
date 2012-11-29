@@ -9,7 +9,13 @@ module.exports = Backbone.Model.extend(
 	}
 )
 
-defineGetSetters(module.exports.prototype, ['occupant', 'position', 'facing'])
+defineGetSetters(module.exports.prototype,
+	  [ 'occupant'
+	  , 'position'
+	  , 'facing'
+	  , 'occupant-name'
+	  ]
+)
 
 function resolveDependencies() {
 	if(this.get('occupant')) {
