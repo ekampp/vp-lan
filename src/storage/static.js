@@ -4,7 +4,7 @@ module.exports =
 , reset: reset
 }
 
-var Q = require('Q')
+var Q = require('q')
   , db = require('./db')
 
 function collection() {
