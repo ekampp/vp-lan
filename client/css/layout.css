@@ -1,0 +1,15 @@
+.menu {
+}
+
+.menu__link {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.menu__link--current {
+}
+
+.logo {
+	width: 200px;
+	vertical-align: middle;
+}

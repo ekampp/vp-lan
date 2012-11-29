@@ -4,6 +4,7 @@ module.exports =
 }
 
 var Q = require('q')
+  , format = require('util').format
 
 function middleware(req, res, next) {
 	res.render = render.bind(res, Q.nbind(res.render, res))
@@ -28,12 +29,30 @@ function render(_realRender, view /*, ...args*/) {
 			return _realRender.call(this, 'layout',
 				{ body: html
 				, l10n: l10n
+				, minify: minify
 				}
 			)
 		})
 		.nodeify(callback || function(err, html) {
 			res.send(html)
 		})
+}
+
+function minify(files) {
+	var isCSS = /\.css$/
+	  , isJS = /\.js$/
+	return files
+		.split('\n')
+		.map(function(file) {
+			if(isCSS.test(file)) {
+				return format('<link href=%s rel=stylesheet>', file)
+			}
+			if(isJS.test(file)) {
+				return format('<script src=%s></script>', file)
+			}
+			return ''
+		})
+		.join('\n')
 }
 
 function l10n(str) {
