@@ -1,15 +1,15 @@
 <!doctype html>
 <title>VP Lan{{#title}}- {{title}}{{/title}}</title>
 
-<nav>
-	<a href="/events">Events</a>
-	<a href="/user">Profile</a>
-	<a href="/signup">Signup</a>
-	<a href="/login">Login</a>
+<header class="layout-header">
+	<img src=gfx/logo.jpg alt="Logo">
+</header>
+
+<nav class="layout-menu">
+	<a href="/">{{#l10n}}layout, main{{/l10n}}</a>
+	<a href="/events">{{#l10n}}layout, signup{{/l10n}}</a>
+	<a href="/info">{{#l10n}}layout, info{{/l10n}}</a>
+	<a href="/info">{{#l10n}}layout, facebook{{/l10n}}</a>
 </nav>
 
 {{{body}}}
-
-<script src=/js/ender.min.js></script>
-<script src=/js/draw-seats.js></script>
-<script src=/js/index.js></script>

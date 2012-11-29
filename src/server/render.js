@@ -10,19 +10,36 @@ function middleware(req, res, next) {
 	next()
 }
 
-function render(_realRender /*, ...args*/) {
-	var args = Array.prototype.slice.call(arguments, 1)
+function render(_realRender, view /*, ...args*/) {
+	var args = Array.prototype.slice.call(arguments, 2)
 	  , res = this
 	  , callback = args.pop()
+	  , options
 	if(typeof(callback) != 'function') {
 		args.push(callback)
 		callback = null
 	}
-	_realRender.apply(this, args)
+	options = args.pop() || {}
+
+	options.l10n = l10n
+
+	_realRender.call(this, view, options)
 		.then(function(html) {
-			return _realRender.call(this, 'layout', { body: html })
+			return _realRender.call(this, 'layout',
+				{ body: html
+				, l10n: l10n
+				}
+			)
 		})
 		.nodeify(callback || function(err, html) {
 			res.send(html)
 		})
+}
+
+function l10n(str) {
+	// let {} = str.split(
+	var tokenIdx = str.indexOf(',')
+	  , table = str.substr(0, tokenIdx).trim()
+	  , key = str.substr(tokenIdx + 1).trim()
+	return require('../../l10n/da/strings.json')[table][key]
 }
