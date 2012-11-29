@@ -1,15 +1,19 @@
 <!doctype html>
 <title>VP Lan{{#title}}- {{title}}{{/title}}</title>
+{{#minify}}/css/styles.css{{/minify}}
 
-<nav>
-	<a href="/events">Events</a>
-	<a href="/user">Profile</a>
-	<a href="/signup">Signup</a>
-	<a href="/login">Login</a>
+<nav class="menu">
+	<a class="menu__link {{#is-main}}menu__link--current{{/is-main}}" href=/>{{#l10n}}layout, main{{/l10n}}</a>
+	<a class="menu__link {{#is-events}}menu__link--current{{/is-events}}" href=/events>{{#l10n}}layout, signup{{/l10n}}</a>
+	<img class="logo" src=/gfx/logo.jpg alt="Logo">
+	<a class="menu__link {{#is-info}}menu__link--current{{/is-info}}" href=/info>{{#l10n}}layout, info{{/l10n}}</a>
+	<a class="menu__link" href=/info>{{#l10n}}layout, facebook{{/l10n}}</a>
 </nav>
 
 {{{body}}}
 
-<script src=/js/ender.min.js></script>
-<script src=/js/draw-seats.js></script>
-<script src=/js/index.js></script>
+{{#minify}}
+/js/ender.min.js
+/js/draw-seats.js
+/js/index.js
+{{/minify}}

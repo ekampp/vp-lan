@@ -1,0 +1,16 @@
+.menu {
+}
+
+.menu__link {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.menu__link--current {
+	font-style: italic;
+}
+
+.logo {
+	width: 200px;
+	vertical-align: middle;
+}

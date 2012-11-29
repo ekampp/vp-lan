@@ -6,7 +6,6 @@
 		return
 	}
 
-	drawLegend($.create('<h2>Legend</h2><canvas>').appendTo(container).get(1))
 	var canvas = $.create('<h2>Seats</h2><canvas>').appendTo(container).get(1)
 
 	$.ajax(

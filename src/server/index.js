@@ -18,6 +18,7 @@ function start(settings, done) {
 
 	app.use(express.static('./client'))
 	app.use(express.cookieParser())
+	require('../middleware').currentPage.setup(app)
 	app.use(require('./render').middleware)
 	app.engine('mustache', require('consolidate').hogan)
 	app.set('view engine', 'mustache')
