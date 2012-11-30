@@ -28,5 +28,5 @@ function get(key) {
 }
 
 function reset() {
-	return collection().invoke()
+	return collection().invoke('remove')
 }
