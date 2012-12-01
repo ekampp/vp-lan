@@ -1,6 +1,12 @@
 <h2>{{friendly-when}}</h2>
 <p>{{seats-left}}</p>
 
+<div>
+	<label>Your name:</label>
+	<input name=name class="js-occupant-name" type=text>
+</div>
+<button class="js-btn-occupy-seat" type=button disabled>Occupy seat</button>
+
 <div class="event-seats">
 {{>seats}}
 </div>

@@ -29,10 +29,8 @@ function render(req, res, view /*, ...args*/) {
 		args.push(callback)
 		callback = null
 	}
-	options = args.shift() || {}
+	options = extendData(args.shift() || {})
 	partials = args.shift()
-
-	options.l10n = l10n
 
 	if(partials) {
 		partialKeys = Object.keys(partials)
@@ -69,9 +67,10 @@ function render(req, res, view /*, ...args*/) {
 		.then(function(templates) {
 			var data =
 			    { body: templates[1].render(options, templates[2])
-			    , l10n: l10n
 			    , minify: minify
+			    , 'user-json': req.user ? JSON.stringify(req.user) : 'null'
 			    }
+			extendData(data)
 			if(req.currentPage) {
 				data['is-' + req.currentPage] = true
 			}
@@ -83,6 +82,12 @@ function render(req, res, view /*, ...args*/) {
 			}
 			return res.send(rendered)
 		})
+
+	function extendData(data) {
+		data.l10n = l10n
+		data['is-logged-in'] = !!req.user
+		return data
+	}
 }
 
 function minify(files) {

@@ -26,7 +26,8 @@
   , "ender": "0.8.11"
   , "bonzo": "1.2.x"
   , "bean": "1.0.1"
-  , "reqwest": "0.5.0"
+  , "reqwest": "~0.6.0"
+  , "page": "git://github.com/fizker/page.js.git#ender"
   }
 , "devDependencies":
   { "mocha": "~1.6.0"
