@@ -8,6 +8,7 @@ var request = require('request')
   , util = require('util')
   , btoa = require('btoa')
   , Q = require('q')
+  , querystring = require('qs')
 
 function parse(str) {
 	if(typeof str != 'string') {
@@ -82,6 +83,14 @@ function createHelper(defaults, options) {
 				opts.body = objToBody(opts.data)
 			}
 			delete opts.data
+		}
+		if(!opts.headers) {
+			opts.headers = {}
+		}
+		if(opts.form) {
+			opts.headers['content-type'] = 'application/x-www-form-urlencoded'
+			opts.body = querystring.stringify(opts.form)
+			delete opts.form
 		}
 		url = defaults.url + url
 		opts.uri = url
