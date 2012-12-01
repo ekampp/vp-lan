@@ -68,8 +68,9 @@ function update(user, data) {
 			, update
 			, options
 		)
+		.get(0)
 		.then(function(data) {
-			return new User(data[0]).resolveDependencies()
+			return new User(data).resolveDependencies()
 		})
 }
 

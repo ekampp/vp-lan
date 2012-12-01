@@ -14,7 +14,7 @@ var Q = require('q')
 function middleware(app) {
 	views = app.get('views')
 	return function(req, res, next) {
-		res.render = render.bind(res)
+		res.render = render.bind(null, req, res)
 		next()
 	}
 }
