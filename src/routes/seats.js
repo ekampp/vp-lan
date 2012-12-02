@@ -19,20 +19,22 @@ function occupySeat(req, res) {
 		.then(function(event) {
 			event.seats.forEach(function(seat) {
 				if(seat.occupant == req.user.id) {
-					delete seat.occupant
+					seat.occupant = null
 				}
 			})
-			return event.seats.find(function(seat) {
+			var seat = event.seats.find(function(seat) {
 				return seat.id == req.body.seat
 			})
-		})
-		.then(function(seat) {
 			if(seat.occupant) {
 				res.send(400, 'seat already taken')
 				return
 			}
 			seat.occupant = req.user.id
-			res.send(200, seat)
+
+			return event.save()
+				.then(function() {
+					res.send(200, seat)
+				})
 		})
 		.done()
 }

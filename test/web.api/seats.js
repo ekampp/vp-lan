@@ -49,6 +49,11 @@ describe('web.api/seats.js', function() {
 				var seat = { id: 2, occupant: 1 }
 				expect(body).to.approximate(seat)
 			})
+			it('should store the change', function() {
+				var seat = { id: 2, occupant: 1 }
+				return expect(client.get('/seats/1').get(1))
+					.to.eventually.approximate([seat])
+			})
 			describe('and the user decides on a different seat', function() {
 				var response
 				  , body
