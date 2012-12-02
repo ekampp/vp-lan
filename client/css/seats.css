@@ -1,5 +1,9 @@
 .event-seats {}
 
+.event-seats__legend {
+	float: right;
+}
+
 .event-seats__row {
 	min-height: 40px;
 }

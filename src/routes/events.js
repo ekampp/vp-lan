@@ -51,7 +51,11 @@ function updateEvent(req, res) {
 function getEvent(req, res) {
 	storage.events.get(req.params.id).then(function(event) {
 		if(req.accepts('html')) {
-			res.render('events/item', transformEvent(event), { seats: 'events/seats' })
+			var partials =
+			    { seats: 'events/seats'
+			    , 'seats-legend': 'events/seats-legend'
+			    }
+			res.render('events/item', transformEvent(event), partials)
 			return
 		}
 		res.send(event)

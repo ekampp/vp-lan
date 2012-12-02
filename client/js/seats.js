@@ -5,7 +5,7 @@ VP.seats = (function() {
 	       }
 
 	function toggleSubmitButton() {
-		$$('.js-btn-occupy-seat').disabled = !this.seat
+		$$('.js-btn-occupy-seat').disabled = !VP.user || !this.seat
 	}
 
 	function init(event) {
