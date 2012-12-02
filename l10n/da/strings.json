@@ -1,10 +1,17 @@
-{ "layout":
-  { "info": "Info"
-  , "signup": "Tilmelding"
-  , "facebook": "Facebook"
-  , "main": "Generelt"
-  }
-, "events":
+{ "events":
   { "NEED LOGIN": "Det er nødvendigt at logge ind før du kan registere for et event.\n\nDette gør det muligt for os at opdatere dig om ændringer, samt du kan vælge et andet sæde hvis du ønsker"
+  , "BTN SELECT SEAT": "Vælg sæde"
+  }
+, "menu":
+  { "USER SIGNUP": "Oret bruger"
+  , "INFO": "Info"
+  , "EVENT SIGNUP": "Tilmelding"
+  , "FACEBOOK": "Facebook"
+  , "MAIN": "Generelt"
+  }
+, "user":
+  { "LBL FORM USERNAME": "Brugernavn:"
+  , "LBL FORM PASSWORD": "Kodeord:"
+  , "BTN LOGIN": "Log ind"
   }
 }
