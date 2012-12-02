@@ -5,7 +5,7 @@ VP.seats = (function() {
 	       }
 
 	function toggleSubmitButton() {
-		$$('.js-btn-occupy-seat').disabled = !this.occupantName || !this.seat
+		$$('.js-btn-occupy-seat').disabled = !this.seat
 	}
 
 	function init(event) {
@@ -30,17 +30,18 @@ VP.seats = (function() {
 			}
 			this.toggleSubmitButton()
 		}.bind(this))
-		$('.js-occupant-name').on('change', function(event) {
-			this.occupantName = event.target.value
-			this.toggleSubmitButton()
-		}.bind(this))
+
+		// We do not allow selecting seats if there is no user
+		// The server should respond with 401 anyway!
+		if(!VP.user) {
+			return
+		}
 		$('.js-btn-occupy-seat').on('click', function() {
-			var occupantName = $('.js-occupant-name').val()
-			  , seatId = this.seat.id
+			var seatId = this.seat.id
 			$.ajax(
 				{ url: '/seats/' + event
 				, method: 'post'
-				, data: { seat: seatId, occupant: occupantName }
+				, data: { seat: seatId }
 				})
 				.then(function() {
 					console.log('seat updated..')

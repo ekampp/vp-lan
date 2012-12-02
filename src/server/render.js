@@ -10,6 +10,7 @@ var Q = require('q')
   , format = require('util').format
 
   , views
+  , markdown = new (require('showdown').converter)()
 
 function middleware(app) {
 	views = app.get('views')
@@ -66,7 +67,7 @@ function render(req, res, view /*, ...args*/) {
 		})
 		.then(function(templates) {
 			var data =
-			    { body: templates[1].render(options, templates[2])
+			    { body: templates[1].render(options, extendPartials(templates[2]))
 			    , minify: minify
 			    , 'user-json': req.user ? JSON.stringify(req.user) : 'null'
 			    }
@@ -82,12 +83,20 @@ function render(req, res, view /*, ...args*/) {
 			}
 			return res.send(rendered)
 		})
+		.done()
 
 	function extendData(data) {
 		data.l10n = l10n
+		data.ml10n = ml10n
 		data['is-logged-in'] = !!req.user
 		return data
 	}
+}
+
+function extendPartials(partials) {
+	partials = partials || {}
+	partials.login = fs.readFileSync(path.join(views, 'partials/login.mustache'), 'utf8')
+	return partials
 }
 
 function minify(files) {
@@ -112,5 +121,13 @@ function l10n(str) {
 	var tokenIdx = str.indexOf(',')
 	  , table = str.substr(0, tokenIdx).trim()
 	  , key = str.substr(tokenIdx + 1).trim()
-	return require('../../l10n/da/strings.json')[table][key]
+	  , strings = require('../../l10n/da/strings.json')
+	if(!strings[table] || !strings[table][key]) {
+		return key
+	}
+	return strings[table][key]
+}
+
+function ml10n(str) {
+	return markdown.makeHtml(l10n(str))
 }

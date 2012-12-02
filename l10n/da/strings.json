@@ -4,4 +4,7 @@
   , "facebook": "Facebook"
   , "main": "Generelt"
   }
+, "events":
+  { "NEED LOGIN": "Det er nødvendigt at logge ind før du kan registere for et event.\n\nDette gør det muligt for os at opdatere dig om ændringer, samt du kan vælge et andet sæde hvis du ønsker"
+  }
 }
