@@ -1,6 +1,6 @@
 module.exports =
-{ middleware: middleware
-, auth: promise
+{ requireUser: requireUser
+, loadUser: loadUser
 }
 
 var users = require('../storage').users
@@ -19,21 +19,29 @@ function promise(req) {
 	return Q.reject()
 }
 
-function middleware(req, res, next) {
+function loadUser(req, res, next) {
 	promise(req)
 		.then(function(user) {
 			req.user = user
-			return next()
-		}, function(err) {
-			if(req.accepts('html')) {
-				return res.render(
-					  'users/access-form'
-					, { action: 'login', 'btn-text': 'Login' }
-					, function(err, html) {
-						res.send(401, html)
-					}
-				)
-			}
-			res.send(401)
+			next()
+		}, function() {
+			next()
 		})
+}
+
+function requireUser(req, res, next) {
+	if(req.user) {
+		return next()
+	}
+
+	if(req.accepts('html')) {
+		return res.render(
+			  'users/access-form'
+			, { action: 'login', 'btn-text': 'Login' }
+			, function(err, html) {
+				res.send(401, html)
+			}
+		)
+	}
+	res.send(401)
 }

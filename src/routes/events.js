@@ -1,16 +1,15 @@
 module.exports = function setup(app) {
 	app.get('/events', getEvents)
-	app.post('/events', bodyParser(), auth.middleware, addEvent)
+	app.post('/events', middleware.auth.requireUser, addEvent)
 
-	app.get('/events/add', auth.middleware, showEventForm)
+	app.get('/events/add', middleware.auth.requireUser, showEventForm)
 
 	app.get('/events/:id', getEvent)
-	app.put('/events/:id', bodyParser(), auth.middleware, updateEvent)
+	app.put('/events/:id', middleware.auth.requireUser, updateEvent)
 }
 
 var storage = require('../storage')
-  , auth = require('../middleware/auth')
-  , bodyParser = require('express').bodyParser
+  , middleware = require('../middleware')
   , format = require('util').format
 
 function getEvents(req, res) {

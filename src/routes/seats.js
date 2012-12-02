@@ -1,12 +1,12 @@
 module.exports = function setup(app) {
 	app.get('/seats/:event', getSeats)
-	app.post('/seats/:event', bodyParser(), auth.middleware, occupySeat)
+	app.post('/seats/:event', middleware.auth.requireUser, occupySeat)
 	app.put('/seats/:event/:id', updateSeat)
 }
 
 var storage = require('../storage')
   , bodyParser = require('express').urlencoded
-  , auth = require('../middleware/auth')
+  , middleware = require('../middleware')
 
 function updateSeat() {}
 function getSeats(req, res) {
