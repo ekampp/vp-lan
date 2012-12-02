@@ -13,7 +13,6 @@ defineGetSetters(module.exports.prototype,
 	  [ 'occupant'
 	  , 'position'
 	  , 'facing'
-	  , 'occupant-name'
 	  ]
 )
 
@@ -21,8 +20,8 @@ function resolveDependencies() {
 	if(this.get('occupant')) {
 		return storage.users.get(this.get('occupant'))
 			.then(function(user) {
-				this.set('!occupant', user)
-				this.set('occupant-name', user.get('name') || user.get('username'))
+				this['!occupant'] = user
+				this['occupant-name'] = user.get('name') || user.get('username')
 				return this
 			}.bind(this))
 	}
