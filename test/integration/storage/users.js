@@ -1,9 +1,26 @@
 describe('integration/storage/users.js', function() {
 	var storage = require('../../../src/storage')
+	  , db = require('../../../src/storage/db')
 
 	helpers.common.setup(this)
 	beforeEach(function() {
 		return storage.reset()
+	})
+	describe('When adding a new user', function() {
+		describe('and some users were already in the database', function() {
+			beforeEach(function() {
+				return db.collection('users')
+					.invoke('insert',
+						[ { id: 1, username: 'a' }
+						, { id: 3, username: 'b' }
+						]
+					)
+			})
+			it('should set the id correctly', function() {
+				return expect(storage.users.add({ username: 'c' }))
+					.to.eventually.approximate({id: 4})
+			})
+		})
 	})
 	describe('When creating multiple users', function() {
 		it('should be possible to mix and match between including ids', function() {

@@ -10,6 +10,7 @@ var express = require('express')
   , server = http.createServer(app)
 
   , routes = require('../routes')
+  , middleware = require('../middleware')
 
 function start(settings, done) {
 	if(!settings.port) {
@@ -17,11 +18,11 @@ function start(settings, done) {
 	}
 
 	app.use(express.static('./client'))
+	app.use(express.bodyParser())
 	app.use(express.cookieParser())
 	require('../middleware').currentPage.setup(app)
-	app.use(require('./render').middleware)
-	app.engine('mustache', require('consolidate').hogan)
-	app.set('view engine', 'mustache')
+	app.use(require('./render').middleware(app))
+	app.use(middleware.auth.loadUser)
 	routes.setup(app)
 	return Q.ninvoke(server, 'listen', settings.port)
 }

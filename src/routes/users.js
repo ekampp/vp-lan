@@ -1,37 +1,35 @@
 module.exports = function setup(app) {
-	app.get('/users', auth.middleware, getUsers)
-	app.post(/\/user(s?)/, bodyParser(), createUser)
+	app.get('/users', middleware.auth.requireUser, getUsers)
+	app.post(/\/user(s?)/, createUser)
 
-	app.get('/user', auth.middleware, getUser)
-	app.get('/users/:id', auth.middleware, getUser)
+	app.get('/user', middleware.auth.requireUser, getUser)
+	app.get('/users/:id', middleware.auth.requireUser, getUser)
 
-	app.put('/user', auth.middleware, updateUser)
-	app.put('/users/:id', auth.middleware, updateUser)
+	app.put('/user', middleware.auth.requireUser, updateUser)
+	app.put('/users/:id', middleware.auth.requireUser, updateUser)
 }
 
-var auth = require('../middleware/auth')
-  , bodyParser = require('express').urlencoded
+var middleware = require('../middleware')
   , storage = require('../storage')
   , Q = require('q')
 
 function createUser(req, res) {
-	auth.auth(req).then(
-		function(user) {
-			return storage.users.update(user, req.body)
-				.then(function() {
-					res.redirect('/')
-				})
-		},
-		function() {
-			return storage.users.add(req.body)
-				.then(function(user) {
-					res.cookie('x-user-token', user.id)
-					res.redirect('/')
-				},
-				function() {
-					res.send(400)
-				})
-		})
+	var user = req.user
+	if(user) {
+		return storage.users.update(user, req.body)
+			.then(function() {
+				res.redirect('/')
+			})
+	} else {
+		return storage.users.add(req.body)
+			.then(function(user) {
+				res.cookie('x-user-token', user.id)
+				res.redirect('/')
+			},
+			function() {
+				res.send(400)
+			})
+	}
 }
 function getUser(req, res) {
 	if(req.params.id) {

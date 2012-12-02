@@ -1,4 +1,12 @@
 <h2>{{friendly-when}}</h2>
 <p>{{seats-left}}</p>
 
-<div class="event-seats"></div>
+{{^is-logged-in}}
+<p>{{#ml10n}}events, NEED LOGIN{{/ml10n}}</p>
+{{>login}}
+{{/is-logged-in}}
+
+<div class="event-seats">
+{{>seats}}
+</div>
+<button disabled type=button class="js-btn-occupy-seat">{{#l10n}}events, BTN SELECT SEAT{{/l10n}}</button>

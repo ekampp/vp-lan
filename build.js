@@ -5,6 +5,7 @@ var ender = require('ender')
     , 'bean'
     , 'bonzo'
     , 'q'
+    , 'page'
     ]
   , options =
     { output: 'client/js/ender'

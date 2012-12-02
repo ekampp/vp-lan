@@ -3,17 +3,21 @@
 {{#minify}}/css/styles.css{{/minify}}
 
 <nav class="menu">
-	<a class="menu__link {{#is-main}}menu__link--current{{/is-main}}" href=/>{{#l10n}}layout, main{{/l10n}}</a>
-	<a class="menu__link {{#is-events}}menu__link--current{{/is-events}}" href=/events>{{#l10n}}layout, signup{{/l10n}}</a>
+	<a class="menu__link {{#is-main}}menu__link--current{{/is-main}}" href=/>{{#l10n}}menu, MAIN{{/l10n}}</a>
+	<a class="menu__link {{#is-events}}menu__link--current{{/is-events}}" href=/events/1>{{#l10n}}menu, EVENT SIGNUP{{/l10n}}</a>
 	<img class="logo" src=/gfx/logo.jpg alt="Logo">
-	<a class="menu__link {{#is-info}}menu__link--current{{/is-info}}" href=/info>{{#l10n}}layout, info{{/l10n}}</a>
-	<a class="menu__link" href=/info>{{#l10n}}layout, facebook{{/l10n}}</a>
+	<a class="menu__link {{#is-info}}menu__link--current{{/is-info}}" href=/info>{{#l10n}}menu, INFO{{/l10n}}</a>
+	<a class="menu__link" href=http://www.facebook.com/groups/377764815646255>{{#l10n}}menu, FACEBOOK{{/l10n}}</a>
 </nav>
 
 {{{body}}}
 
+<script>
+var VP = { user: {{{user-json}}} }
+</script>
 {{#minify}}
 /js/ender.min.js
-/js/draw-seats.js
+/js/seats.js
+/js/events.js
 /js/index.js
 {{/minify}}

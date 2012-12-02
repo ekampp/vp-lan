@@ -4,7 +4,7 @@ module.exports = function setup(app) {
 	//app.get('/', render('index'))
 	app.get('/signup', render('users/access-form', { action: 'users', 'btn-text': 'Signup' }))
 	app.get('/login', render('users/access-form', { action: 'login', 'btn-text': 'Login' }))
-	app.post('/login', bodyParser(), login)
+	app.post('/login', login)
 }
 
 var bodyParser = require('express').urlencoded
@@ -20,7 +20,7 @@ function login(req, res) {
 			},
 			function() {
 				res.render(
-				  'signup'
+				  'users/access-form'
 				, { action: 'login', 'btn-text': 'Login', msg: 'Login failed' }
 				, function(err, html) { res.send(401, html) }
 				)
