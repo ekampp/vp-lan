@@ -80,6 +80,9 @@ function transformEvent(event) {
 		seats.forEach(function(seat) {
 			arrAtRow(seat.position[1]).seats[seat.position[0]] = seat
 		})
+		for(var i = 0; i < rows.length; i++) {
+			rows[i] = arrAtRow(i)
+		}
 		return rows
 
 		function arrAtRow(idx) {

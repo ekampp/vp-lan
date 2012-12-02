@@ -1,6 +1,8 @@
 .event-seats {}
 
-.event-seats__row {}
+.event-seats__row {
+	min-height: 40px;
+}
 
 .event-seats__row__seat {
 	background: no-repeat;
