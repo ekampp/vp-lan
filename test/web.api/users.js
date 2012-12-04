@@ -120,11 +120,17 @@ describe('web.api/users.js', function() {
 				.to.eventually.equal(200)
 		})
 		describe('and getting /user', function() {
-			it('should return status 200', function() {
+			it('should return status 200 for the new user', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
 				return expect(helper.get('/user', { headers: auth })
 					.get(0).get('statusCode')
 				).to.eventually.equal(200)
+			})
+			it('should set the basic role for the new user', function() {
+				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				return expect(helper.get('/user', { headers: auth })
+					.get(1)
+				).to.eventually.have.property('role', 'user')
 			})
 			it('should reject non-existing users', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')

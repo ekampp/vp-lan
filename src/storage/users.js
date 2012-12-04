@@ -47,6 +47,7 @@ function add(data) {
 	if(!data.id) {
 		data.id = nextId
 	}
+	data.role = 'user'
 	nextId = Math.max(data.id, nextId) + 1
 	return collection()
 		.invoke('insert', data)
