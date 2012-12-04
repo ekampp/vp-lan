@@ -12,7 +12,7 @@ var express = require('express')
   , routes = require('../routes')
   , middleware = require('../middleware')
 
-function start(settings, done) {
+function start(settings) {
 	if(!settings.port) {
 		throw new Error('Port should be given.')
 	}
