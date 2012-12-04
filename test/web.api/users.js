@@ -8,7 +8,7 @@ describe('web.api/users.js', function() {
 		helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
-	describe('When posting to login', function() {
+	describe('When posting to `/login`', function() {
 		beforeEach(function() {
 			return helpers.storage.users.add({ username: 'a', password: '1' })
 		})
@@ -98,13 +98,15 @@ describe('web.api/users.js', function() {
 	})
 	describe('When posting without login', function() {
 		var response
+		  , cookie
 		beforeEach(function() {
-			helper.options({ jar: request.jar() })
+			cookie = request.jar()
 			var options =
 			    { data:
 			      { username: 'a'
 			      , password: '1'
 			      }
+			    , jar: cookie
 			    }
 			return helper.post('/users', options).then(function(args) {
 				response = args[0]
@@ -114,22 +116,21 @@ describe('web.api/users.js', function() {
 			expect(response.statusCode).to.equal(302)
 		})
 		it('should allow subsequent requests', function() {
-			return expect(helper.get('/user').get(0).get('statusCode'))
+			return expect(helper.get('/user', { jar: cookie }).get(0).get('statusCode'))
 				.to.eventually.equal(200)
 		})
 		describe('and getting /user', function() {
 			it('should return status 200', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
-				return helper.get('/user', { headers: auth }).then(function(args) {
-					var resp = args[0]
-					expect(resp.statusCode).to.equal(200)
-				})
+				return expect(helper.get('/user', { headers: auth })
+					.get(0).get('statusCode')
+				).to.eventually.equal(200)
 			})
-			it('should reject other users', function() {
+			it('should reject non-existing users', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
-				return helper.get('/user', { headers: auth }, function(err, resp, body) {
-					expect(resp.statusCode).to.equal(401)
-				})
+				return expect(helper.get('/user', { headers: auth })
+					.get(0).get('statusCode')
+				).to.eventually.equal(401)
 			})
 		})
 	})
