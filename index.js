@@ -6,13 +6,18 @@ module.exports =
 var server = require('./src/server')
   , mongo = require('q-mongodb')
   , Q = require('q')
+  , path = require('path')
+
   , db
+  , l10n = require('./src/l10n')
+  , staticAnalysis = require('./src/static-analysis')
   , storage = require('./src/storage/db')
 
 if(require.main === module) {
 	var settings =
 	    { web:
 	      { port: process.env.PORT || 8080
+	      , views: path.join(__dirname, 'views')
 	      }
 	    , database: process.env.MONGO_URL || 'mongodb://localhost:27017/finc-vp-lan'
 	    }
@@ -35,6 +40,19 @@ function start(settings) {
 		return Q.reject('no database given')
 	}
 	promises.push(server.start(settings.web))
+	if(settings.web.views) {
+		promises.push(l10n.init()
+			.then(function() {
+				return staticAnalysis.l10n.unmetRefs(settings.web.views, l10n.get)
+			})
+			.then(function(unmetRefs) {
+				if(0 == unmetRefs.length) {
+					return
+				}
+				console.warn('There are l10n refs in use that are not translated:\n', unmetRefs)
+			})
+		)
+	}
 	return Q.all(promises)
 }
 
