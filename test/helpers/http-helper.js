@@ -95,7 +95,7 @@ function createHelper(defaults, options) {
 		url = defaults.url + url
 		opts.uri = url
 
-		var promise = Q.ncall(request[method.toLowerCase()], req, opts)
+		var promise = Q.ninvoke(request, method.toLowerCase(), opts)
 			.then(function(args) {
 				var response = args[0]
 				  , body = args[1]
