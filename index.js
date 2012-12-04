@@ -30,6 +30,7 @@ if(require.main === module) {
 
 function start(settings) {
 	var promises = []
+	  , l10nPromise = l10n.init()
 	if(settings.database) {
 		promises.push(mongo.connect(settings.database).then(function(database) {
 			db = database
@@ -40,8 +41,9 @@ function start(settings) {
 		return Q.reject('no database given')
 	}
 	promises.push(server.start(settings.web))
+	promises.push(l10nPromise)
 	if(settings.web.views) {
-		promises.push(l10n.init()
+		l10nPromise
 			.then(function() {
 				return staticAnalysis.l10n.unmetRefs(settings.web.views, l10n.get)
 			})
@@ -51,7 +53,6 @@ function start(settings) {
 				}
 				console.warn('There are l10n refs in use that are not translated:\n', unmetRefs)
 			})
-		)
 	}
 	return Q.all(promises)
 }
