@@ -12,6 +12,7 @@ module.exports = function setup(app) {
 var middleware = require('../middleware')
   , storage = require('../storage')
   , Q = require('q')
+  , _ = require('underscore')
 
 function createUser(req, res) {
 	var user = req.user
@@ -38,18 +39,25 @@ function getUser(req, res) {
 			: { username: req.params.id }
 		storage.users.get(search)
 			.then(function(user) {
-				res.send(user)
+				res.send(removeSecretProps(user))
 			},
 			function() {
 				res.send(404)
 			})
 		return
 	}
-	res.send(req.user)
+	res.send(removeSecretProps(req.user))
 }
 function getUsers(req, res) {
 	storage.users.getAll().then(function(users) {
-		res.send(users)
+		res.send(users.map(removeSecretProps))
 	})
 }
 function updateUser() {}
+
+function removeSecretProps(user) {
+	var attr = _(user.attributes).clone()
+	delete attr._id
+	delete attr.password
+	return attr
+}

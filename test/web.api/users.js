@@ -61,17 +61,34 @@ describe('web.api/users.js', function() {
 		it('should return 200 for /users', assertStatus('get', '/users', 200))
 		it('should return a list of users for /users', function() {
 			var expected =
-			    [ { username: 'a', password: '1' }
-			    , { username: 'b', password: '2' }
+			    [ { username: 'a' }
+			    , { username: 'b' }
 			    ]
 			return expect(helper.get('/users').get(1))
 				.to.eventually.approximate(expected)
+		})
+		it('should not return password and mongo-id for /users', function() {
+			var expected =
+			    [ 'password'
+			    , '_id'
+			    ]
+			return expect(helper.get('/users').get(1))
+				.to.eventually.not.have.anyOfThePropertiesInAnyOfTheObjects(expected)
+		})
+		it('should not return password and mongo-id for /user', function() {
+			return expect(helper.get('/user').get(1))
+				.to.eventually.not.have.property('password')
+				.and.not.have.property('_id')
+		})
+		it('should not return password and mongo-id for /user/:id', function() {
+			return expect(helper.get('/users/a').get(1))
+				.to.eventually.not.have.property('password')
+				.and.not.have.property('_id')
 		})
 		it('should return 200 for /user', assertStatus('get', '/user', 200))
 		it('should return the current user for /user', function() {
 			var expected =
 			    { username: 'a'
-			    , password: '1'
 			    , extra: 'c'
 			    }
 			return expect(helper.get('/user').get(1))
@@ -81,7 +98,6 @@ describe('web.api/users.js', function() {
 		it('should return the specified user for /users/:id', function() {
 			var expected =
 			    { username: 'b'
-			    , password: '2'
 			    }
 			return expect(helper.get('/users/b').get(1))
 				.to.eventually.approximate(expected)
@@ -167,7 +183,6 @@ describe('web.api/users.js', function() {
 		it('should have updated the user', function() {
 			var expected =
 			    { username: 'b'
-			    , password: '2'
 			    }
 			return expect(helpers.storage.users.get(1))
 				.to.eventually.approximate(expected)
