@@ -61,6 +61,11 @@ function update(user, data) {
 	  , sort = []
 	  , update = { $set: data }
 	  , options = { new: true }
+
+	if('password' in data && !data.password) {
+		delete data.password
+	}
+
 	return collection()
 		.invoke(
 			  'findAndModify'

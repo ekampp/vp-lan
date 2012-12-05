@@ -12,9 +12,12 @@
   , "FACEBOOK": "Facebook"
   , "MAIN": "Generelt"
   }
-, "user":
+, "users":
   { "LBL FORM USERNAME": "Brugernavn:"
   , "LBL FORM PASSWORD": "Kodeord:"
+  , "LBL FORM NAME": "Fulde navn:"
+  , "FORM PASSWORD PLACEHOLDER": "Indtast kun koden såfremt den skal ændres"
   , "BTN LOGIN": "Log ind"
+  , "BTN UPDATE": "Opdatér din profil"
   }
 }

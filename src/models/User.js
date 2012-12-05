@@ -8,7 +8,7 @@ module.exports = Backbone.Model.extend(
 	}
 )
 
-defineGetSetters(module.exports.prototype, ['username','password'])
+defineGetSetters(module.exports.prototype, ['username','password', 'name'])
 
 function resolveDependencies() {
 	return Q.resolve(this)

@@ -1,0 +1,16 @@
+<form method=post action=/users>
+	<div>
+		<label class="form__lbl--required" for=in-username>{{#l10n}}users, LBL FORM USERNAME{{/l10n}}</label>
+		<input name=username id=in-username value="{{username}}" type=text>
+	</div>
+	<div>
+		<label for=in-name>{{#l10n}}users, LBL FORM NAME{{/l10n}}</label>
+		<input name=name id=in-name value="{{name}}" type=text>
+	</div>
+	<div>
+		<label for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
+		<input name=password id=in-password type=password
+			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
+	</div>
+	<button type=submit>{{#l10n}}users, BTN UPDATE{{/l10n}}</button>
+</form>

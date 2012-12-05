@@ -46,7 +46,11 @@ function getUser(req, res) {
 			})
 		return
 	}
-	res.send(removeSecretProps(req.user))
+	var user = removeSecretProps(req.user)
+	if(req.accepts('html')) {
+		return res.render('users/profile-edit', user)
+	}
+	res.send(user)
 }
 function getUsers(req, res) {
 	storage.users.getAll().then(function(users) {

@@ -156,7 +156,7 @@ describe('web.api/users.js', function() {
 			})
 		})
 	})
-	describe('When posting while logged in', function() {
+	describe('When posting to `/users` while logged in', function() {
 		var response
 		beforeEach(function() {
 			return helpers.server.setData('basic')
@@ -186,6 +186,25 @@ describe('web.api/users.js', function() {
 			    }
 			return expect(helpers.storage.users.get(1))
 				.to.eventually.approximate(expected)
+		})
+		describe('and password is empty', function() {
+			beforeEach(function() {
+				return helpers.server.setData('basic')
+					.then(function() {
+						var opts =
+						{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+						, data:
+						  { username: 'b'
+						  , password: ''
+						  }
+						}
+						return helper.post('/users', opts)
+					})
+			})
+			it('should not change the current password', function() {
+				return expect(helpers.storage.users.get(1).get('password'))
+					.to.eventually.equal('1')
+			})
 		})
 	})
 
