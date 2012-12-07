@@ -12,6 +12,7 @@ var server = require('./src/server')
   , l10n = require('./src/l10n')
   , staticAnalysis = require('./src/static-analysis')
   , storage = require('./src/storage/db')
+  , patches = require('./src/storage/patches')
 
 if(require.main === module) {
 	var settings =
@@ -35,7 +36,7 @@ function start(settings) {
 		promises.push(mongo.connect(settings.database).then(function(database) {
 			db = database
 			storage.setConnection(database)
-			return Q.resolve()
+			return patches.run(database)
 		}))
 	} else {
 		return Q.reject('no database given')
@@ -60,7 +61,7 @@ function start(settings) {
 function stop() {
 	return Q.all(
 		[ server.stop()
-		, db.database ? mongo.closeAll() : Q.resolve()
+		, db ? mongo.closeAll() : Q.resolve()
 		]
 	)
 }
