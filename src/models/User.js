@@ -5,10 +5,24 @@ var Backbone = require('backbone')
 
 module.exports = Backbone.Model.extend(
 	{ resolveDependencies: resolveDependencies
+	, conformsToRole: conformsToRole
 	}
 )
 
-defineGetSetters(module.exports.prototype, ['username','password', 'name'])
+function conformsToRole(role) {
+	if(role == 'user') {
+		return true
+	}
+	if(this.role == 'super') {
+		return true
+	}
+	if(role == 'admin' && this.role == 'admin') {
+		return true
+	}
+	return false
+}
+
+defineGetSetters(module.exports.prototype, ['username','password', 'name', 'role'])
 
 function resolveDependencies() {
 	return Q.resolve(this)

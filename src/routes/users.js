@@ -1,12 +1,13 @@
 module.exports = function setup(app) {
 	app.get('/users', middleware.auth.requireUser, getUsers)
-	app.post(/\/user(s?)/, createUser)
+	app.post(/^\/user(s?)$/, createUser)
 
 	app.get('/user', middleware.auth.requireUser, getUser)
 	app.get('/users/:id', middleware.auth.requireUser, getUser)
 
 	app.put('/user', middleware.auth.requireUser, updateUser)
 	app.put('/users/:id', middleware.auth.requireUser, updateUser)
+	app.post('/users/:id', middleware.auth.requireUserRole('admin'), updateUser)
 }
 
 var middleware = require('../middleware')
@@ -32,21 +33,31 @@ function createUser(req, res) {
 			})
 	}
 }
+
+function getUserQuery(val) {
+	return +val ? +val : { username: val }
+}
+
 function getUser(req, res) {
 	if(req.params.id) {
-		var search = +req.params.id
-			? +req.params.id
-			: { username: req.params.id }
+		var search = getUserQuery(req.params.id)
 		storage.users.get(search)
 			.then(function(user) {
-				res.send(removeSecretProps(user))
+				user = removeSecretProps(req.user, user)
+				if(req.user
+				&& req.user.conformsToRole('admin')
+				&& req.accepts('html')
+				) {
+					return res.render('users/profile-edit', user)
+				}
+				res.send(user)
 			},
 			function() {
 				res.send(404)
 			})
 		return
 	}
-	var user = removeSecretProps(req.user)
+	var user = removeSecretProps(req.user, req.user)
 	if(req.accepts('html')) {
 		return res.render('users/profile-edit', user)
 	}
@@ -54,14 +65,26 @@ function getUser(req, res) {
 }
 function getUsers(req, res) {
 	storage.users.getAll().then(function(users) {
-		res.send(users.map(removeSecretProps))
+		res.send(users.map(removeSecretProps.bind(null, req.user)))
 	})
 }
-function updateUser() {}
 
-function removeSecretProps(user) {
+function updateUser(req, res) {
+	var search = getUserQuery(req.params.id)
+	storage.users.update(search, req.body).then(function(user) {
+		res.send(200, user)
+	})
+}
+
+function removeSecretProps(currentUser, user) {
 	var attr = _(user.attributes).clone()
 	delete attr._id
 	delete attr.password
+	attr['sel-current-role'] = function(role) {
+		return role == this.role
+		     ? 'selected'
+		     : ''
+	}
+	attr['other-user'] = currentUser && currentUser.id != user.id
 	return attr
 }

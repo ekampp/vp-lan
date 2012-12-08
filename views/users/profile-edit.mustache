@@ -1,4 +1,4 @@
-<form method=post action=/users>
+<form method=post action=/users{{#other-user}}/{{username}}{{/other-user}}>
 	<div>
 		<label class="form__lbl--required" for=in-username>{{#l10n}}users, LBL FORM USERNAME{{/l10n}}</label>
 		<input name=username id=in-username value="{{username}}" type=text>
@@ -12,5 +12,14 @@
 		<input name=password id=in-password type=password
 			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
 	</div>
+	{{#is-admin}}
+	<div>
+		<label for=in-role>{{#l10n}}users, LBL FORM ROLE{{/l10n}}</label>
+		<select name=role id=in-role>
+			<option value=user {{#sel-current-role}}user{{/sel-current-role}}>{{#l10n}}users, FORM ROLE OPT USER{{/l10n}}
+			<option value=admin {{#sel-current-role}}admin{{/sel-current-role}}>{{#l10n}}users, FORM ROLE OPT ADMIN{{/l10n}}
+		</select>
+	</div>
+	{{/is-admin}}
 	<button type=submit>{{#l10n}}users, BTN UPDATE{{/l10n}}</button>
 </form>

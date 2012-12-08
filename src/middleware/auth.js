@@ -1,5 +1,6 @@
 module.exports =
 { requireUser: requireUser
+, requireUserRole: requireUserRole
 , loadUser: loadUser
 }
 
@@ -29,19 +30,31 @@ function loadUser(req, res, next) {
 		})
 }
 
-function requireUser(req, res, next) {
-	if(req.user) {
-		return next()
-	}
-
+function rejectRequest(req, res, code) {
 	if(req.accepts('html')) {
 		return res.render(
 			  'users/access-form'
 			, { action: 'login', 'btn-text': 'Login' }
 			, function(err, html) {
-				res.send(401, html)
+				res.send(code, html)
 			}
 		)
 	}
-	res.send(401)
+	res.send(code)
+}
+
+function requireUser(req, res, next) {
+	if(req.user) {
+		return next()
+	}
+	rejectRequest(req, res, 401)
+}
+
+function requireUserRole(role) {
+	return function(req, res, next) {
+		if(req.user && req.user.conformsToRole(role)) {
+			return next()
+		}
+		rejectRequest(req, res, 403)
+	}
 }

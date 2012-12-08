@@ -1,11 +1,12 @@
 describe('web.api/users.js', function() {
 	var helper
+	  , client
 	  , Q = require('q')
 	  , request = require('request')
 
 	helpers.common.setup(this)
 	beforeEach(function() {
-		helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
+		client = helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
 	describe('When posting to `/login`', function() {
@@ -153,6 +154,71 @@ describe('web.api/users.js', function() {
 				return expect(helper.get('/user', { headers: auth })
 					.get(0).get('statusCode')
 				).to.eventually.equal(401)
+			})
+		})
+	})
+	describe('When posting to `/users/:id`', function() {
+		beforeEach(function() {
+			return helpers.storage.users.add(
+			  { id: 1
+			  , username: 'a'
+			  , password: '1'
+			  , role: 'admin'
+			  }
+			, { id: 2
+			  , username: 'b'
+			  , password: '2'
+			  , role: 'user'
+			  }
+			, { id: 3
+			  , username: 'c'
+			  , password: '3'
+			  , role: 'user'
+			  }
+			)
+		})
+		describe('and current role is `user`', function() {
+			var response
+			beforeEach(function() {
+				var data = { username: 'cc' }
+				client.options({ headers: helpers.httpHelper.createBasicHttpAuthHeader('b', '2') })
+				return client.post('/users/c', { data: data })
+					.get(0)
+					.then(function(resp) {
+						response = resp
+					})
+			})
+			it('should return 403', function() {
+				expect(response.statusCode).to.equal(403)
+			})
+			it('should not update the user', function() {
+				var expected =
+				    { username: 'a'
+				    }
+				return expect(helpers.storage.users.get(1))
+					.to.eventually.approximate(expected)
+			})
+		})
+		describe('and current role is `admin`', function() {
+			var response
+			beforeEach(function() {
+				var data = { username: 'bc' }
+				client.options({ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1') })
+				return client.post('/users/b', { data: data })
+					.get(0)
+					.then(function(resp) {
+						response = resp
+					})
+			})
+			it('should return code 200', function() {
+				expect(response.statusCode).to.equal(200)
+			})
+			it('should update the user', function() {
+				var expected =
+				    { username: 'bc'
+				    }
+				return expect(helpers.storage.users.get(2))
+					.to.eventually.approximate(expected)
 			})
 		})
 	})
