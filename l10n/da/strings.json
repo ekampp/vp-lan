@@ -11,10 +11,19 @@
   , "EVENT SIGNUP": "Tilmelding"
   , "FACEBOOK": "Facebook"
   , "MAIN": "Generelt"
+  , "PROFILE": "Profil"
+  , "LOGOUT": "Log ud"
   }
-, "user":
+, "users":
   { "LBL FORM USERNAME": "Brugernavn:"
   , "LBL FORM PASSWORD": "Kodeord:"
+  , "LBL FORM NAME": "Fulde navn:"
+  , "FORM PASSWORD PLACEHOLDER": "Indtast kun koden såfremt den skal ændres"
+  , "LBL FORM ROLE": "Rolle:"
+  , "FORM ROLE OPT USER": "Bruger"
+  , "FORM ROLE OPT ADMIN": "Admin"
   , "BTN LOGIN": "Log ind"
+  , "BTN UPDATE": "Opdatér din profil"
+  , "BTN SIGNUP": "Opret bruger"
   }
 }

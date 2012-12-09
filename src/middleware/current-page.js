@@ -5,6 +5,8 @@ module.exports =
 
 function setup(app) {
 	app.use('/events', middleware('events'))
+	app.use('/user', middleware('profile'))
+	app.use('/users', middleware('users'))
 }
 
 function middleware(key) {

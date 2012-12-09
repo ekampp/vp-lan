@@ -89,6 +89,7 @@ function render(req, res, view /*, ...args*/) {
 		data.l10n = l10n
 		data.ml10n = ml10n
 		data['is-logged-in'] = !!req.user
+		data['is-admin'] = req.user && req.user.conformsToRole('admin')
 		return data
 	}
 }

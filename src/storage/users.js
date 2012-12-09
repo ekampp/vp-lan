@@ -47,6 +47,9 @@ function add(data) {
 	if(!data.id) {
 		data.id = nextId
 	}
+	if(!data.role) {
+		data.role = 'user'
+	}
 	nextId = Math.max(data.id, nextId) + 1
 	return collection()
 		.invoke('insert', data)
@@ -56,10 +59,18 @@ function add(data) {
 }
 
 function update(user, data) {
-	var query = { id: user.id }
+	var query
 	  , sort = []
 	  , update = { $set: data }
 	  , options = { new: true }
+	if(user.username) {
+		query = { username: user.username }
+	} else {
+		query = { id: user.id || user }
+	}
+	if('password' in data && !data.password) {
+		delete data.password
+	}
 	return collection()
 		.invoke(
 			  'findAndModify'
