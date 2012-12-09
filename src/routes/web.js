@@ -5,6 +5,7 @@ module.exports = function setup(app) {
 	app.get('/signup', render('users/access-form', { action: 'users', 'btn-text': 'Signup' }))
 	app.get('/login', render('users/access-form', { action: 'login', 'btn-text': 'Login' }))
 	app.post('/login', login)
+	app.get('/logout', logout)
 }
 
 var bodyParser = require('express').urlencoded
@@ -38,6 +39,10 @@ function static(req, res) {
 		})
 }
 
+function logout(req, res) {
+	res.clearCookie('x-user-token')
+	res.redirect('/')
+}
 function render(view, data) {
 	return function(req, res) {
 		res.render(view, data)

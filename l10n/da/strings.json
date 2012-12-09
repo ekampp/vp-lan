@@ -11,6 +11,8 @@
   , "EVENT SIGNUP": "Tilmelding"
   , "FACEBOOK": "Facebook"
   , "MAIN": "Generelt"
+  , "PROFILE": "Profil"
+  , "LOGOUT": "Log ud"
   }
 , "users":
   { "LBL FORM USERNAME": "Brugernavn:"

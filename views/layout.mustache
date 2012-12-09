@@ -3,11 +3,13 @@
 {{#minify}}/css/styles.css{{/minify}}
 
 <nav class="menu">
+	{{#is-logged-in}}<a class="menu__link {{#is-profile}}menu__link--current{{/is-profile}}" href=/user>{{#l10n}}menu, PROFILE{{/l10n}}</a>{{/is-logged-in}}
 	<a class="menu__link {{#is-main}}menu__link--current{{/is-main}}" href=/>{{#l10n}}menu, MAIN{{/l10n}}</a>
 	<a class="menu__link {{#is-events}}menu__link--current{{/is-events}}" href=/events/1>{{#l10n}}menu, EVENT SIGNUP{{/l10n}}</a>
 	<img class="logo" src=/gfx/logo.jpg alt="Logo">
 	<a class="menu__link {{#is-info}}menu__link--current{{/is-info}}" href=/info>{{#l10n}}menu, INFO{{/l10n}}</a>
 	<a class="menu__link" href=http://www.facebook.com/groups/377764815646255>{{#l10n}}menu, FACEBOOK{{/l10n}}</a>
+	{{#is-logged-in}}<a class="menu__link" href=/logout>{{#l10n}}menu, LOGOUT{{/l10n}}</a>{{/is-logged-in}}
 </nav>
 
 {{{body}}}
