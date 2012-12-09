@@ -2,14 +2,25 @@ module.exports = function setup(app) {
 	app.get('/', static)
 	app.get('/info', static)
 	//app.get('/', render('index'))
-	app.get('/signup', render('users/access-form', { action: 'users', 'btn-text': 'Signup' }))
-	app.get('/login', render('users/access-form', { action: 'login', 'btn-text': 'Login' }))
+	app.get('/signup', render(
+	  'users/access-form'
+	, { action: 'users'
+	  , 'btn-text': l10n.get('users', 'BTN SIGNUP')
+	  }
+	))
+	app.get('/login', render(
+	  'users/access-form'
+	, { action: 'login'
+	  , 'btn-text': l10n.get('users', 'BTN LOGIN')
+	  }
+	))
 	app.post('/login', login)
 	app.get('/logout', logout)
 }
 
 var bodyParser = require('express').urlencoded
   , storage = require('../storage')
+  , l10n = require('../l10n')
 
 function login(req, res) {
 	var data = req.body

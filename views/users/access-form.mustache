@@ -1,5 +1,11 @@
 <form method=post action=/{{action}}>
-	<label>Username: <input name=username type=text></label>
-	<label>Password: <input name=password type=password></label>
+	<div>
+		<label for=in-username>{{#l10n}}users, LBL FORM USERNAME{{/l10n}}</label>
+		<input name=username type=text id=in-username>
+	</div>
+	<div>
+		<label for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
+		<input name=password type=password id=in-password>
+	</div>
 	<button type=submit>{{btn-text}}</button>
 </form>
