@@ -250,7 +250,7 @@ describe('web.api/users.js', function() {
 			})
 		})
 	})
-	describe('When posting to `/users/:id`', function() {
+	describe('When updating other user via posting to `/users/:id`', function() {
 		beforeEach(function() {
 			return helpers.storage.users.add(
 			  { id: 1
