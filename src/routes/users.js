@@ -18,6 +18,9 @@ var middleware = require('../middleware')
 function createUser(req, res) {
 	var user = req.user
 	if(user) {
+		if(req.body.role) {
+			return res.send(400, 'cannot change own role')
+		}
 		return storage.users.update(user, req.body)
 			.then(function() {
 				res.redirect('/')
@@ -35,7 +38,7 @@ function createUser(req, res) {
 }
 
 function getUserQuery(val) {
-	return +val ? +val : { username: val }
+	return +val ? { id: +val } : { username: val }
 }
 
 function getUser(req, res) {
@@ -70,7 +73,14 @@ function getUsers(req, res) {
 }
 
 function updateUser(req, res) {
-	var search = getUserQuery(req.params.id)
+	var search = getUserQuery(req.params.id || req.user.id)
+	if(( search.id == req.user.id
+	  || search.username == req.user.username
+	)
+	&& req.body.role
+	) {
+		return res.send(400, 'cannot change own role')
+	}
 	storage.users.update(search, req.body).then(function(user) {
 		res.send(200, user)
 	})

@@ -48,7 +48,7 @@ describe('web.api/users.js', function() {
 		it('should return 401 for /users/:id', assertStatus('put', '/users/1', 401))
 	})
 
-	describe('When getting while logged in', function() {
+	describe('While logged in, when getting', function() {
 		beforeEach(function() {
 			helper.options({
 				headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
@@ -59,61 +59,75 @@ describe('web.api/users.js', function() {
 				]
 			)
 		})
-		it('should return 200 for /users', assertStatus('get', '/users', 200))
-		it('should return a list of users for /users', function() {
-			var expected =
-			    [ { username: 'a' }
-			    , { username: 'b' }
-			    ]
-			return expect(helper.get('/users').get(1))
-				.to.eventually.approximate(expected)
+		describe('from `/users`', function() {
+			it('should return 200', assertStatus('get', '/users', 200))
+			it('should return a list of users', function() {
+				var expected =
+				    [ { username: 'a' }
+				    , { username: 'b' }
+				    ]
+				return expect(helper.get('/users').get(1))
+					.to.eventually.approximate(expected)
+			})
+			it('should not return password and mongo-id', function() {
+				var expected =
+				    [ 'password'
+				    , '_id'
+				    ]
+				return expect(helper.get('/users').get(1))
+					.to.eventually.not.have.anyOfThePropertiesInAnyOfTheObjects(expected)
+			})
 		})
-		it('should not return password and mongo-id for /users', function() {
-			var expected =
-			    [ 'password'
-			    , '_id'
-			    ]
-			return expect(helper.get('/users').get(1))
-				.to.eventually.not.have.anyOfThePropertiesInAnyOfTheObjects(expected)
+		describe('from `/user`', function() {
+			it('should not return password and mongo-id', function() {
+				return expect(helper.get('/user').get(1))
+					.to.eventually.not.have.property('password')
+					.and.not.have.property('_id')
+			})
+			it('should return 200', assertStatus('get', '/user', 200))
+			it('should return the current user', function() {
+				var expected =
+				    { username: 'a'
+				    , extra: 'c'
+				    }
+				return expect(helper.get('/user').get(1))
+					.to.eventually.approximate(expected)
+			})
 		})
-		it('should not return password and mongo-id for /user', function() {
-			return expect(helper.get('/user').get(1))
-				.to.eventually.not.have.property('password')
-				.and.not.have.property('_id')
+		describe('from `/users/:id`', function() {
+			it('should not return password and mongo-id for /user/:id', function() {
+				return expect(helper.get('/users/a').get(1))
+					.to.eventually.not.have.property('password')
+					.and.not.have.property('_id')
+			})
+			it('should return 200 for /users/:id', assertStatus('get', '/users/b', 200))
+			it('should return the specified user for /users/:id', function() {
+				var expected =
+				    { username: 'b'
+				    }
+				return expect(helper.get('/users/b').get(1))
+					.to.eventually.approximate(expected)
+			})
+			it('should return 404 for an unknown user at /users/:id',
+				assertStatus('get', '/users/c', 404))
 		})
-		it('should not return password and mongo-id for /user/:id', function() {
-			return expect(helper.get('/users/a').get(1))
-				.to.eventually.not.have.property('password')
-				.and.not.have.property('_id')
-		})
-		it('should return 200 for /user', assertStatus('get', '/user', 200))
-		it('should return the current user for /user', function() {
-			var expected =
-			    { username: 'a'
-			    , extra: 'c'
-			    }
-			return expect(helper.get('/user').get(1))
-				.to.eventually.approximate(expected)
-		})
-		it('should return 200 for /users/:id', assertStatus('get', '/users/b', 200))
-		it('should return the specified user for /users/:id', function() {
-			var expected =
-			    { username: 'b'
-			    }
-			return expect(helper.get('/users/b').get(1))
-				.to.eventually.approximate(expected)
-		})
-		it('should return 404 for an unknown user at /users/:id',
-			assertStatus('get', '/users/c', 404))
 	})
 
-	describe('When posting without login and no username is given', function() {
-		it('should return status 400', function() {
-			return expect(helper.post('/users').get(0).get('statusCode'))
-				.to.eventually.equal(400)
+	describe('When posting to `/users` without login', function() {
+		describe('and no username is given', function() {
+			it('should return status 400', function() {
+				return expect(helper.post('/users', { password: 'abc' }).get(0).get('statusCode'))
+					.to.eventually.equal(400)
+			})
+		})
+		describe('and no password is given', function() {
+			it('should return status 400', function() {
+				return expect(helper.post('/users', { username: 'abc' }).get(0).get('statusCode'))
+					.to.eventually.equal(400)
+			})
 		})
 	})
-	describe('When posting without login', function() {
+	describe('When posting to `/users` without login', function() {
 		var response
 		  , cookie
 		beforeEach(function() {
@@ -154,6 +168,85 @@ describe('web.api/users.js', function() {
 				return expect(helper.get('/user', { headers: auth })
 					.get(0).get('statusCode')
 				).to.eventually.equal(401)
+			})
+		})
+	})
+	describe('When updating the role', function() {
+		describe('of the current user', function() {
+			var data
+			beforeEach(function() {
+				client.options({ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1') })
+				data = { role: 'user' }
+				return helpers.storage.users.add(
+				         { username: 'a'
+				         , password: '1'
+				         , role: 'admin'
+				         }
+				       )
+			})
+			describe('via put to `/user`', function() {
+				var response
+				beforeEach(function() {
+					return client.put('/user', { json: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 400', function() {
+					expect(response.statusCode).to.equal(400)
+				})
+				it('should not update the user', function() {
+					return expect(helpers.storage.users.get({ username: 'a' }))
+						.to.eventually.have.property('role', 'admin')
+				})
+			})
+			describe('via put to `/users/:id`', function() {
+				var response
+				beforeEach(function() {
+					return client.put('/users/a', { json: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 400', function() {
+					expect(response.statusCode).to.equal(400)
+				})
+				it('should not update the user', function() {
+					return expect(helpers.storage.users.get({ username: 'a' }))
+						.to.eventually.have.property('role', 'admin')
+				})
+			})
+			describe('via post to `/user`', function() {
+				var response
+				beforeEach(function() {
+					return client.post('/user', { form: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 400', function() {
+					expect(response.statusCode).to.equal(400)
+				})
+				it('should not update the user', function() {
+					return expect(helpers.storage.users.get({ username: 'a' }))
+						.to.eventually.have.property('role', 'admin')
+				})
+			})
+			describe('via post to `/users/:id`', function() {
+				var response
+				beforeEach(function() {
+					return client.post('/users/a', { form: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 400', function() {
+					expect(response.statusCode).to.equal(400)
+				})
+				it('should not update the user', function() {
+					return expect(helpers.storage.users.get({ username: 'a' }))
+						.to.eventually.have.property('role', 'admin')
+				})
 			})
 		})
 	})
