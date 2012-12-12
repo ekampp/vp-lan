@@ -10,6 +10,12 @@
 	<a class="menu__link {{#is-info}}menu__link--current{{/is-info}}" href=/info>{{#l10n}}menu, INFO{{/l10n}}</a>
 	<a class="menu__link" href=http://www.facebook.com/groups/377764815646255>{{#l10n}}menu, FACEBOOK{{/l10n}}</a>
 	{{#is-logged-in}}<a class="menu__link" href=/logout>{{#l10n}}menu, LOGOUT{{/l10n}}</a>{{/is-logged-in}}
+
+	{{#is-admin}}
+	<div class="menu__admin">
+		<a class="menu__link" href=/static-pages>{{#l10n}}menu, ADMIN EDIT STATIC PAGES{{/l10n}}</a>
+	</div>
+	{{/is-admin}}
 </nav>
 
 {{{body}}}
@@ -21,5 +27,6 @@ var VP = { user: {{{user-json}}} }
 /js/ender.min.js
 /js/seats.js
 /js/events.js
+/js/static-pages.js
 /js/index.js
 {{/minify}}

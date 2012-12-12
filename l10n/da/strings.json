@@ -13,6 +13,7 @@
   , "MAIN": "Generelt"
   , "PROFILE": "Profil"
   , "LOGOUT": "Log ud"
+  , "ADMIN EDIT STATIC PAGES": "Edit pages"
   }
 , "users":
   { "LBL FORM USERNAME": "Brugernavn:"
@@ -25,5 +26,13 @@
   , "BTN LOGIN": "Log ind"
   , "BTN UPDATE": "Opdatér din profil"
   , "BTN SIGNUP": "Opret bruger"
+  }
+, "admin":
+  { "STATIC PAGE SELECT PLACEHOLDER": "Select static page"
+  , "STATIC PAGE FORM LBL NAME": "Name:"
+  , "STATIC PAGE FORM LBL CONTENT": "Content:"
+  , "BTN PREVIEW STATIC PAGE": "Preview"
+  , "STATIC PAGE AUTO PREVIEW": "Update preview automatically"
+  , "BTN SUBMIT STATIC PAGE": "Save changes"
   }
 }

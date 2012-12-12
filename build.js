@@ -6,6 +6,7 @@ var ender = require('ender')
     , 'bonzo'
     , 'q'
     , 'page'
+    , 'showdown'
     ]
   , options =
     { output: 'client/js/ender'

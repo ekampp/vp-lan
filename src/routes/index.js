@@ -6,6 +6,7 @@ var users = require('./users')
   , web = require('./web')
   , events = require('./events')
   , seats = require('./seats')
+  , staticPages = require('./static-pages')
   , Q = require('q')
 
 function setup(app, settings) {
@@ -14,5 +15,6 @@ function setup(app, settings) {
 	, users(app, settings)
 	, events(app, settings)
 	, seats(app, settings)
+	, staticPages(app, settings)
 	])
 }
