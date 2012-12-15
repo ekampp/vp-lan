@@ -5,31 +5,22 @@ var Q = require('q')
 
 function setData() {
 	return Q.all(
-	[ storage.users.add(
-	    { id: 1
-	    , username: 'a'
-	    , password: '1'
-	    }
-	  , { id: 2
-	    , username: 'b'
-	    , password: '2'
-	    }
-	  )
+	[ require('./basic-users')()
 	, storage.events.add(
 	    { id: 1
 	    , name: 'December 2012'
 	    , start: '2012-12-07T19:00:00+01:00'
 	    , end: '2012-12-09T14:00:00+01:00'
 	    , tables:
-  '.| .|\n'
-+ '.| .|\n'
-+ '.| .|\n'
-+ '\n'
-+ '...\n'
-+ '---\n'
-+ '\n'
-+ '...\n'
-+ '---\n'
+	        '.| .|\n'
+	      + '.| .|\n'
+	      + '.| .|\n'
+	      + '\n'
+	      + '...\n'
+	      + '---\n'
+	      + '\n'
+	      + '...\n'
+	      + '---\n'
 	    , seats:
 	      [ { id: 1
 	        , position: [ 0, 0 ]

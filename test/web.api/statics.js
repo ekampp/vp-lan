@@ -1,18 +1,16 @@
 describe('web.api/statics.js', function() {
 	var client
+	  , Q = require('q')
 
 	helpers.common.setup(this)
 	beforeEach(function() {
 		client = helpers.httpHelper.createHelper(settings, { skipAuth: true })
+		return Q.all(
+		       [ helpers.server.setData('basic-static')
+		       , helpers.server.setData('basic-users')
+		       ])
 	})
 	describe('When getting `/static-pages`', function() {
-		beforeEach(function() {
-			helpers.storage.static.add(getStatic('/', 'abc'), getStatic('/a', 'def'))
-
-			function getStatic(url, content) {
-				return { url: url, content: content }
-			}
-		})
 		it('should return a list of pages', function() {
 			var data =
 			    [ { url: '/'
@@ -33,6 +31,16 @@ describe('web.api/statics.js', function() {
 			{ url: '/'
 			, content: 'abc'
 			}
+		})
+		describe('as a user', function() {
+			beforeEach(function() {
+				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
+				client.options({ headers: auth })
+			})
+			it('should return status 401', function() {
+				return expect(client.post('/static-pages', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 403)
+			})
 		})
 		describe('as an admin', function() {
 			var response
