@@ -36,17 +36,25 @@ describe('web.api/statics.js', function() {
 		})
 		describe('as an admin', function() {
 			var response
+			  , body
 			beforeEach(function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
 				client.options({ headers: auth })
 				return client.post('/static-pages', { form: data })
-					.get(0)
-					.then(function(resp) {
-						response = resp
+					.then(function(args) {
+						response = args[0]
+						body = args[1]
 					})
 			})
 			it('should return status 200', function() {
 				expect(response).to.have.property('statusCode', 200)
+			})
+			it('should return the object', function() {
+				var expected =
+				    { url: '/'
+				    , content: 'abc'
+				    }
+				expect(body).to.approximate(expected)
 			})
 			it('should return the new content (also converted) when getting', function() {
 				return expect(client.get('/').get(1))

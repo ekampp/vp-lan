@@ -4,11 +4,19 @@ module.exports = function setup(app) {
 }
 
 var storage = require('../storage')
+  , l10n = require('../l10n')
 
 function getStaticPages(req, res) {
 	storage.static.getAll().then(function(statics) {
 		if(req.accepts('html')) {
-			res.render('admin/static', { pages: statics })
+			var opts = { pages: statics }
+			if(req.query.m == 'ok') {
+				opts.message =
+				{ status: 'ok'
+				, message: l10n.get('admin', 'STATIC PAGE UPDATE OK')
+				}
+			}
+			res.render('admin/static', opts)
 			return
 		}
 		res.send(statics)
@@ -17,8 +25,13 @@ function getStaticPages(req, res) {
 
 function updateStaticPage(req, res) {
 	var body = req.body
-	storage.static.update(body.url, body)
-	res.send(200)
+	storage.static.update(body.url, body).then(function(data) {
+		if(req.accepts('html')) {
+			res.redirect('/static-pages?m=ok')
+			return
+		}
+		res.send(200, data)
+	})
 }
 
 function prepareStatics(req, statics) {
