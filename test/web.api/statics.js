@@ -32,6 +32,16 @@ describe('web.api/statics.js', function() {
 			, content: 'abc'
 			}
 		})
+		describe('that has no url', function() {
+			it('should give status 400', function() {
+				var opts =
+				    { headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				    , form: { url: '', content: 'ghi' }
+				    }
+				return expect(client.post('/static-pages', opts).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+		})
 		describe('as a user', function() {
 			beforeEach(function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')

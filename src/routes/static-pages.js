@@ -26,6 +26,9 @@ function getStaticPages(req, res) {
 
 function updateStaticPage(req, res) {
 	var body = req.body
+	if(!body.url || !body.url.trim()) {
+		return res.send(400, 'url required')
+	}
 	storage.static.update(body.url, body).then(function(data) {
 		if(req.accepts('html')) {
 			res.redirect('/static-pages?m=ok')
