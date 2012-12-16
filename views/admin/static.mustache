@@ -1,0 +1,40 @@
+{{#message}}
+<div class="admin__static__update admin__static__update--{{status}}">
+{{message}}
+</div>
+{{/message}}
+<select class="js-select-page">
+<option>{{#l10n}}admin, STATIC PAGE SELECT PLACEHOLDER{{/l10n}}
+{{#pages}}
+<option value="{{url}}" {{#current}}selected{{/current}}>{{name}} - '{{url}}'
+{{/pages}}
+</select>
+
+<div class="grid">
+<fieldset class="grid--1o2">
+<form method=post>
+	<input type=hidden name=url>
+	<div>
+		<label for=in-name>{{#l10n}}admin, STATIC PAGE FORM LBL NAME{{/l10n}}</label>
+		<input name=name id=in-name type=text>
+	</div>
+	<div>
+		<label for=in-content>{{#l10n}}admin, STATIC PAGE FORM LBL CONTENT{{/l10n}}</label>
+		<textarea name=content id=in-content></textarea>
+	</div>
+	<div>
+		<button type=button class="js-btn-preview">{{#l10n}}admin, BTN PREVIEW STATIC PAGE{{/l10n}}</button>
+		<label><input class="js-chk-preview-auto" type=checkbox> {{#l10n}}admin, STATIC PAGE AUTO PREVIEW{{/l10n}}</label>
+	</div>
+
+	<button type=submit>{{#l10n}}admin, BTN SUBMIT STATIC PAGE{{/l10n}}</button>
+</form>
+</fieldset>
+
+<fieldset class="grid--1o2">
+<section class="page">
+	<header class="js-preview-header page__header"></header>
+	<article class="js-preview-content page__content"></article>
+</section>
+</fieldset>
+</div>

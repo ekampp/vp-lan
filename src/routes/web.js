@@ -45,9 +45,14 @@ function static(req, res) {
 	storage.static
 		.get(key)
 		.then(function(data) {
-			req.currentPage = data.name
-			res.render('static', data)
+			if(req.accepts('html')) {
+				req.currentPage = data.name
+				res.render('static', data)
+			} else {
+				res.send(data)
+			}
 		})
+		.done()
 }
 
 function logout(req, res) {

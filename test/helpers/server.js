@@ -14,6 +14,10 @@ function reset() {
 	return storage.reset()
 }
 
+function addData(type) {
+	return dataSetters(type)
+}
+
 function setData(type) {
-	return reset().then(dataSetters.bind(null, type))
+	return reset().then(addData.bind(null, type))
 }

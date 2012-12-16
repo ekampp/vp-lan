@@ -20,7 +20,7 @@
   , "atob": "1.1.0"
   , "q": "~0.8.11"
   , "glob": "~3.1.14"
-  , "showdown": "~0.3.1"
+  , "showdown": "git://github.com/fizker/showdown.git#ender"
   , "hogan.js": "2.0.0"
   , "consolidate": "0.5.0"
   , "backbone": "0.9.2"
