@@ -8,7 +8,7 @@
 
 {{>seats-legend}}
 
-<div class="event-seats">
+<div class="event-seats {{#is-logged-in}}interactable{{/is-logged-in}}">
 {{>seats}}
 </div>
 <button disabled type=button class="js-btn-occupy-seat">{{#l10n}}events, BTN SELECT SEAT{{/l10n}}</button>

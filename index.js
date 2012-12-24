@@ -33,11 +33,16 @@ function start(settings) {
 	var promises = []
 	  , l10nPromise = l10n.init()
 	if(settings.database) {
-		promises.push(mongo.connect(settings.database).then(function(database) {
-			db = database
-			storage.setConnection(database)
-			return patches.run(database)
-		}))
+		promises.push(mongo.connect(settings.database)
+			.then(function(database) {
+				db = database
+				storage.setConnection(database)
+				return patches.run(database)
+			})
+			.fail(function() {
+				throw new Error('Could not connect to mongo.')
+			})
+		)
 	} else {
 		return Q.reject('no database given')
 	}

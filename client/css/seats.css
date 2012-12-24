@@ -37,3 +37,15 @@
 .event-seats__row__seat--selected {
 	-webkit-filter: drop-shadow(0 0 5px blue);
 }
+
+.interactable .event-seats__row__seat:hover {
+	-webkit-filter: drop-shadow(0 0 5px yellow);
+}
+
+.interactable .event-seats__row__seat--selected:hover {
+	-webkit-filter: drop-shadow(0 0 5px green);
+}
+
+.interactable .event-seats__row__seat--occupied:hover {
+	-webkit-filter: drop-shadow(0 0 5px #f60);
+}
