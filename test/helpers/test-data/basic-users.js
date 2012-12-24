@@ -1,4 +1,6 @@
-module.exports = setData
+module.exports = function() {
+	return storage.users.reset().then(setData)
+}
 
 var Q = require('q')
   , storage = require('../../../src/storage')

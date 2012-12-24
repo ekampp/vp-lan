@@ -5,7 +5,7 @@ describe('web.api/seats.js', function() {
 	helpers.common.setup(this)
 	beforeEach(function() {
 		client = helpers.httpHelper.createHelper(settings)
-		return helpers.server.setData('basic')
+		return helpers.server.setData('basic-events')
 	})
 
 	describe('When getting /seats/:event', function() {

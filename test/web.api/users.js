@@ -11,7 +11,9 @@ describe('web.api/users.js', function() {
 
 	describe('When posting to `/login`', function() {
 		beforeEach(function() {
-			return helpers.storage.users.add({ username: 'a', password: '1' })
+			return helpers.storage.users.reset().then(function() {
+				return helpers.storage.users.add({ username: 'a', password: '1' })
+			})
 		})
 		it('should return 401 when the creds does not match', function() {
 			var data = { username: 'b', password: '2' }
@@ -53,11 +55,13 @@ describe('web.api/users.js', function() {
 			helper.options({
 				headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
 			})
-			return Q.all(
-				[ helpers.storage.users.add({ username: 'a', password: '1', extra: 'c' })
-				, helpers.storage.users.add({ username: 'b', password: '2' })
-				]
-			)
+			return helpers.storage.users.reset().then(function() {
+				return Q.all(
+					[ helpers.storage.users.add({ username: 'a', password: '1', extra: 'c' })
+					, helpers.storage.users.add({ username: 'b', password: '2' })
+					]
+				)
+			})
 		})
 		describe('from `/users`', function() {
 			it('should return 200', assertStatus('get', '/users', 200))
@@ -130,7 +134,7 @@ describe('web.api/users.js', function() {
 	describe('When posting to `/users` without login', function() {
 		var response
 		  , cookie
-		beforeEach(function() {
+		before(function() {
 			cookie = request.jar()
 			var options =
 			    { data:
@@ -139,8 +143,10 @@ describe('web.api/users.js', function() {
 			      }
 			    , jar: cookie
 			    }
-			return helper.post('/users', options).then(function(args) {
-				response = args[0]
+			return helpers.storage.reset().then(function() {
+				return helper.post('/users', options).then(function(args) {
+					response = args[0]
+				})
 			})
 		})
 		it('should redirect', function() {
@@ -151,17 +157,23 @@ describe('web.api/users.js', function() {
 				.to.eventually.equal(200)
 		})
 		describe('and getting /user', function() {
-			it('should return status 200 for the new user', function() {
-				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
-				return expect(helper.get('/user', { headers: auth })
-					.get(0).get('statusCode')
-				).to.eventually.equal(200)
-			})
-			it('should set the basic role for the new user', function() {
-				var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
-				return expect(helper.get('/user', { headers: auth })
-					.get(1)
-				).to.eventually.have.property('role', 'user')
+			describe('with the new user', function() {
+				var response
+				  , body
+				before(function() {
+					var auth = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+					return helper.get('/user', { headers: auth })
+						.then(function(args) {
+							response = args[0]
+							body = args[1]
+						})
+				})
+				it('should return status 200 for the new user', function() {
+					expect(response.statusCode).to.equal(200)
+				})
+				it('should set the basic role for the new user', function() {
+					expect(body).to.have.property('role', 'user')
+				})
 			})
 			it('should reject non-existing users', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
@@ -177,12 +189,14 @@ describe('web.api/users.js', function() {
 			beforeEach(function() {
 				client.options({ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1') })
 				data = { role: 'user' }
-				return helpers.storage.users.add(
-				         { username: 'a'
-				         , password: '1'
-				         , role: 'admin'
-				         }
-				       )
+				return helpers.storage.users.reset().then(function() {
+				         return helpers.storage.users.add(
+				           { username: 'a'
+				           , password: '1'
+				           , role: 'admin'
+				           }
+				         )
+				       })
 			})
 			describe('via put to `/user`', function() {
 				var response
@@ -318,7 +332,7 @@ describe('web.api/users.js', function() {
 	describe('When posting to `/users` while logged in', function() {
 		var response
 		beforeEach(function() {
-			return helpers.server.setData('basic')
+			return helpers.server.setData('basic-users')
 				.then(function() {
 					var opts =
 					{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
@@ -348,7 +362,7 @@ describe('web.api/users.js', function() {
 		})
 		describe('and password is empty', function() {
 			beforeEach(function() {
-				return helpers.server.setData('basic')
+				return helpers.server.setData('basic-users')
 					.then(function() {
 						var opts =
 						{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')

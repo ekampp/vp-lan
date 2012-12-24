@@ -19,5 +19,5 @@ function addData(type) {
 }
 
 function setData(type) {
-	return reset().then(addData.bind(null, type))
+	return addData(type)
 }

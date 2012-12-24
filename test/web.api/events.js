@@ -4,7 +4,7 @@ describe('web.api/events.js', function() {
 	helpers.common.setup(this)
 	beforeEach(function() {
 		client = helpers.httpHelper.createHelper(settings, { skipAuth: true })
-		return helpers.server.setData('basic')
+		return helpers.server.setData('basic-events')
 	})
 
 	describe('When not logged in', function() {
