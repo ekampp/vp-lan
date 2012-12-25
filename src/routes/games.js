@@ -1,5 +1,5 @@
 module.exports = function setup(app) {
-	app.post('/games', updateGame)
+	app.post('/games', middleware.auth.requireUserRole('admin'), updateGame)
 	app.get('/games/:id?', getGame)
 }
 

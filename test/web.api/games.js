@@ -6,6 +6,13 @@ describe('web.api/games.js', function() {
 		client = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
+	describe('When posting without login', function() {
+		it('should give status 403', function() {
+			return expect(client.post('/games', { form: {} }).get(0))
+				.to.eventually.have.property('statusCode', 403)
+		})
+	})
+
 	describe('When posting to `/games`', function() {
 		var response
 		  , body
