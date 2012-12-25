@@ -2,6 +2,7 @@ exports = module.exports =
 { users: require('./users')
 , events: require('./events')
 , static: require('./static')
+, games: require('./games')
 , reset: reset
 }
 
@@ -12,5 +13,6 @@ function reset() {
 	[ exports.users.reset()
 	, exports.events.reset()
 	, exports.static.reset()
+	, exports.games.reset()
 	])
 }
