@@ -9,7 +9,8 @@
 				, type: 'json'
 				, accept: 'application/json'
 				})
-				.then(function(data) {
+				.promise.then(function(res) {
+					var data = res.body
 					Object.keys(data).forEach(function(key) {
 						$('[name=' + key + ']').val(data[key])
 					})

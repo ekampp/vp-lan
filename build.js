@@ -1,7 +1,7 @@
 var ender = require('ender')
 
   , packages =
-    [ 'reqwest'
+    [ 'fajax'
     , 'bean'
     , 'bonzo'
     , 'q'

@@ -4,12 +4,29 @@ describe('web.api/games.js', function() {
 	helpers.common.setup(this)
 	before(function() {
 		client = helpers.httpHelper.createHelper(settings, { skipAuth: true })
+		return helpers.server.setData('basic-users')
 	})
 
 	describe('When posting without login', function() {
 		it('should give status 403', function() {
 			return expect(client.post('/games', { form: {} }).get(0))
 				.to.eventually.have.property('statusCode', 403)
+		})
+	})
+
+	describe('When deleting from `/games/:id`', function() {
+		before(function() {
+			return helpers.storage.games.add({ title: 'abc' })
+				.then(function(game) {
+					var opts =
+					{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+					}
+					return client.del('/games/' + game.id, opts)
+				})
+		})
+		it('should no longer have the game', function() {
+			return expect(helpers.storage.games.getAll())
+				.to.eventually.have.property('length', 0)
 		})
 	})
 
@@ -27,9 +44,6 @@ describe('web.api/games.js', function() {
 			    , form: data
 			    }
 			return helpers.storage.games.reset()
-				.then(function() {
-					return helpers.server.setData('basic-users')
-				})
 				.then(function() {
 					return client.post('/games', opts)
 				})

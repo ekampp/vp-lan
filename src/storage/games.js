@@ -2,6 +2,7 @@ module.exports =
 { store: store
 , add: store
 , update: store
+, remove: remove
 , get: get
 , getAll: getAll
 , reset: reset
@@ -18,6 +19,10 @@ function collection() {
 function reset() {
 	nextId = 0
 	return collection().invoke('remove')
+}
+
+function remove(id) {
+	return collection().invoke('remove', { id: +id })
 }
 
 function updateNextId() {

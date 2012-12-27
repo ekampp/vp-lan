@@ -14,6 +14,7 @@
   , "PROFILE": "Profil"
   , "LOGOUT": "Log ud"
   , "ADMIN EDIT STATIC PAGES": "Ændr sider"
+  , "GAMES": "Spil"
   }
 , "users":
   { "LBL FORM USERNAME": "Brugernavn:"
@@ -35,5 +36,15 @@
   , "BTN PREVIEW STATIC PAGE": "Se eksempel"
   , "STATIC PAGE AUTO PREVIEW": "Opdater eksempel automatisk"
   , "BTN SUBMIT STATIC PAGE": "Gem ændringer"
+
+  , "GAMES SELECT NEW": "Nyt spil"
+  , "GAMES FORM LBL TITLE": "Titel:"
+  , "GAMES FORM LBL TEXT": "Beskrivelse:"
+  , "GAMES FORM LBL VISIBLE": "Synlig"
+  , "GAMES FORM LBL HIDDEN": "Skjult"
+  , "BTN PREVIEW GAME": "Se eksempel"
+  , "GAMES AUTO PREVIEW": "Opdater eksempel automatisk"
+  , "BTN SUBMIT GAME": "Gem ændringer"
+  , "BTN DELETE GAME": "Slet spil"
   }
 }
