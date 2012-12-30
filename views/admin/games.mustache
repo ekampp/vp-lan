@@ -1,0 +1,47 @@
+{{#message}}
+<div class="admin__static__update admin__static__update--{{status}}">{{message}}</div>
+{{/message}}
+
+<select class="js-select-game">
+<option>{{#l10n}}admin, GAMES SELECT NEW{{/l10n}}
+{{#games}}
+<option value={{id}}>{{title}}
+{{/games}}
+</select>
+
+<div class="grid">
+<fieldset class="grid--1o2">
+<form class="js-form-games" method=post action=/games>
+	<input type=hidden name=id>
+	<div>
+		<label for=in-title>{{#l10n}}admin, GAMES FORM LBL TITLE{{/l10n}}</label>
+		<input name=title id=in-title type=text>
+	</div>
+	<div>
+		<label for=in-text>{{#l10n}}admin, GAMES FORM LBL TEXT{{/l10n}}</label>
+		<textarea name=text id=in-text></textarea>
+	</div>
+	<div>
+		<button type=button class="js-btn-preview">{{#l10n}}admin, BTN PREVIEW GAME{{/l10n}}</button>
+		<label><input class="js-chk-preview-auto" type=checkbox> {{#l10n}}admin, GAMES AUTO PREVIEW{{/l10n}}</label>
+	</div>
+	<div>
+		<label>{{#l10n}}admin, GAMES FORM LBL VISIBLE{{/l10n}}:
+			<input type=radio name=visibility value=visible></label>
+		<label>{{#l10n}}admin, GAMES FORM LBL HIDDEN{{/l10n}}:
+			<input type=radio name=visibility value=hidden></label>
+	</div>
+
+	<button class="js-btn-delete" type=button>{{#l10n}}admin, BTN DELETE GAME{{/l10n}}</button>
+	<button type=submit>{{#l10n}}admin, BTN SUBMIT GAME{{/l10n}}</button>
+</form>
+
+</fieldset>
+
+<fieldset class="grid--1o2">
+<section class="page">
+	<header class="js-preview-header page__header"></header>
+	<article class="js-preview-content page__content"></article>
+</section>
+</fieldset>
+</div>

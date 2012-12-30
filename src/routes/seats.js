@@ -5,7 +5,6 @@ module.exports = function setup(app) {
 }
 
 var storage = require('../storage')
-  , bodyParser = require('express').urlencoded
   , middleware = require('../middleware')
 
 function updateSeat() {}

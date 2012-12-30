@@ -88,6 +88,12 @@ function render(req, res, view /*, ...args*/) {
 	function extendData(data) {
 		data.l10n = l10n
 		data.ml10n = ml10n
+		if(req.finc.msg && req.finc.status) {
+			data.message =
+			{ status: req.finc.status
+			, message: req.finc.msg
+			}
+		}
 		data['is-logged-in'] = !!req.user
 		data['is-admin'] = req.user && req.user.conformsToRole('admin')
 		return data
