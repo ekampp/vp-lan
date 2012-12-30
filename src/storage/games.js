@@ -77,11 +77,12 @@ function store(/*...games*/) {
 			.invoke('insert', game)
 			.get(0)
 	} else {
-		var query = { id: game.id }
+		var query = { id: +game.id }
 		  , sort = []
 		  , data = { $set: game }
-		  , options = { new: true }
+		  , options = { new: true, upsert: true }
 		return collection()
 			.invoke('findAndModify', query, sort, data, options)
+			.get(0)
 	}
 }

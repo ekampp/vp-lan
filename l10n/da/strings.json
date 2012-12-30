@@ -15,6 +15,7 @@
   , "LOGOUT": "Log ud"
   , "ADMIN EDIT STATIC PAGES": "Ændr sider"
   , "GAMES": "Spil"
+  , "ADMIN EDIT GAMES": "Ændr spil"
   }
 , "users":
   { "LBL FORM USERNAME": "Brugernavn:"
@@ -46,5 +47,6 @@
   , "GAMES AUTO PREVIEW": "Opdater eksempel automatisk"
   , "BTN SUBMIT GAME": "Gem ændringer"
   , "BTN DELETE GAME": "Slet spil"
+  , "GAMES UPDATE OK": "Opdatering gennemført"
   }
 }

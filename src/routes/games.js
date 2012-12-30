@@ -8,6 +8,7 @@ module.exports = function setup(app) {
 
 var storage = require('../storage')
   , middleware = require('../middleware')
+  , l10n = require('../l10n')
 
 function deleteGame(req, res) {
 	storage.games.remove(req.params.id)
@@ -19,6 +20,11 @@ function deleteGame(req, res) {
 function updateGame(req, res) {
 	var game = req.body
 	storage.games.store(game).then(function(game) {
+		if(req.accepts('html')) {
+			req.finc.msg = l10n.get('admin', 'GAMES UPDATE OK')
+			req.finc.status = 'ok'
+			return getGame(req, res)
+		}
 		res.send(200, game);
 	})
 	.done()
@@ -36,12 +42,18 @@ function getGame(req, res) {
 			if(req.accepts('html')) {
 				var view
 				if(Array.isArray(data)) {
+					data = data.filter(function(game) {
+						return game.visibility == 'visible'
+					})
 					view = 'games/list'
 					data =
 					{ games: data
 					, 'static-text': 'bla'
 					}
 				} else {
+					if(data.visibility == 'hidden') {
+						return res.send(404)
+					}
 					view = 'games/item'
 				}
 				return res.render(view, data)
