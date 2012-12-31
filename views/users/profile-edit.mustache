@@ -13,6 +13,7 @@
 			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
 	</div>
 	{{#is-admin}}
+	{{#other-user}}
 	<div>
 		<label for=in-role>{{#l10n}}users, LBL FORM ROLE{{/l10n}}</label>
 		<select name=role id=in-role>
@@ -20,6 +21,7 @@
 			<option value=admin {{#sel-current-role}}admin{{/sel-current-role}}>{{#l10n}}users, FORM ROLE OPT ADMIN{{/l10n}}
 		</select>
 	</div>
+	{{/other-user}}
 	{{/is-admin}}
 	<button type=submit>{{#l10n}}users, BTN UPDATE{{/l10n}}</button>
 </form>

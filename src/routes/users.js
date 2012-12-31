@@ -28,8 +28,7 @@ function createUser(req, res) {
 			.then(function(user) {
 				req.finc.msg = l10n.get('users', 'UPDATE OK')
 				req.finc.status = 'ok'
-				req.param.id = user.id
-				getUser(req, res)
+				getUsers(req, res)
 			})
 	} else {
 		return storage.users.add(req.body)

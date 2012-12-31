@@ -90,7 +90,9 @@ function getAll() {
 		.invoke('find')
 		.invoke('toArray')
 		.then(function(u) {
-			return Q.all(u.map(function(user) {
+			return Q.all(u.filter(function(u) {
+				return u.role != 'super'
+			}).map(function(user) {
 				return new User(user).resolveDependencies()
 			}))
 		})
