@@ -94,6 +94,11 @@ function updateUser(req, res) {
 		return res.send(400, 'cannot change own role')
 	}
 	storage.users.update(search, req.body).then(function(user) {
+		if(req.accepts('html')) {
+			req.finc.msg = l10n.get('users', 'UPDATE OK')
+			req.finc.status = 'ok'
+			return getUser(req, res)
+		}
 		res.send(200, user)
 	})
 }
