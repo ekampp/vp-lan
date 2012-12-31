@@ -12,18 +12,24 @@ module.exports = function setup(app) {
 
 var middleware = require('../middleware')
   , storage = require('../storage')
+  , l10n = require('../l10n')
   , Q = require('q')
   , _ = require('underscore')
 
 function createUser(req, res) {
 	var user = req.user
 	if(user) {
-		if(req.body.role) {
+		if(req.body.role
+		&& req.body.role != user.role
+		) {
 			return res.send(400, 'cannot change own role')
 		}
 		return storage.users.update(user, req.body)
-			.then(function() {
-				res.redirect('/')
+			.then(function(user) {
+				req.finc.msg = l10n.get('users', 'UPDATE OK')
+				req.finc.status = 'ok'
+				req.param.id = user.id
+				getUser(req, res)
 			})
 	} else {
 		return storage.users.add(req.body)
@@ -68,6 +74,12 @@ function getUser(req, res) {
 }
 function getUsers(req, res) {
 	storage.users.getAll().then(function(users) {
+		if(req.accepts('html')) {
+			var data =
+			    { users: users
+			    }
+			return res.render('users/list', data)
+		}
 		res.send(users.map(removeSecretProps.bind(null, req.user)))
 	})
 }
@@ -78,6 +90,7 @@ function updateUser(req, res) {
 	  || search.username == req.user.username
 	)
 	&& req.body.role
+	&& req.body.role != req.user.role
 	) {
 		return res.send(400, 'cannot change own role')
 	}

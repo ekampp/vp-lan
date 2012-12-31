@@ -184,6 +184,69 @@ describe('web.api/users.js', function() {
 		})
 	})
 	describe('When updating the role', function() {
+		describe('to the current value', function() {
+			var data
+			beforeEach(function() {
+				client.options({ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1') })
+				data = { role: 'admin' }
+				return helpers.storage.users.reset().then(function() {
+				         return helpers.storage.users.add(
+				           { username: 'a'
+				           , password: '1'
+				           , role: 'admin'
+				           }
+				         )
+				       })
+			})
+			describe('via put to `/user`', function() {
+				var response
+				beforeEach(function() {
+					return client.put('/user', { json: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 200', function() {
+					expect(response.statusCode).to.equal(200)
+				})
+			})
+			describe('via put to `/users/:id`', function() {
+				var response
+				beforeEach(function() {
+					return client.put('/users/a', { json: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 200', function() {
+					expect(response.statusCode).to.equal(200)
+				})
+			})
+			describe('via post to `/user`', function() {
+				var response
+				beforeEach(function() {
+					return client.post('/user', { form: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 200', function() {
+					expect(response.statusCode).to.equal(200)
+				})
+			})
+			describe('via post to `/users/:id`', function() {
+				var response
+				beforeEach(function() {
+					return client.post('/users/a', { form: data }).get(0)
+						.then(function(resp) {
+							response = resp
+						})
+				})
+				it('should return status 200', function() {
+					expect(response.statusCode).to.equal(200)
+				})
+			})
+		})
 		describe('of the current user', function() {
 			var data
 			beforeEach(function() {
@@ -347,8 +410,8 @@ describe('web.api/users.js', function() {
 					response = args[0]
 				})
 		})
-		it('should return code 302', function() {
-			expect(response.statusCode).to.equal(302)
+		it('should return code 200', function() {
+			expect(response.statusCode).to.equal(200)
 		})
 		it('should have updated the existing user', function() {
 			return expect(helpers.storage.users.get('a')).to.be.rejected

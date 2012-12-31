@@ -16,6 +16,7 @@
   , "ADMIN EDIT STATIC PAGES": "Ændr sider"
   , "GAMES": "Spil"
   , "ADMIN EDIT GAMES": "Ændr spil"
+  , "USERS": "Brugere"
   }
 , "users":
   { "LBL FORM USERNAME": "Brugernavn:"
@@ -28,6 +29,7 @@
   , "BTN LOGIN": "Log ind"
   , "BTN UPDATE": "Opdatér din profil"
   , "BTN SIGNUP": "Opret bruger"
+  , "UPDATE OK": "Opdatering gennemført"
   }
 , "admin":
   { "STATIC PAGE SELECT PLACEHOLDER": "Vælg statisk side"
