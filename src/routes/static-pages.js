@@ -1,11 +1,23 @@
 module.exports = function setup(app) {
 	app.get('/static-pages', getStaticPages)
 	app.post('/static-pages', middleware.auth.requireUserRole('admin'), updateStaticPage)
+
+	app.get(/\/static-pages\/(.*)/, getStaticPage)
 }
 
 var storage = require('../storage')
   , l10n = require('../l10n')
   , middleware = require('../middleware')
+
+function getStaticPage(req, res) {
+	var key = req.params[0]
+	storage.static.get('/' + key).then(function(data) {
+		if(!data) {
+			return res.send(404)
+		}
+		res.send(data)
+	})
+}
 
 function getStaticPages(req, res) {
 	storage.static.getAll().then(function(statics) {

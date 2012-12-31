@@ -4,7 +4,7 @@
 		$('.js-select-page').on('change', function(event) {
 			var select = event.target
 			$.ajax(
-				{ url: select.value
+				{ url: '/static-pages' + select.value
 				, method: 'get'
 				, type: 'json'
 				, accept: 'application/json'

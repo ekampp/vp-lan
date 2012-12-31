@@ -1,6 +1,7 @@
 module.exports = function setup(app) {
 	app.post('/games', middleware.auth.requireUserRole('admin'), updateGame)
-	app.get('/games/:id?', getGame)
+	app.get('/games', getGames)
+	app.get('/games/:id', getGame)
 	app.del('/games/:id', middleware.auth.requireUserRole('admin'), deleteGame)
 
 	app.get('/admin/games', middleware.auth.requireUserRole('admin'), showAdmin)
@@ -30,34 +31,34 @@ function updateGame(req, res) {
 	.done()
 }
 
-function getGame(req, res) {
-	var promise
-	if(req.params.id) {
-		promise = storage.games.get(req.params.id)
-	} else {
-		promise = storage.games.getAll()
-	}
-	promise.then(
+function getGames(req, res) {
+	storage.games.getAll().then(
 		function(data) {
+			var games = data.filter(function(game) {
+				return game.visibility == 'visible'
+			})
 			if(req.accepts('html')) {
-				var view
-				if(Array.isArray(data)) {
-					data = data.filter(function(game) {
-						return game.visibility == 'visible'
-					})
-					view = 'games/list'
-					data =
-					{ games: data
-					, 'static-text': 'bla'
-					}
-				} else {
-					if(data.visibility == 'hidden') {
-						return res.send(404)
-					}
-					view = 'games/item'
-				}
-				return res.render(view, data)
+				return storage.static.get('/games').then(function(text) {
+					var data =
+					    { games: games
+					    , static: text
+					    }
+					  , partials =
+					    { renderStatic: 'static'
+					    }
+					return res.render( 'games/list', data, partials)
+				})
 			}
+			res.send(data)
+		}, function() {
+			res.send(404)
+		}
+	)
+}
+
+function getGame(req, res) {
+	storage.games.get(req.params.id).then(
+		function(data) {
 			res.send(data)
 		}, function() {
 			res.send(404)
