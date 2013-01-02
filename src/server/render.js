@@ -8,9 +8,11 @@ var Q = require('q')
   , fs = require('fs')
   , path = require('path')
   , format = require('util').format
+  , _ = require('underscore')
 
   , views
   , markdown = new (require('showdown').converter)()
+  , storage = require('../storage')
 
 function middleware(app) {
 	views = app.get('views')
@@ -37,7 +39,12 @@ function render(req, res, view /*, ...args*/) {
 		partialKeys = Object.keys(partials)
 		partials = Q
 			.all(partialKeys.map(function(key) {
-				return Q.ninvoke(fs, 'readFile', path.join(views, partials[key] + '.mustache'), 'utf8')
+				return Q.ninvoke
+				         (fs
+				       , 'readFile'
+				       , path.join(views, partials[key] + '.mustache')
+				       , 'utf8'
+				       )
 			}))
 			.then(function(p) {
 				var obj = {}
@@ -54,6 +61,7 @@ function render(req, res, view /*, ...args*/) {
 	[ Q.ninvoke(fs, 'readFile', path.join(views, 'layout.mustache'), 'utf8')
 	, Q.ninvoke(fs, 'readFile', path.join(views, view + '.mustache'), 'utf8')
 	, partials
+	, storage.static.getAll()
 	])
 		.then(function(files) {
 			return files
@@ -66,10 +74,16 @@ function render(req, res, view /*, ...args*/) {
 				})
 		})
 		.then(function(templates) {
-			var data =
+			var statics = templates.pop()
+			  , data =
 			    { body: templates[1].render(options, extendPartials(templates[2]))
 			    , minify: minify
 			    , 'user-json': req.user ? JSON.stringify(req.user) : 'null'
+			    , 'static-menu-text': function(menu) {
+			        return _(statics).find(function(item) {
+			          return item.url == menu
+			        }).name
+			      }
 			    }
 			extendData(data)
 			if(req.currentPage) {

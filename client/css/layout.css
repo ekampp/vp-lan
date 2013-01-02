@@ -1,13 +1,26 @@
+body {
+	width: 880px;
+	margin: auto;
+	padding: 0 10px;
+}
+
+a {
+	color: #888;
+}
+a:hover {
+	color: #555;
+}
+
 .menu {
+	border-bottom: 1px solid black;
 }
 
 .menu__link {
-	display: inline-block;
-	vertical-align: middle;
 }
 
 .menu__link--current {
-	font-style: italic;
+	color: black;
+	text-decoration: none;
 }
 
 .logo {

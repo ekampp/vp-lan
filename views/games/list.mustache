@@ -2,9 +2,11 @@
 {{>renderStatic}}
 {{/static}}
 
-{{#games}}
-<div>
-	<h2>{{title}}</h2>
-	<p>{{{text}}}</p>
-</div>
-{{/games}}
+<section class="games">
+	{{#games}}
+	<div class="games__game">
+		<h2>{{title}}</h2>
+		<p>{{{text}}}</p>
+	</div>
+	{{/games}}
+</section>

@@ -1,0 +1,9 @@
+.games {
+}
+
+.games__game {
+	border-top: 1px solid black;
+}
+
+.games__game:nth-child(even) {
+}
