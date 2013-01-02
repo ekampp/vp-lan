@@ -80,9 +80,10 @@ function render(req, res, view /*, ...args*/) {
 			    , minify: minify
 			    , 'user-json': req.user ? JSON.stringify(req.user) : 'null'
 			    , 'static-menu-text': function(menu) {
-			        return _(statics).find(function(item) {
+			        var menu = _(statics).find(function(item) {
 			          return item.url == menu
-			        }).name
+			        })
+			        return menu && menu.name
 			      }
 			    }
 			extendData(data)
