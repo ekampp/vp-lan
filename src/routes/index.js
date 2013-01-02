@@ -8,6 +8,7 @@ var users = require('./users')
   , seats = require('./seats')
   , staticPages = require('./static-pages')
   , games = require('./games')
+  , views = require('./views')
   , Q = require('q')
 
 function setup(app, settings) {
@@ -18,5 +19,6 @@ function setup(app, settings) {
 	, seats(app, settings)
 	, staticPages(app, settings)
 	, games(app, settings)
+	, views(app, settings)
 	])
 }

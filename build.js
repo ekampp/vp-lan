@@ -7,6 +7,7 @@ var ender = require('ender')
     , 'q'
     , 'page'
     , 'showdown'
+    , 'mustache'
     ]
   , options =
     { output: 'client/js/ender'

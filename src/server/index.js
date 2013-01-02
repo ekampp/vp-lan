@@ -27,7 +27,7 @@ function start(settings) {
 	require('../middleware').currentPage.setup(app)
 	app.use(require('./render').middleware(app))
 	app.use(middleware.auth.loadUser)
-	routes.setup(app)
+	routes.setup(app, settings)
 	return Q.ninvoke(server, 'listen', settings.port)
 }
 function stop() {
