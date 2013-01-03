@@ -31,7 +31,7 @@
   , "bean": "~1.0.1"
   , "reqwest": "~0.6.0"
   , "page": "git://github.com/fizker/page.js.git#ender"
-  , "fajax": "~0.1.2"
+  , "fajax": "~0.2.0"
   }
 , "devDependencies":
   { "mocha": "~1.6.0"

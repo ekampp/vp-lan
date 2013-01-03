@@ -7,6 +7,7 @@ function $$(sel, scope) {
 }
 ;(function() {
 	$.ajax.defer(require('q').defer)
+	$.ajax.defaults({ accept: 'application/json, text/plain;q=.9' })
 	$._select = function(sel, scope) {
 		if(typeof(sel) != 'string') {
 			return sel.nodeName ? [sel] : sel
