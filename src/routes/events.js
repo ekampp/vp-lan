@@ -1,4 +1,8 @@
 module.exports = function setup(app) {
+	app.get('/event', function(req, res) {
+		req.params.id = 1
+		getEvent(req, res)
+	})
 	app.get('/events', getEvents)
 	app.post('/events', middleware.auth.requireUser, addEvent)
 
