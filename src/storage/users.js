@@ -8,6 +8,7 @@ module.exports =
 }
 
 var Q = require('q')
+  , _ = require('underscore')
   , db = require('./db')
   , nextId = 0
   , User = require('../models').User
@@ -41,9 +42,6 @@ function add(data) {
 			return add(user)
 		}))
 	}
-	if(!data.username) {
-		return Q.reject('no username')
-	}
 	if(!data.id) {
 		data.id = nextId
 	}
@@ -51,37 +49,70 @@ function add(data) {
 		data.role = 'user'
 	}
 	nextId = Math.max(data.id, nextId) + 1
-	return collection()
-		.invoke('insert', data)
-		.then(function(data) {
-			return new User(data[0]).resolveDependencies()
+	if(!data.username) {
+		return Q.reject('no username')
+	}
+	data = ensureValidUserData(data)
+	return get({ username: data.username })
+		.then(function() {
+			throw new Error('username taken')
+		},
+		function() {
+			return collection()
+				.invoke('insert', data)
+				.then(function(data) {
+					return new User(data[0]).resolveDependencies()
+				})
 		})
 }
 
 function update(user, data) {
 	var query
 	  , sort = []
+	  , data = ensureValidUserData(data)
 	  , update = { $set: data }
 	  , options = { new: true }
+	  , duplicateUsernamePromise
 	if(user.username) {
 		query = { username: user.username }
+		if(data.username && user.username == data.username) {
+			duplicateUsernamePromise = Q.resolve()
+		}
 	} else {
 		query = { id: user.id || user }
 	}
 	if('password' in data && !data.password) {
 		delete data.password
 	}
-	return collection()
-		.invoke(
-			  'findAndModify'
-			, query
-			, sort
-			, update
-			, options
-		)
-		.get(0)
-		.then(function(data) {
-			return new User(data).resolveDependencies()
+	if(!data.username && !duplicateUsernamePromise) {
+		duplicateUsernamePromise = Q.resolve()
+	}
+	if(!duplicateUsernamePromise) {
+		duplicateUsernamePromise = Q.all(
+			[ get(query)
+			, get({ username: data.username })
+		])
+	}
+	return duplicateUsernamePromise
+		.then(function(users) {
+			if(users && users[0].id != users[1].id) {
+				throw new Error('duplicate username')
+			}
+		} , function() {
+		})
+		.then(function() {
+			return collection()
+				.invoke(
+					  'findAndModify'
+					, query
+					, sort
+					, update
+					, options
+				)
+				.get(0)
+				.then(function(data) {
+					return new User(data).resolveDependencies()
+				})
 		})
 }
 
@@ -101,7 +132,7 @@ function getAll() {
 function get(data) {
 	var query
 	if(data.username) {
-		query = { username: data.username }
+		query = { usernameIdx: data.username.toLowerCase() }
 	} else {
 		query = { id: +(data.id || data) }
 	}
@@ -122,4 +153,12 @@ function auth(username, password) {
 		}
 		throw new Error('unknown credentials')
 	})
+}
+
+function ensureValidUserData(data) {
+	var d = _(data).clone()
+	if(d.username) {
+		d.usernameIdx = d.username.toLowerCase()
+	}
+	return d
 }

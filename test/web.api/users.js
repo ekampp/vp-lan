@@ -9,6 +9,62 @@ describe('web.api/users.js', function() {
 		client = helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
+	describe('When setting a duplicate username', function() {
+		beforeEach(function() {
+			return helpers.storage.users.reset().then(function() {
+				return helpers.storage.users
+					.add(
+					  { username: 'a', password: '1' }
+					, { username: 'b', password: '2' }
+					)
+			})
+		})
+		describe('by adding via posting to /users', function() {
+			it('should reject an exact match', function() {
+				var data = { username: 'a', password: '1' }
+				return expect(client.post('/users', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+			it('should reject a different casing', function() {
+				var data = { username: 'A', password: '1' }
+				return expect(client.post('/users', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+		})
+		describe('by updating via posting to /users', function() {
+			beforeEach(function() {
+				var headers = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				client.options({ headers: headers })
+			})
+			it('should reject an exact match', function() {
+				var data = { username: 'b', password: '1' }
+				return expect(client.post('/users', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+			it('should reject a different casing', function() {
+				var data = { username: 'B', password: '1' }
+				return expect(client.post('/users', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+		})
+		describe('by updating via putting to /user', function() {
+			beforeEach(function() {
+				var headers = helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				client.options({ headers: headers })
+			})
+			it('should reject an exact match', function() {
+				var data = { username: 'b', password: '1' }
+				return expect(client.put('/user', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+			it('should reject a different casing', function() {
+				var data = { username: 'B', password: '1' }
+				return expect(client.put('/user', { form: data }).get(0))
+					.to.eventually.have.property('statusCode', 400)
+			})
+		})
+	})
+
 	describe('When posting to `/login`', function() {
 		beforeEach(function() {
 			return helpers.storage.users.reset().then(function() {
@@ -329,23 +385,25 @@ describe('web.api/users.js', function() {
 	})
 	describe('When updating other user via posting to `/users/:id`', function() {
 		beforeEach(function() {
-			return helpers.storage.users.add(
-			  { id: 1
-			  , username: 'a'
-			  , password: '1'
-			  , role: 'admin'
-			  }
-			, { id: 2
-			  , username: 'b'
-			  , password: '2'
-			  , role: 'user'
-			  }
-			, { id: 3
-			  , username: 'c'
-			  , password: '3'
-			  , role: 'user'
-			  }
-			)
+			return helpers.storage.users.reset().then(function() {
+				return helpers.storage.users.add(
+				  { id: 1
+				  , username: 'a'
+				  , password: '1'
+				  , role: 'admin'
+				  }
+				, { id: 2
+				  , username: 'b'
+				  , password: '2'
+				  , role: 'user'
+				  }
+				, { id: 3
+				  , username: 'c'
+				  , password: '3'
+				  , role: 'user'
+				  }
+				)
+			})
 		})
 		describe('and current role is `user`', function() {
 			var response
@@ -384,10 +442,13 @@ describe('web.api/users.js', function() {
 				expect(response.statusCode).to.equal(200)
 			})
 			it('should update the user', function() {
-				var expected =
-				    { username: 'bc'
-				    }
+				var expected = { username: 'bc' }
 				return expect(helpers.storage.users.get(2))
+					.to.eventually.approximate(expected)
+			})
+			it('should find the user based on the new username', function() {
+				var expected = { id: 2, username: 'bc' }
+				return expect(helpers.storage.users.get({ username: 'bc' }))
 					.to.eventually.approximate(expected)
 			})
 		})
@@ -400,8 +461,8 @@ describe('web.api/users.js', function() {
 					var opts =
 					{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
 					, data:
-					  { username: 'b'
-					  , password: '2'
+					  { username: 'aa'
+					  , password: '11'
 					  }
 					}
 					return helper.post('/users', opts)
@@ -418,7 +479,7 @@ describe('web.api/users.js', function() {
 		})
 		it('should have updated the user', function() {
 			var expected =
-			    { username: 'b'
+			    { username: 'aa'
 			    }
 			return expect(helpers.storage.users.get(1))
 				.to.eventually.approximate(expected)

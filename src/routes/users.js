@@ -29,6 +29,8 @@ function createUser(req, res) {
 				req.finc.msg = l10n.get('users', 'UPDATE OK')
 				req.finc.status = 'ok'
 				getUsers(req, res)
+			}, function() {
+				res.send(400)
 			})
 	} else {
 		return storage.users.add(req.body)
@@ -100,6 +102,8 @@ function updateUser(req, res) {
 			return getUser(req, res)
 		}
 		res.send(200, user)
+	} , function() {
+		res.send(400)
 	})
 }
 
