@@ -1,16 +1,35 @@
-<form method=post action=/users{{#other-user}}/{{username}}{{/other-user}}>
+<form class="form form--users" method=post action=/users{{#other-user}}/{{username}}{{/other-user}}>
+	<div class="form__errs"></div>
 	<div>
-		<label class="form__lbl--required" for=in-username>{{#l10n}}users, LBL FORM USERNAME{{/l10n}}</label>
+		<label class="form__lbl form--user__lbl form__lbl--mandatory" for=in-username>{{#l10n}}users, LBL FORM USERNAME{{/l10n}}</label>
 		<input name=username id=in-username value="{{username}}" type=text>
 	</div>
 	<div>
-		<label for=in-name>{{#l10n}}users, LBL FORM NAME{{/l10n}}</label>
+		<label class="form__lbl form__lbl--mandatory form--user__lbl" for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
+		<input name=password id=in-password type=password
+			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
+	</div>
+
+	<div>
+		<label for=in-name class="form__lbl form--user__lbl form__lbl--mandatory">{{#l10n}}users, LBL FORM NAME{{/l10n}}</label>
 		<input name=name id=in-name value="{{name}}" type=text>
 	</div>
 	<div>
-		<label for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
-		<input name=password id=in-password type=password
-			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
+		<label for=in-email class="form__lbl form--user__lbl form__lbl--mandatory">{{#l10n}}users, LBL FORM EMAIL{{/l10n}}</label>
+		<input name=email id=in-email value="{{email}}" type=email>
+	</div>
+
+	<div>
+		<label for=in-age class="form__lbl form--user__lbl form__lbl--mandatory">{{#l10n}}users, LBL FORM AGE{{/l10n}}</label>
+		<input placeholder="YYYY-MM-DD" name=age id=in-age value="{{age}}" type=date>
+		<span class="note">{{#l10n}}users, NOTE FORM AGE{{/l10n}}</span>
+	</div>
+
+	<div>
+		<label for=in-text class="form__lbl form__lbl--ta form--user__lbl">{{#l10n}}users, LBL FORM TEXT{{/l10n}}
+		<br><span class="note">{{#l10n}}users, NOTE FORM TEXT{{/l10n}}</span>
+		</label>
+		<textarea name=text id=in-text>{{text}}</textarea>
 	</div>
 	{{#is-admin}}
 	{{#other-user}}
@@ -23,5 +42,8 @@
 	</div>
 	{{/other-user}}
 	{{/is-admin}}
-	<button type=submit>{{#l10n}}users, BTN UPDATE{{/l10n}}</button>
+	<button type=submit>
+	{{#is-logged-in}}{{#l10n}}users, BTN UPDATE{{/l10n}}{{/is-logged-in}}
+	{{^is-logged-in}}{{#l10n}}users, BTN SIGNUP{{/l10n}}{{/is-logged-in}}
+	</button>
 </form>

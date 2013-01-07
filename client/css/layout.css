@@ -11,6 +11,10 @@ a:hover {
 	color: #555;
 }
 
+.note {
+	font-size: .8em;
+}
+
 .menu {
 	border-bottom: 1px solid black;
 }

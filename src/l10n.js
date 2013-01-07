@@ -18,5 +18,9 @@ function get(table, key) {
 	if(!json) {
 		throw new Error('l10n.init() has not been called')
 	}
-	return (json[table] && json[table][key]) || key
+	table = json[table]
+	if(!key) {
+		return table
+	}
+	return (table && table[key]) || key
 }

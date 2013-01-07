@@ -1,0 +1,24 @@
+.form textarea {
+	min-height: 100px;
+	min-width: 200px;
+}
+
+.form__lbl {
+	width: 150px;
+	display: inline-block;
+	text-align: right;
+}
+
+.form__lbl--ta {
+	vertical-align: top;
+}
+
+.form__errs {
+	color: red;
+}
+
+.form__lbl--mandatory::after {
+	content: '*';
+	padding: 0 3px;
+	color: red;
+}

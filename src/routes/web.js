@@ -3,10 +3,7 @@ module.exports = function setup(app) {
 	app.get('/info', static)
 	//app.get('/', render('index'))
 	app.get('/signup', render(
-	  'users/access-form'
-	, { action: 'users'
-	  , 'btn-text': l10n.get('users', 'BTN SIGNUP')
-	  }
+	  'users/profile-edit'
 	))
 	app.get('/login', render(
 	  'users/access-form'

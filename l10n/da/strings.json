@@ -22,6 +22,12 @@
   { "LBL FORM USERNAME": "Brugernavn:"
   , "LBL FORM PASSWORD": "Kodeord:"
   , "LBL FORM NAME": "Fulde navn:"
+  , "LBL FORM EMAIL": "E-mail:"
+  , "LBL FORM AGE": "Alder:"
+  , "NOTE FORM AGE": "Din alder vil ikke blive vist til andre, det bruges kun til at afstemme aldersbegrænsningen."
+  , "LBL FORM PHONE": "Telefon:"
+  , "LBL FORM TEXT": "Fritekst:"
+  , "NOTE FORM TEXT": "Det er en god idé at skrive dit steam-id og andre brugernavne, så dine medspillere nemt kan finde dig i spillene."
   , "FORM PASSWORD PLACEHOLDER": "Indtast kun koden såfremt den skal ændres"
   , "LBL FORM ROLE": "Rolle:"
   , "FORM ROLE OPT USER": "Bruger"
@@ -30,6 +36,13 @@
   , "BTN UPDATE": "Opdatér din profil"
   , "BTN SIGNUP": "Opret bruger"
   , "UPDATE OK": "Opdatering gennemført"
+
+  , "VALIDATION NO USERNAME": "Du skal angive et brugernavn."
+  , "VALIDATION NO PASSWORD": "Du skal angive et kodeord."
+  , "VALIDATION INVALID EMAIL": "Du skal udfylde e-mail korrekt."
+  , "VALIDATION NO NAME": "Du skal udfylde dit name."
+  , "VALIDATION AGE INVALID": "Du skal udfylde din alder."
+  , "VALIDATION AGE TOO LOW": "Du skal være mindst 15 år."
   }
 , "admin":
   { "STATIC PAGE SELECT PLACEHOLDER": "Vælg statisk side"
