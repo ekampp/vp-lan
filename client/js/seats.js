@@ -13,24 +13,24 @@ VP.seats = (function() {
 		$.ajax('/views/events/seats', function(res) {
 			view = res.body
 		})
-		$('.event-seats').on('click', '.event-seats__row__seat', function(event) {
-			var seat = event.target
+		$('.interactable.event-seats').on('click', '.seat', function(event) {
+			var seat = event.currentTarget
 			  , seatId = seat.dataset.id
-			if(seat.classList.contains('event-seats__row__seat--occupied')) {
+			if(seat.classList.contains('seat--occupied')) {
 				// todo: notify user of error
 				console.log('err')
 				return
 			}
 			if(this.seat) {
-				$('.event-seats__row__seat[data-id="' + this.seat.id + '"]')
-					.removeClass('event-seats__row__seat--selected')
+				$('.seat[data-id="' + this.seat.id + '"]')
+					.removeClass('seat--selected')
 			}
 			if(this.seat && this.seat.id == seatId) {
 				this.seat = null
 			} else {
 				this.seat = { id: seatId }
-				$('.event-seats__row__seat[data-id="' + this.seat.id + '"]')
-					.addClass('event-seats__row__seat--selected')
+				$('.seat[data-id="' + this.seat.id + '"]')
+					.addClass('seat--selected')
 			}
 			this.toggleSubmitButton()
 		}.bind(this))
@@ -47,7 +47,7 @@ VP.seats = (function() {
 				, method: 'post'
 				, json: { seat: seatId }
 				}, function() {
-					$.ajax('/seats/1', function(res) {
+					$.ajax('/seats/' + event, function(res) {
 						var compiled = $.to_html(view, { 'seats-arr': seatsArr(res.body) } )
 						$('.event-seats').html(compiled)
 						console.log('seat updated..')

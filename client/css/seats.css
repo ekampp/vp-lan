@@ -1,51 +1,75 @@
+.venue {
+	border: 1px solid black;
+	text-align: center;
+}
+
+.venue__bar {
+	border: 4px solid grey;
+	width: 300px;
+	height: 150px;
+	line-height: 150px;
+	margin: 0 0 100px 0;
+}
+.venue__scene {
+	border: 4px solid grey;
+	width: 300px;
+	height: 150px;
+	line-height: 150px;
+	margin: 100px 0 0 500px;
+}
+
 .event-seats {}
 
-.event-seats__legend {
-	float: right;
-}
-
-.event-seats__row {
-	min-height: 40px;
-}
-
-.event-seats__row__seat {
-	background: no-repeat;
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30px" height="30px"><g><g><rect x="25" y=".5" width="4" height="29" fill="white" stroke="black" stroke-width="1"/></g><g><circle cx="12.5" cy="15" r="12" fill="white" stroke="black" stroke-width="1"/></g></g></svg>');
-	width: 30px;
+.table-group {
 	display: inline-block;
+	width: 150px;
 	margin: 5px;
-	padding: 30px 0 0;
-	font-size: 12px;
-	text-align: center;
+}
+
+.seat {
+	display: inline-block;
 	vertical-align: top;
 }
 
-.event-seats__row__seat--facing-90 {
-	background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30px" height="30px"><g><g><rect x=".5" y="25" height="4" width="29" fill="white" stroke="black" stroke-width="1"/></g><g><circle cy="12.5" cx="15" r="12" fill="white" stroke="black" stroke-width="1"/></g></g></svg>');
-}
-.event-seats__row__seat--facing-180 {
-	background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30px" height="30px"><g><g><rect x=".5" y=".5" width="4" height="29" fill="white" stroke="black" stroke-width="1"/></g><g><circle cx="16.5" cy="15" r="12" fill="white" stroke="black" stroke-width="1"/></g></g></svg>');
-}
-.event-seats__row__seat--facing-270 {
-	background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30px" height="30px"><g><g><rect x=".5" y=".5" height="4" width="29" fill="white" stroke="black" stroke-width="1"/></g><g><circle cy="16.5" cx="15" r="12" fill="white" stroke="black" stroke-width="1"/></g></g></svg>');
+.interactable .seat {
+	cursor: pointer;
 }
 
-.event-seats__row__seat--occupied {
-	-webkit-filter: drop-shadow(0 0 5px red);
+.seat__table {
+	font-size: .8em;
+	overflow: none;
+	text-overflow: ellipsis;
+	border: 2px solid black;
+	width: 70px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+.seat__table--bot {
+	border-top: 0;
+}
+.seat--left .seat__table {
+	border-right: 0;
+}
+.seat--right .seat__table {
+	border-left: 2px dashed black;
+}
+.seat__chair {
+	border: 2px solid black;
+	border-radius: 2px;
+	margin: 2px auto;
+	width: 20px;
+	height: 20px;
 }
 
-.event-seats__row__seat--selected {
-	-webkit-filter: drop-shadow(0 0 5px blue);
+.seat--occupied .seat__table {
+	background: red;
 }
 
-.interactable .event-seats__row__seat:hover {
-	-webkit-filter: drop-shadow(0 0 5px yellow);
+.seat--selected .seat__table {
+	background: blue;
 }
 
-.interactable .event-seats__row__seat--selected:hover {
-	-webkit-filter: drop-shadow(0 0 5px green);
-}
-
-.interactable .event-seats__row__seat--occupied:hover {
-	-webkit-filter: drop-shadow(0 0 5px #f60);
+.interactable .seat--occupied:hover .seat__table {
+	background: #f60;
 }

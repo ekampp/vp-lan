@@ -31,6 +31,13 @@ describe('web.api/seats.js', function() {
 		})
 	})
 	describe('When posting to /seats/:event', function() {
+		describe('and the seat does not exist', function() {
+			it('should return code 404', function() {
+				var options = { data: { seat: 1 } }
+				return expect(client.post('/seats/nan').get(0))
+					.to.eventually.have.property('statusCode', 404)
+			})
+		})
 		describe('and the seat is not already taken', function() {
 			var response
 			  , body

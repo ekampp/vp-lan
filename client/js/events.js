@@ -1,6 +1,7 @@
 ;(function() {
-	$.page('/events/:id', function(ctx) {
+	$.page('/event', function(ctx) {
 		// setup seat functionality
-		VP.seats.init(ctx.params.id)
+		var eventId = 1//ctx.params.id
+		VP.seats.init(eventId)
 	})
 })()
