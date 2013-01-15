@@ -28,17 +28,11 @@ function setData() {
 	           + '---\n'
 	         , seats:
 	           [ { id: 1
-	             , position: [ 0, 0 ]
 	             , occupant: 2
-	             , facing: 0
 	             }
 	           , { id: 2
-	             , position: [ 0, 1 ]
-	             , facing: 0
 	             }
 	           , { id: 3
-	             , position: [ 0, 2 ]
-	             , facing: 0
 	             }
 	           ]
 	         }

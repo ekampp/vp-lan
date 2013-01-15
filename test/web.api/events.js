@@ -84,23 +84,17 @@ describe('web.api/events.js', function() {
 			    , end: '2012-12-07T15:00+01:00'
 			    , id: 1
 			    , seats:
-			      [ { position: [ 0, 0 ]
-			        , facing: 0
+			      [ { a: 1
 			        }
-			      , { position: [ 0, 1 ]
-			        , facing: 0
+			      , { a: 2
 			        }
-			      , { position: [ 0, 2 ]
-			        , facing: 0
+			      , { a: 3
 			        }
-			      , { position: [ 1, 0 ]
-			        , facing: 0
+			      , { a: 4
 			        }
-			      , { position: [ 1, 1 ]
-			        , facing: 0
+			      , { a: 5
 			        }
-			      , { position: [ 1, 2 ]
-			        , facing: 0
+			      , { a: 6
 			        }
 			      ]
 			    }
@@ -118,27 +112,21 @@ describe('web.api/events.js', function() {
 			    { start: '2012-12-05T12:00+01:00'
 			    , end: '2012-12-07T15:00+01:00'
 			    , seats:
-			      [ { position: [ 0, 0 ]
-			        , facing: 0
+			      [ {
 			        }
-			      , { position: [ 0, 1 ]
-			        , facing: 0
+			      , {
 			        }
-			      , { position: [ 0, 2 ]
-			        , facing: 0
+			      , {
 			        }
-			      , { position: [ 1, 0 ]
-			        , facing: 0
+			      , {
 			        }
-			      , { position: [ 1, 1 ]
-			        , facing: 0
+			      , {
 			        }
-			      , { position: [ 1, 2 ]
-			        , facing: 0
+			      , {
 			        }
 			      ]
 			    }
-			expect(body).to.have.property('id').that.equals(1)
+			expect(body).to.have.property('id', 1)
 			return expect(client.get('/events/1').get(1))
 				.to.eventually.approximate(expected)
 		})
@@ -154,27 +142,21 @@ describe('web.api/events.js', function() {
 			    { start: '2012-12-05T12:00+01:00'
 			    , end: '2012-12-07T15:00+01:00'
 			    , seats:
-			      [ { position: [ 0, 0 ]
-			        , facing: 0
+			      [ { a: 1
 			        }
-			      , { position: [ 0, 1 ]
-			        , facing: 0
+			      , { a: 2
 			        }
-			      , { position: [ 0, 2 ]
-			        , facing: 0
+			      , { a: 3
 			        }
-			      , { position: [ 1, 0 ]
-			        , facing: 0
+			      , { a: 4
 			        }
-			      , { position: [ 1, 1 ]
-			        , facing: 0
+			      , { a: 5
 			        }
-			      , { position: [ 1, 2 ]
-			        , facing: 0
+			      , { a: 6
 			        }
 			      ]
 			    }
-			return client.post('/events', { data: data })
+			return client.post('/events', { json: data })
 				.then(function(args) {
 					response = args[0]
 					body = args[1]
@@ -188,27 +170,21 @@ describe('web.api/events.js', function() {
 			    { start: '2012-12-05T12:00+01:00'
 			    , end: '2012-12-07T15:00+01:00'
 			    , seats:
-			      [ { position: [ 0, 0 ]
-			        , facing: 0
+			      [ { a: 1
 			        }
-			      , { position: [ 0, 1 ]
-			        , facing: 0
+			      , { a: 2
 			        }
-			      , { position: [ 0, 2 ]
-			        , facing: 0
+			      , { a: 3
 			        }
-			      , { position: [ 1, 0 ]
-			        , facing: 0
+			      , { a: 4
 			        }
-			      , { position: [ 1, 1 ]
-			        , facing: 0
+			      , { a: 5
 			        }
-			      , { position: [ 1, 2 ]
-			        , facing: 0
+			      , { a: 6
 			        }
 			      ]
 			    }
-			expect(body).to.have.property('id').that.equals(2)
+			expect(body).to.have.property('id', 2)
 			return expect(client.get('/events/2').get(1))
 				.to.eventually.approximate(expected)
 		})

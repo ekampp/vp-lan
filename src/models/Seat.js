@@ -15,6 +15,7 @@ defineGetSetters(module.exports.prototype,
 	  [ 'occupant'
 	  , 'position'
 	  , 'facing'
+	  , 'occupant-name'
 	  ]
 )
 

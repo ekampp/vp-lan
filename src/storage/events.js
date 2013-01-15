@@ -16,11 +16,13 @@ function collection() {
 }
 
 function vetEvent(event) {
+	if(!(event instanceof Event)) {
+		event = new Event(event)
+	}
+	return event.stripCalculated()
 	if(event.seats) {
 		event.seats = event.seats.map(function(seat) {
-			seat.position = seat.position.map(function(p) { return +p })
-			seat.facing = +seat.facing
-			return seat
+			return seat.stripCalculated()
 		})
 	}
 	return event
@@ -48,7 +50,7 @@ function add(event) {
 	if(!event.id) {
 		event.id = nextId
 	}
-	vetEvent(event)
+	event = vetEvent(event)
 	nextId = Math.max(event.id, nextId) + 1
 	return collection()
 		.invoke('insert', event)
@@ -79,11 +81,10 @@ function getAll() {
 		})
 }
 function update(id, event) {
-	vetEvent(event)
 	var query = { id: +id }
 	  , options = { new: true, upsert: true }
 	  , sort = []
-	  , data = { $set: event }
+	  , data = { $set: vetEvent(event) }
 	return collection()
 		.invoke('findAndModify', query, sort, data, options)
 		.get(0)

@@ -18,13 +18,9 @@ describe('web.api/seats.js', function() {
 		it('should return a list of all seats', function() {
 			expect(data).to.approximate(
 				[ { id: 1
-				  , position: [ 0, 0 ]
 				  , occupant: 2
-				  , facing: 0
 				  }
 				, { id: 2
-				  , position: [ 0, 1 ]
-				  , facing: 0
 				  }
 				]
 			)
@@ -79,8 +75,11 @@ describe('web.api/seats.js', function() {
 				it('should no longer occupy the old seat', function() {
 					return client.get('/seats/1').get(1)
 						.then(function(seats) {
-							expect(_(seats).find(function(seat) { return seat.id == 2 }))
-								.not.to.contain.keys('occupant')
+							var seat = _(seats).find(function(seat) { return seat.id == 2 })
+							expect(seat)
+								.not.to.have.property('occupant')
+							expect(seat)
+								.not.to.have.property('occupant-name')
 						})
 				})
 			})

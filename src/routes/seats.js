@@ -32,7 +32,7 @@ function occupySeat(req, res) {
 			}
 			seat.occupant = req.user.id
 
-			return event.save()
+			return storage.events.update(event.id, event)
 				.then(function() {
 					res.send(200, seat)
 				})
