@@ -1,11 +1,13 @@
-var Backbone = require('backbone')
+var Model = require('./Model')
   , _ = require('underscore')
   , Q = require('q')
   , storage = { users: require('../storage/users') }
   , defineGetSetters = require('./utils').defineGetSetters
 
-module.exports = Backbone.Model.extend(
+module.exports = Model.extend(
 	{ resolveDependencies: resolveDependencies
+	, private: [ '_id' ]
+	, calculated: [ '!occupant', 'occupant-name' ]
 	}
 )
 
