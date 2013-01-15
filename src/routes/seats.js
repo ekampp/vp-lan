@@ -10,7 +10,9 @@ var storage = require('../storage')
 function updateSeat() {}
 function getSeats(req, res) {
 	storage.events.get(req.params.event).get('seats').then(function(seats) {
-		res.send(seats)
+		res.send(seats.map(function(seat) {
+			return seat.toJSON()
+		}))
 	})
 }
 function occupySeat(req, res) {
@@ -30,10 +32,13 @@ function occupySeat(req, res) {
 			}
 			seat.occupant = req.user.id
 
-			return event.save()
+			return storage.events.update(event.id, event)
 				.then(function() {
 					res.send(200, seat)
 				})
+		},
+		function() {
+			res.send(404)
 		})
 		.done()
 }

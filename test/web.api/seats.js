@@ -18,19 +18,22 @@ describe('web.api/seats.js', function() {
 		it('should return a list of all seats', function() {
 			expect(data).to.approximate(
 				[ { id: 1
-				  , position: [ 0, 0 ]
 				  , occupant: 2
-				  , facing: 0
 				  }
 				, { id: 2
-				  , position: [ 0, 1 ]
-				  , facing: 0
 				  }
 				]
 			)
 		})
 	})
 	describe('When posting to /seats/:event', function() {
+		describe('and the seat does not exist', function() {
+			it('should return code 404', function() {
+				var options = { data: { seat: 1 } }
+				return expect(client.post('/seats/nan').get(0))
+					.to.eventually.have.property('statusCode', 404)
+			})
+		})
 		describe('and the seat is not already taken', function() {
 			var response
 			  , body
@@ -72,8 +75,11 @@ describe('web.api/seats.js', function() {
 				it('should no longer occupy the old seat', function() {
 					return client.get('/seats/1').get(1)
 						.then(function(seats) {
-							expect(_(seats).find(function(seat) { return seat.id == 2 }))
-								.not.to.contain.keys('occupant')
+							var seat = _(seats).find(function(seat) { return seat.id == 2 })
+							expect(seat)
+								.not.to.have.property('occupant')
+							expect(seat)
+								.not.to.have.property('occupant-name')
 						})
 				})
 			})

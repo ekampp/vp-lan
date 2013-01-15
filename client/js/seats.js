@@ -10,27 +10,27 @@ VP.seats = (function() {
 	}
 
 	function init(event) {
-		$.ajax('/views/events/seats', function(res) {
+		$.ajax('/views/events/tables', function(res) {
 			view = res.body
 		})
-		$('.event-seats').on('click', '.event-seats__row__seat', function(event) {
-			var seat = event.target
+		$('.interactable.event-seats').on('click', '.seat', function(event) {
+			var seat = event.currentTarget
 			  , seatId = seat.dataset.id
-			if(seat.classList.contains('event-seats__row__seat--occupied')) {
+			if(seat.classList.contains('seat--occupied')) {
 				// todo: notify user of error
 				console.log('err')
 				return
 			}
 			if(this.seat) {
-				$('.event-seats__row__seat[data-id="' + this.seat.id + '"]')
-					.removeClass('event-seats__row__seat--selected')
+				$('.seat[data-id="' + this.seat.id + '"]')
+					.removeClass('seat--selected')
 			}
 			if(this.seat && this.seat.id == seatId) {
 				this.seat = null
 			} else {
 				this.seat = { id: seatId }
-				$('.event-seats__row__seat[data-id="' + this.seat.id + '"]')
-					.addClass('event-seats__row__seat--selected')
+				$('.seat[data-id="' + this.seat.id + '"]')
+					.addClass('seat--selected')
 			}
 			this.toggleSubmitButton()
 		}.bind(this))
@@ -47,8 +47,8 @@ VP.seats = (function() {
 				, method: 'post'
 				, json: { seat: seatId }
 				}, function() {
-					$.ajax('/seats/1', function(res) {
-						var compiled = $.to_html(view, { 'seats-arr': seatsArr(res.body) } )
+					$.ajax('/seats/' + event, function(res) {
+						var compiled = $.to_html(view, { 'tables': tablesArr(res.body) } )
 						$('.event-seats').html(compiled)
 						console.log('seat updated..')
 					})
@@ -56,21 +56,24 @@ VP.seats = (function() {
 		}.bind(this))
 	}
 
-	function seatsArr(seats) {
-		var rows = []
-		seats.forEach(function(seat) {
-			arrAtRow(seat.position[1]).seats[seat.position[0]] = seat
-		})
-		for(var i = 0; i < rows.length; i++) {
-			rows[i] = arrAtRow(i)
-		}
-		return rows
-
-		function arrAtRow(idx) {
-			if(!rows[idx]) {
-				rows[idx] = { seats: [] }
+	function tablesArr(seats) {
+		var tables = []
+		  , added = 1
+		for(var i = 0; i < seats.length; i+=4) {
+			var table = { show: true }
+			for(var j = 1; j <= 4; j++) {
+				var seat = seats[i+j-1]
+				table['occupant-' + j] = !!seat.occupant
+				table['occupant-' + j + '-name'] = seat['occupant-name']
+				table['seat-' + j + '-id'] = seat.id
 			}
-			return rows[idx]
+			tables.push(table)
+			added ++
+			if(added == 4) {
+				added = 0
+				tables.push({ show: false })
+			}
 		}
+		return tables
 	}
 })()

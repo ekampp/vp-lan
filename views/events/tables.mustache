@@ -1,0 +1,42 @@
+{{#tables}}
+<div class="table-group">
+	{{#show}}
+	<div class="
+		seat
+		seat--left
+		{{#occupant-1}}seat--occupied{{/occupant-1}}"
+		data-id={{seat-1-id}}
+	>
+		<div class="seat__chair"></div>
+		<div class="seat__table">{{occupant-1-name}}</div>
+	</div
+	><div class="
+		seat
+		seat--right
+		{{#occupant-2}}seat--occupied{{/occupant-2}}"
+		data-id={{seat-2-id}}
+	>
+		<div class="seat__chair"></div>
+		<div class="seat__table">{{occupant-2-name}} </div>
+	</div
+	><div class="
+		seat
+		seat--left
+		{{#occupant-3}}seat--occupied{{/occupant-3}}"
+		data-id={{seat-3-id}}
+	>
+		<div class="seat__table seat__table--bot">{{occupant-3-name}} </div>
+		<div class="seat__chair"></div>
+	</div
+	><div class="
+		seat
+		seat--right
+		{{#occupant-4}}seat--occupied{{/occupant-4}}"
+		data-id={{seat-4-id}}
+	>
+		<div class="seat__table seat__table--bot">{{occupant-4-name}} </div>
+		<div class="seat__chair"></div>
+	</div>
+	{{/show}}
+</div>
+{{/tables}}

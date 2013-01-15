@@ -6,6 +6,7 @@ function $$(sel, scope) {
 	return (scope||document).querySelector(sel)
 }
 ;(function() {
+	$.up = $.closest
 	$.ajax.defer(require('q').defer)
 	$.ajax.defaults({ accept: 'application/json, text/plain;q=.9' })
 	$._select = function(sel, scope) {

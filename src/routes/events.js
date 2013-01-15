@@ -56,7 +56,7 @@ function getEvent(req, res) {
 	storage.events.get(req.params.id).then(function(event) {
 		if(req.accepts('html')) {
 			var partials =
-			    { seats: 'events/seats'
+			    { seats: 'events/tables'
 			    , 'seats-legend': 'events/seats-legend'
 			    }
 			res.render('events/item', transformEvent(event), partials)
@@ -83,23 +83,26 @@ function transformEvent(event) {
 		}).length
 		return left == 1 ? '1 seat left' : left + ' seats left'
 	}
-	event['seats-arr'] = (function(seats) {
-		var rows = []
-		seats.forEach(function(seat) {
-			arrAtRow(seat.position[1]).seats[seat.position[0]] = seat
-		})
-		for(var i = 0; i < rows.length; i++) {
-			rows[i] = arrAtRow(i)
-		}
-		return rows
-
-		function arrAtRow(idx) {
-			if(!rows[idx]) {
-				rows[idx] = { seats: [] }
+	event['tables'] = (function(seats) {
+		var tables = []
+		  , added = 1
+		for(var i = 0; i < seats.length; i+=4) {
+			var table = { show: true }
+			for(var j = 1; j <= 4; j++) {
+				var seat = seats[i+j-1]
+				table['occupant-' + j] = !!seat.occupant
+				table['occupant-' + j + '-name'] = seat['occupant-name']
+				table['seat-' + j + '-id'] = seat.id
 			}
-			return rows[idx]
+			tables.push(table)
+			added ++
+			if(added == 4) {
+				added = 0
+				tables.push({ show: false })
+			}
 		}
-	})(event.seats)
+		return tables
+	})(event.seats.toArray())
 
 	return event
 }

@@ -1,11 +1,13 @@
-var Backbone = require('backbone')
+var Model = require('./Model')
   , _ = require('underscore')
   , Q = require('q')
   , storage = { users: require('../storage/users') }
   , defineGetSetters = require('./utils').defineGetSetters
 
-module.exports = Backbone.Model.extend(
+module.exports = Model.extend(
 	{ resolveDependencies: resolveDependencies
+	, private: [ '_id' ]
+	, calculated: [ '!occupant', 'occupant-name' ]
 	}
 )
 
@@ -13,6 +15,7 @@ defineGetSetters(module.exports.prototype,
 	  [ 'occupant'
 	  , 'position'
 	  , 'facing'
+	  , 'occupant-name'
 	  ]
 )
 
@@ -21,7 +24,7 @@ function resolveDependencies() {
 		return storage.users.get(this.get('occupant'))
 			.then(function(user) {
 				this['!occupant'] = user
-				this['occupant-name'] = user.get('name') || user.get('username')
+				this['occupant-name'] = user.get('username')
 				return this
 			}.bind(this))
 	}

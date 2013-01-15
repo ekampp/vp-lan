@@ -1,16 +1,22 @@
-var Backbone = require('backbone')
+var Model = require('./Model')
   , _ = require('underscore')
   , Q = require('q')
   , Seats = require('./Seats')
   , defineGetSetters = require('./utils').defineGetSetters
 
-module.exports = Backbone.Model.extend(
+module.exports = Model.extend(
 	{ resolveDependencies: resolveDependencies
 	, save: save
+	, private: [ '_id' ]
+	, initialize: init
 	}
 )
 
 defineGetSetters(module.exports.prototype, ['start', 'end', 'seats'])
+
+function init(data) {
+	this.seats = new Seats(this.seats)
+}
 
 function save() {
 	var data = this.attributes
@@ -24,7 +30,6 @@ function save() {
 }
 
 function resolveDependencies() {
-	this.seats = new Seats(this.seats)
 	return this.seats.resolveDependencies()
 		.then(function() {
 			return this
