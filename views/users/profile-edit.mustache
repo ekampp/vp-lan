@@ -5,7 +5,7 @@
 		<input name=username id=in-username value="{{username}}" type=text>
 	</div>
 	<div>
-		<label class="form__lbl form__lbl--mandatory form--user__lbl" for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
+		<label class="form__lbl {{^is-logged-in}}form__lbl--mandatory{{/is-logged-in}} form--user__lbl" for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
 		<input name=password id=in-password type=password
 			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
 	</div>

@@ -23,7 +23,9 @@
 		if(!form.username.value.trim()) {
 			errors.push('VALIDATION NO USERNAME')
 		}
-		if(!form.password.value.trim()) {
+		if($('label[for=in-password].form__lbl--mandatory').length
+		&& !form.password.value.trim())
+		{
 			errors.push('VALIDATION NO PASSWORD')
 		}
 		if(!/.*@.*\..*/.test(form.email.value)) {
