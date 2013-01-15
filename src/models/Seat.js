@@ -21,7 +21,7 @@ function resolveDependencies() {
 		return storage.users.get(this.get('occupant'))
 			.then(function(user) {
 				this['!occupant'] = user
-				this['occupant-name'] = user.get('name') || user.get('username')
+				this['occupant-name'] = user.get('username')
 				return this
 			}.bind(this))
 	}
