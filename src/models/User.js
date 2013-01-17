@@ -1,11 +1,12 @@
-var Backbone = require('backbone')
+var Model = require('./Model')
   , _ = require('underscore')
   , Q = require('q')
   , defineGetSetters = require('./utils').defineGetSetters
 
-module.exports = Backbone.Model.extend(
+module.exports = Model.extend(
 	{ resolveDependencies: resolveDependencies
 	, conformsToRole: conformsToRole
+	, private: [ '_id', 'password' ]
 	}
 )
 

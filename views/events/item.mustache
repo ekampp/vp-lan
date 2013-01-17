@@ -6,15 +6,16 @@
 {{>login}}
 {{/is-logged-in}}
 
+<button disabled type=button class="js-btn-occupy-seat">{{#l10n}}events, BTN SELECT SEAT{{/l10n}}</button>
 <div class="venue">
 
-<div class="venue__bar">Bar</div>
+	<div class="venue__bar">Bar</div>
 
-<div class="event-seats {{#is-logged-in}}interactable{{/is-logged-in}}">
-{{>seats}}
-</div>
+	<div class="event-seats {{#is-logged-in}}interactable{{/is-logged-in}}">
+	{{>seats}}
+	</div>
 
-<div class="venue__scene">Scene</div>
+	<div class="venue__scene">Scene</div>
 
 </div>
 <button disabled type=button class="js-btn-occupy-seat">{{#l10n}}events, BTN SELECT SEAT{{/l10n}}</button>

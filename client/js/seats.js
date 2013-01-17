@@ -6,7 +6,10 @@ VP.seats = (function() {
 	       }
 
 	function toggleSubmitButton() {
-		$$('.js-btn-occupy-seat').disabled = !VP.user || !this.seat
+		var disabled = !VP.user || !this.seat
+		$('.js-btn-occupy-seat').forEach(function(seat) {
+			seat.disabled = disabled
+		})
 	}
 
 	function init(event) {

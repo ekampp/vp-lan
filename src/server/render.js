@@ -78,7 +78,7 @@ function render(req, res, view /*, ...args*/) {
 			  , data =
 			    { body: templates[1].render(options, extendPartials(templates[2]))
 			    , minify: minify
-			    , 'user-json': req.user ? JSON.stringify(req.user) : 'null'
+			    , 'user-json': req.user ? JSON.stringify(req.user.toJSON()) : 'null'
 			    , 'static-menu-text': function(menu) {
 			        var menu = _(statics).find(function(item) {
 			          return item.url == menu
