@@ -28,7 +28,8 @@ function createUser(req, res) {
 			.then(function(user) {
 				req.finc.msg = l10n.get('users', 'UPDATE OK')
 				req.finc.status = 'ok'
-				getUsers(req, res)
+				req.params.id = null
+				getUser(req, res)
 			}, function() {
 				res.send(400)
 			})
@@ -36,7 +37,7 @@ function createUser(req, res) {
 		return storage.users.add(req.body)
 			.then(function(user) {
 				res.cookie('x-user-token', user.id)
-				res.redirect('/')
+				res.redirect('/event')
 			},
 			function() {
 				res.send(400)

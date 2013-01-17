@@ -25,7 +25,7 @@ function login(req, res) {
 		.then(
 			function(user) {
 				res.cookie('x-user-token', user.id)
-				res.redirect('/')
+				res.redirect('/event')
 			},
 			function() {
 				res.render(
@@ -54,7 +54,7 @@ function static(req, res) {
 
 function logout(req, res) {
 	res.clearCookie('x-user-token')
-	res.redirect('/')
+	res.redirect('/event')
 }
 function render(view, data) {
 	return function(req, res) {
