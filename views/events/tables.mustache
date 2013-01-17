@@ -8,7 +8,7 @@
 		data-id={{seat-1-id}}
 	>
 		<div class="seat__chair"></div>
-		<div class="seat__table">{{occupant-1-name}}</div>
+		<div class="seat__table" title="{{occupant-1-name}}"><span class="seat__table__lbl">{{occupant-1-name}}</span></div>
 	</div
 	><div class="
 		seat
@@ -17,7 +17,7 @@
 		data-id={{seat-2-id}}
 	>
 		<div class="seat__chair"></div>
-		<div class="seat__table">{{occupant-2-name}} </div>
+		<div class="seat__table" title="{{occupant-2-name}}"><span class="seat__table__lbl">{{occupant-2-name}}</span></div>
 	</div
 	><div class="
 		seat
@@ -25,7 +25,7 @@
 		{{#occupant-3}}seat--occupied{{/occupant-3}}"
 		data-id={{seat-3-id}}
 	>
-		<div class="seat__table seat__table--bot">{{occupant-3-name}} </div>
+		<div title="{{occupant-3-name}}" class="seat__table seat__table--bot"><span class="seat__table__lbl">{{occupant-3-name}}</span></div>
 		<div class="seat__chair"></div>
 	</div
 	><div class="
@@ -34,7 +34,7 @@
 		{{#occupant-4}}seat--occupied{{/occupant-4}}"
 		data-id={{seat-4-id}}
 	>
-		<div class="seat__table seat__table--bot">{{occupant-4-name}} </div>
+		<div title="{{occupant-4-name}}" class="seat__table seat__table--bot"><span class="seat__table__lbl">{{occupant-4-name}}</span></div>
 		<div class="seat__chair"></div>
 	</div>
 	{{/show}}

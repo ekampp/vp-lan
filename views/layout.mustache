@@ -5,7 +5,10 @@
 /css/styles.css
 /js/modernizr.custom.33479.js
 {{/minify}}
-
+<!--[if lt IE 9]>
+{{#minify}}js/html5shiv/dist/html5shiv.js{{/minify}}
+<![end if]-->
+<body lang=en>
 <header>
 	<a href=/><img class="logo" src=/gfx/logo.jpg alt="Logo"></a>
 </header>
@@ -48,3 +51,4 @@ var VP = { user: {{{user-json}}} }
 /js/texts.js
 /js/index.js
 {{/minify}}
+</body>

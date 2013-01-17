@@ -1,4 +1,4 @@
-<form class="form form--users" method=post action=/users{{#other-user}}/{{username}}{{/other-user}}>
+<form class="form form--users" method=post action="/users{{#other-user}}/{{username}}{{/other-user}}">
 	<div class="form__errs"></div>
 	<div>
 		<label class="form__lbl form--user__lbl form__lbl--mandatory" for=in-username>{{#l10n}}users, LBL FORM USERNAME{{/l10n}}</label>
@@ -6,8 +6,10 @@
 	</div>
 	<div>
 		<label class="form__lbl {{^is-logged-in}}form__lbl--mandatory{{/is-logged-in}} form--user__lbl" for=in-password>{{#l10n}}users, LBL FORM PASSWORD{{/l10n}}</label>
-		<input name=password id=in-password type=password
-			placeholder="{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}">
+		<input name=password id=in-password type=password>
+		{{#is-logged-in}}
+		<span class="note">{{#l10n}}users, FORM PASSWORD PLACEHOLDER{{/l10n}}</span>
+		{{/is-logged-in}}
 	</div>
 
 	<div>

@@ -15,7 +15,7 @@
 	width: 300px;
 	height: 150px;
 	line-height: 150px;
-	margin: 100px 0 0 500px;
+	margin: 100px auto 0;
 }
 
 .event-seats {}
@@ -37,7 +37,7 @@
 
 .seat__table {
 	font-size: .8em;
-	overflow: none;
+	overflow: hidden;
 	text-overflow: ellipsis;
 	border: 2px solid black;
 	width: 70px;
@@ -45,6 +45,7 @@
 	line-height: 40px;
 	text-align: center;
 }
+
 .seat__table--bot {
 	border-top: 0;
 }
@@ -54,6 +55,17 @@
 .seat--right .seat__table {
 	border-left: 2px dashed black;
 }
+
+.seat__table__lbl {
+	line-height: normal;
+	display: inline-block;
+	vertical-align: middle;
+	-webkit-hyphens: auto;
+	   -moz-hyphens: auto;
+	    -ms-hyphens: auto;
+	hyphens: auto;
+}
+
 .seat__chair {
 	border: 2px solid black;
 	border-radius: 2px;

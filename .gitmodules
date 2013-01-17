@@ -1,0 +1,3 @@
+[submodule "client/js/html5shiv"]
+	path = client/js/html5shiv
+	url = git://github.com/aFarkas/html5shiv.git
