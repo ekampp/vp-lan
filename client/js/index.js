@@ -19,6 +19,5 @@ function $$(sel, scope) {
 		return (scope||document).querySelectorAll(sel)
 	}
 	// Initialize page object
-	$.page()
-	$.page.stop()
+	$.page({ dispatch: true, popstate: false, click: false })
 })()
