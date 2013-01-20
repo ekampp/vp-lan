@@ -18,8 +18,8 @@ VP.seats = (function() {
 		})
 		$('.interactable.event-seats').on('click', '.seat', function(event) {
 			var seat = event.currentTarget
-			  , seatId = seat.dataset.id
-			if(seat.classList.contains('seat--occupied')) {
+			  , seatId = seat.getAttribute('data-id')
+			if(seat.className.match(/(^| )seat--occupied($| )/)) {
 				// todo: notify user of error
 				console.log('err')
 				return
@@ -53,7 +53,6 @@ VP.seats = (function() {
 					$.ajax('/seats/' + event, function(res) {
 						var compiled = $.to_html(view, { 'tables': tablesArr(res.body) } )
 						$('.event-seats').html(compiled)
-						console.log('seat updated..')
 					})
 				})
 		}.bind(this))
