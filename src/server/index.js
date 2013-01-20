@@ -21,6 +21,11 @@ function start(settings) {
 	app.use(express.bodyParser())
 	app.use(express.cookieParser())
 	app.use(function(req, res, next) {
+		res.set(
+		{ 'Cache-Control': 'no-cache, must-revalidate'
+		, 'Pragma': 'no-cache'
+		, 'Expires': 'Sat, 26 Jul 1997 05:00:00 GMT'
+		})
 		req.finc = {}
 		next()
 	})
