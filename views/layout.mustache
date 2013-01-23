@@ -6,8 +6,20 @@
 /js/modernizr.custom.33479.js
 {{/minify}}
 <!--[if lt IE 9]>
-{{#minify}}/js/html5shiv/dist/html5shiv.js{{/minify}}
+<body><h2>Din browser er for gammel</h2>
+<p>Jeg er ked af at måtte indrømme det, men din browser blev erstattet for
+2 år siden, og det er ikke fair at holde internettet tilbage pga gammel
+software.</p>
+<p>For at se denne side, skal du opgradere til en moderne browser:</p>
+<ul>
+<li><a href="http://windows.microsoft.com/en-US/internet-explorer/download-ie">Internet Explorer</a>
+<li><a href="http://google.com/chrome">Google Chrome</a>
+<li><a href="http://opera.com">Opera</a>
+<li><a href="http://getfirefox.com">Firefox</a>
+</ul>
+</body>
 <![endif]-->
+<!--[if gte IE 9]><!-->
 <body lang=en>
 <header>
 	<a href=/><img class="logo" src=/gfx/logo.jpg alt="Logo"></a>
@@ -52,3 +64,4 @@ var VP = { user: {{{user-json}}} }
 /js/index.js
 {{/minify}}
 </body>
+<![endif]-->
