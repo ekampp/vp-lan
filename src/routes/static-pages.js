@@ -2,7 +2,8 @@ module.exports = function setup(app) {
 	app.get('/static-pages', getStaticPages)
 	app.post('/static-pages', middleware.auth.requireUserRole('admin'), updateStaticPage)
 
-	app.get(/\/static-pages\/(.*)/, getStaticPage)
+	app.get('/static-pages/:key', getStaticPage)
+	app.put('/static-pages/:key', middleware.auth.requireUserRole('admin'), setStaticPage)
 }
 
 var storage = require('../storage')
@@ -10,8 +11,8 @@ var storage = require('../storage')
   , middleware = require('../middleware')
 
 function getStaticPage(req, res) {
-	var key = req.params[0]
-	storage.static.get('/' + key).then(function(data) {
+	var key = req.params.key
+	storage.static.get(key).then(function(data) {
 		if(!data) {
 			return res.send(404)
 		}
@@ -36,12 +37,23 @@ function getStaticPages(req, res) {
 	})
 }
 
+function setStaticPage(req, res) {
+	var body = req.body
+	  , key = req.params.key
+	if(!body || typeof(body.content) != 'string' || !body.url || !body.url.trim()) {
+		return res.send(400, 'content and url required')
+	}
+	storage.static.update(key, body).then(function(data) {
+		res.send(200, data)
+	})
+}
+
 function updateStaticPage(req, res) {
 	var body = req.body
-	if(!body.url || !body.url.trim()) {
-		return res.send(400, 'url required')
+	if(!body.key || !body.key.trim()) {
+		return res.send(400, 'key required')
 	}
-	storage.static.update(body.url, body).then(function(data) {
+	storage.static.update(body.key, body).then(function(data) {
 		if(req.accepts('html')) {
 			res.redirect('/static-pages?m=ok')
 			return

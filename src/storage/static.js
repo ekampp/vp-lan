@@ -17,7 +17,7 @@ function collection() {
 function add(/* ...args*/) {
 	var args = Array.prototype.slice.call(arguments)
 	return Q.all(args.map(function(static) {
-		return update(static.url, static)
+		return update(static.key, static)
 	}))
 }
 
