@@ -56,10 +56,10 @@ function updateEvent(req, res) {
 function getEvent(req, res) {
 	Q.all(
 	[ storage.events.get(req.params.id)
-	, storage.static.get('event').get('html')
+	, storage.static.get('event')
 	]).then(function(args) {
 		var event = args[0]
-		  , text = args[1]
+		  , text = args[1] ? args[1].html : null
 		event.text = text
 		if(req.accepts('html')) {
 			var partials =
