@@ -8,9 +8,9 @@ describe('web.api/games.js', function() {
 	})
 
 	describe('When posting without login', function() {
-		it('should give status 403', function() {
+		it('should give status 401', function() {
 			return expect(client.post('/games', { form: {} }).get(0))
-				.to.eventually.have.property('statusCode', 403)
+				.to.eventually.have.property('statusCode', 401)
 		})
 	})
 

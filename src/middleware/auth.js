@@ -52,7 +52,10 @@ function requireUser(req, res, next) {
 
 function requireUserRole(role) {
 	return function(req, res, next) {
-		if(req.user && req.user.conformsToRole(role)) {
+		if(!req.user) {
+			return rejectRequest(req, res, 401)
+		}
+		if(req.user.conformsToRole(role)) {
 			return next()
 		}
 		rejectRequest(req, res, 403)

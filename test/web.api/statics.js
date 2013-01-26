@@ -77,7 +77,7 @@ describe('web.api/statics.js', function() {
 				var auth = helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
 				client.options({ headers: auth })
 			})
-			it('should return status 401', function() {
+			it('should return status 403', function() {
 				return expect(client.post('/static-pages', { form: data }).get(0))
 					.to.eventually.have.property('statusCode', 403)
 			})
