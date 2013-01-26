@@ -35,7 +35,7 @@ software.</p>
 	<div class="menu__user">
 		<a class="menu__link {{#is-profile}}menu__link--current{{/is-profile}}" href=/user>{{#l10n}}menu, PROFILE{{/l10n}}</a>
 		{{#is-admin}}
-		<a class="menu__link" href=/users>{{#l10n}}menu, USERS{{/l10n}}</a>
+		<a class="menu__link {{#is-users}}menu__link--current{{/is-users}}" href=/users>{{#l10n}}menu, USERS{{/l10n}}</a>
 		<a class="menu__link" href=/static-pages>{{#l10n}}menu, ADMIN EDIT STATIC PAGES{{/l10n}}</a>
 		<a class="menu__link" href=/admin/games>{{#l10n}}menu, ADMIN EDIT GAMES{{/l10n}}</a>
 		{{/is-admin}}

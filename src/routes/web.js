@@ -47,7 +47,7 @@ function static(req, res) {
 				return row.url == url
 			})
 			if(req.accepts('html')) {
-				req.currentPage = data.name
+				req.currentPage = data.key
 				res.render('static', data)
 			} else {
 				res.send(data)
