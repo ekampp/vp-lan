@@ -38,7 +38,7 @@ function getGames(req, res) {
 				return game.visibility == 'visible'
 			})
 			if(req.accepts('html')) {
-				return storage.static.get('/games').then(function(text) {
+				return storage.static.get('games').then(function(text) {
 					var data =
 					    { games: games
 					    , static: text

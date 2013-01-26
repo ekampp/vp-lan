@@ -15,6 +15,7 @@ module.exports = function setup(app) {
 var storage = require('../storage')
   , middleware = require('../middleware')
   , format = require('util').format
+  , Q = require('q')
 
 function getEvents(req, res) {
 	storage.events.getAll().then(function(events) {
@@ -53,7 +54,13 @@ function updateEvent(req, res) {
 }
 
 function getEvent(req, res) {
-	storage.events.get(req.params.id).then(function(event) {
+	Q.all(
+	[ storage.events.get(req.params.id)
+	, storage.static.get('event').get('html')
+	]).then(function(args) {
+		var event = args[0]
+		  , text = args[1]
+		event.text = text
 		if(req.accepts('html')) {
 			var partials =
 			    { seats: 'events/tables'

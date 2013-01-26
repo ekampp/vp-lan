@@ -81,7 +81,7 @@ function render(req, res, view /*, ...args*/) {
 			    , 'user-json': req.user ? JSON.stringify(req.user.toJSON()) : 'null'
 			    , 'static-menu-text': function(menu) {
 			        var menu = _(statics).find(function(item) {
-			          return item.url == menu
+			          return item.key == menu
 			        })
 			        return menu && menu.name
 			      }

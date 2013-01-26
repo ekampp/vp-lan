@@ -18,6 +18,7 @@ module.exports = function setup(app) {
 var bodyParser = require('express').urlencoded
   , storage = require('../storage')
   , l10n = require('../l10n')
+  , _ = require('underscore')
 
 function login(req, res) {
 	var data = req.body
@@ -38,12 +39,15 @@ function login(req, res) {
 }
 
 function static(req, res) {
-	var key = req.path
+	var url = req.path
 	storage.static
-		.get(key)
+		.getAll()
 		.then(function(data) {
+			data = _(data).find(function(row) {
+				return row.url == url
+			})
 			if(req.accepts('html')) {
-				req.currentPage = data.name
+				req.currentPage = data.key
 				res.render('static', data)
 			} else {
 				res.send(data)

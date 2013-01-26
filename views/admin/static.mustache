@@ -6,14 +6,14 @@
 <select class="js-select-page">
 <option>{{#l10n}}admin, STATIC PAGE SELECT PLACEHOLDER{{/l10n}}
 {{#pages}}
-<option value="{{url}}" {{#current}}selected{{/current}}>{{name}} - '{{url}}'
+<option value="{{key}}" {{#current}}selected{{/current}}>{{name}} - '{{url}}'
 {{/pages}}
 </select>
 
 <div class="grid">
 <fieldset class="grid--1o2">
 <form method=post>
-	<input type=hidden name=url>
+	<input type=hidden name=key>
 	<div>
 		<label for=in-name>{{#l10n}}admin, STATIC PAGE FORM LBL NAME{{/l10n}}</label>
 		<input name=name id=in-name type=text>

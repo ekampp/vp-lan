@@ -8,9 +8,11 @@ var Q = require('q')
 function setData() {
 	return storage.static.add(
 	         { url: '/'
+	         , key: 'k1'
 	         , content: 'abc'
 	         }
 	       , { url: '/a'
+	         , key: 'k2'
 	         , content: 'def'
 	         }
 	       )
