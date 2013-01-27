@@ -9,6 +9,7 @@ module.exports = function setup(app) {
 	app.put('/user', middleware.auth.requireUser, updateUser)
 	app.put('/users/:id', middleware.auth.requireUser, updateUser)
 	app.post('/users/:id', middleware.auth.requireUserRole('admin'), updateUser)
+	app.del('/users/:username', middleware.auth.requireUserRole('admin'), deleteUser)
 }
 
 var middleware = require('../middleware')
@@ -18,7 +19,8 @@ var middleware = require('../middleware')
   , _ = require('underscore')
 
 function deleteUser(req, res) {
-	storage.users.remove(req.user).then(function() {
+	var user = req.params.username || req.user
+	storage.users.remove(user).then(function() {
 		res.send(201)
 	})
 }

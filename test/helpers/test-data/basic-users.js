@@ -17,5 +17,10 @@ function setData() {
 	         , password: '2'
 	         , role: 'user'
 	         }
+	       , { id: 3
+	         , username: 'c'
+	         , password: '3'
+	         , role: 'user'
+	         }
 	       )
 }

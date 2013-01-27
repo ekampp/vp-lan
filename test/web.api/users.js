@@ -9,6 +9,58 @@ describe('web.api/users.js', function() {
 		client = helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
+	describe('When deleting `/users/:username`', function() {
+		beforeEach(function() {
+			return helpers.server.setData('basic-users')
+		})
+		describe('and not logged in', function() {
+			it('should return 401', function() {
+				return expect(client.del('/users/b').get(0))
+					.to.eventually.have.property('statusCode', 401)
+			})
+		})
+		describe('and logged with role `user`', function() {
+			var response
+			  , body
+			beforeEach(function() {
+				client.options(
+				{ headers: helpers.httpHelper.createBasicHttpAuthHeader('c', '3')
+				})
+				return client.del('/users/b').then(function(args) {
+					response = args[0]
+					body = args[1]
+				})
+			})
+			it('should return code 403', function() {
+				expect(response).to.have.property('statusCode', 403)
+			})
+			it('should delete the current user', function() {
+				return expect(client.get('/users/b').get(0))
+					.to.eventually.have.property('statusCode', 200)
+			})
+		})
+		describe('and logged in with role `admin`', function() {
+			var response
+			  , body
+			beforeEach(function() {
+				client.options(
+				{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				})
+				return client.del('/users/b').then(function(args) {
+					response = args[0]
+					body = args[1]
+				})
+			})
+			it('should return code 201', function() {
+				expect(response).to.have.property('statusCode', 201)
+			})
+			it('should delete the current user', function() {
+				return expect(client.get('/users/b').get(0))
+					.to.eventually.have.property('statusCode', 404)
+			})
+		})
+	})
+
 	describe('When deleting `/user`', function() {
 		beforeEach(function() {
 			return helpers.server.setData('basic-users')
@@ -31,7 +83,7 @@ describe('web.api/users.js', function() {
 					body = args[1]
 				})
 			})
-			it('should return code 200', function() {
+			it('should return code 201', function() {
 				expect(response).to.have.property('statusCode', 201)
 			})
 			it('should delete the current user', function() {
