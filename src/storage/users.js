@@ -3,6 +3,7 @@ module.exports =
 , get: get
 , getAll: getAll
 , update: update
+, remove: remove
 , auth: auth
 , reset: reset
 }
@@ -64,6 +65,11 @@ function add(data) {
 					return new User(data[0]).resolveDependencies()
 				})
 		})
+}
+
+function remove(user) {
+	var query = { username: user.username || user }
+	return collection().invoke('remove', query)
 }
 
 function update(user, data) {

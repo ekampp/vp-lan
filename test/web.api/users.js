@@ -9,6 +9,41 @@ describe('web.api/users.js', function() {
 		client = helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
+	describe('When deleting `/user`', function() {
+		beforeEach(function() {
+			return helpers.server.setData('basic-users')
+		})
+		describe('and not logged in', function() {
+			it('should return 401', function() {
+				return expect(client.del('/user').get(0))
+					.to.eventually.have.property('statusCode', 401)
+			})
+		})
+		describe('and logged in', function() {
+			var response
+			  , body
+			beforeEach(function() {
+				client.options(
+				{ headers: helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
+				})
+				return client.del('/user').then(function(args) {
+					response = args[0]
+					body = args[1]
+				})
+			})
+			it('should return code 200', function() {
+				expect(response).to.have.property('statusCode', 201)
+			})
+			it('should delete the current user', function() {
+				client.options(
+				{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				})
+				return expect(client.get('/users/b').get(0))
+					.to.eventually.have.property('statusCode', 404)
+			})
+		})
+	})
+
 	describe('When setting a duplicate username', function() {
 		beforeEach(function() {
 			return helpers.storage.users.reset().then(function() {
