@@ -1,5 +1,6 @@
 ;(function() {
 	$.page('/user', handleProfile)
+	$.page('/users/:username', handleProfile)
 	$.page('/signup', handleProfile)
 	function handleProfile(ctx) {
 		$('form').on('submit', function(event) {

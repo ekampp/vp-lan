@@ -18,6 +18,14 @@ function $$(sel, scope) {
 		}
 		return (scope||document).querySelectorAll(sel)
 	}
+	var msg = sessionStorage.getItem('msg')
+	if(msg) {
+		sessionStorage.removeItem('msg')
+		var target = $('.menu')[0].nextSibling
+		target.parentNode.insertBefore(
+		  Element.create('<div class="msg">' + msg + '</div>')
+		, target)
+	}
 	// Initialize page object
 	$.page({ dispatch: true, popstate: false, click: false })
 })()
