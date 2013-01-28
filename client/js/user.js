@@ -15,6 +15,22 @@
 				event.preventDefault();
 			}
 		})
+		$('.js-btn-del-user').on('click', function(event) {
+			var button = event.target
+			  , deletingSelf = !!ctx.params.username
+			if(confirm(button.getAttribute('data-txt-confirm'))) {
+				$.ajax(
+				{ method: 'delete'
+				, url: '/user' + (deletingSelf ? 's/' + ctx.params.username : '')
+				}).promise.then(function(res) {
+					if(res.status < 300) {
+						sessionStorage.setItem('msg', button.getAttribute('data-txt-completed'))
+						location.href = deletingSelf ? '/event' : '/users'
+					}
+					console.log(res)
+				})
+			}
+		})
 	}
 
 	function validationErrors(form) {

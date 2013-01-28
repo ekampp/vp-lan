@@ -9,6 +9,12 @@ describe('web.api/users.js', function() {
 		client = helper = helpers.httpHelper.createHelper(settings, { skipAuth: true })
 	})
 
+	describe('When deleting a user bound to a seat', function() {
+		it('should fix the ref up properly', function() {
+			expect(1).to.be(0)
+		})
+	})
+
 	describe('When deleting `/users/:username`', function() {
 		beforeEach(function() {
 			return helpers.server.setData('basic-users')
