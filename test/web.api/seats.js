@@ -26,6 +26,61 @@ describe('web.api/seats.js', function() {
 			)
 		})
 	})
+
+	describe('When deleting `/seats/:event`', function() {
+		describe('and the user is not logged in', function() {
+			it('should return code 401', function() {
+				client.options({ headers: null })
+				return expect(client.del('/seats/1').get(0))
+					.to.eventually.have.property('statusCode', 401)
+			})
+		})
+		describe('and the user has taken a seat', function() {
+			var response
+			beforeEach(function() {
+				client.options(
+				{ headers: helpers.httpHelper.createBasicHttpAuthHeader('b', '2')
+				})
+				return client.del('/seats/1').then(function(args) {
+					response = args[0]
+				})
+			})
+			it('should return code 204', function() {
+				expect(response).to.have.property('statusCode', 204)
+			})
+			it('should clear the seat for the user', function() {
+				return expect(client.get('/seats/1').get(1))
+					.to.not.eventually.approximate([{ occupant: 2 }])
+			})
+		})
+		describe('and the user has not taken a seat', function() {
+			var response
+			beforeEach(function() {
+				client.options(
+				{ headers: helpers.httpHelper.createBasicHttpAuthHeader('a', '1')
+				})
+				return client.del('/seats/1').then(function(args) {
+					response = args[0]
+				})
+			})
+			it('should return code 204', function() {
+				expect(response).to.have.property('statusCode', 204)
+			})
+			it('should not change any info', function() {
+				return expect(client.get('/seats/1').get(1))
+					.to.eventually.approximate(
+					[ { id: 1
+					  , occupant: 2
+					  }
+					, { id: 2
+					  }
+					, { id: 3
+					  }
+					])
+			})
+		})
+	})
+
 	describe('When posting to /seats/:event', function() {
 		describe('and the seat does not exist', function() {
 			it('should return code 404', function() {

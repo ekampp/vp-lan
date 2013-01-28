@@ -2,6 +2,7 @@ module.exports = function setup(app) {
 	app.get('/seats/:event', getSeats)
 	app.post('/seats/:event', middleware.auth.requireUser, occupySeat)
 	app.put('/seats/:event/:id', updateSeat)
+	app.del('/seats/:event', middleware.auth.requireUser, unoccupySeat)
 }
 
 var storage = require('../storage')
@@ -15,6 +16,25 @@ function getSeats(req, res) {
 		}))
 	})
 }
+
+function unoccupySeat(req, res) {
+	var event = req.params.event
+	  , userId = req.user.id
+	storage.events.get(event).then(function(event) {
+		var seat = event.seats.find(function(seat) {
+			return seat.occupant == userId
+		})
+		if(!seat) {
+			return
+		}
+		seat.occupant = null
+		return storage.events.update(event)
+	})
+	.then(function() {
+		res.send(204)
+	})
+}
+
 function occupySeat(req, res) {
 	storage.events.get(req.params.event)
 		.then(function(event) {
