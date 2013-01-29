@@ -38,6 +38,11 @@
   , "BTN SIGNUP": "Opret bruger"
   , "UPDATE OK": "Opdatering gennemført"
 
+  , "BTN DELETE USER": "Slet bruger"
+  , "DELETED SELF": "Din brugerkonto er blevet slettet."
+  , "DELETED OTHER": "Brugeren er blevet slettet."
+  , "CONFIRM DELETE": "Er du sikker? Denne handling kan ikke fortrydes."
+
   , "VALIDATION NO USERNAME": "Du skal angive et brugernavn."
   , "VALIDATION NO PASSWORD": "Du skal angive et kodeord."
   , "VALIDATION INVALID EMAIL": "Du skal udfylde e-mail korrekt."

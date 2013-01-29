@@ -9,6 +9,7 @@ module.exports = Model.extend(
 	, save: save
 	, private: [ '_id' ]
 	, initialize: init
+	, unseatUser: unseatUser
 	}
 )
 
@@ -34,4 +35,15 @@ function resolveDependencies() {
 		.then(function() {
 			return this
 		}.bind(this))
+}
+
+function unseatUser(user) {
+	var seat = this.seats.find(function(seat) {
+		return seat.occupant == user.id
+	})
+	if(!seat) {
+		return Q.resolve()
+	}
+	seat.occupant = null
+	return this.save()
 }

@@ -69,7 +69,17 @@ function add(data) {
 
 function remove(user) {
 	var query = { username: user.username || user }
-	return collection().invoke('remove', query)
+	return get(query).then(function(user) {
+		return require('../storage').events.getAll()
+			.then(function(events) {
+				return Q.all(events.map(function(event) {
+					return event.unseatUser(user)
+				}))
+			})
+			.then(function() {
+				return collection().invoke('remove', query)
+			})
+	})
 }
 
 function update(user, data) {
