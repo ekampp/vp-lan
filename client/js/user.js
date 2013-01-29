@@ -17,14 +17,14 @@
 		})
 		$('.js-btn-del-user').on('click', function(event) {
 			var button = event.target
-			  , deletingSelf = !!ctx.params.username
+			  , deletingSelf = !ctx.params.username
 			if(confirm(button.getAttribute('data-txt-confirm'))) {
 				$.ajax(
 				{ method: 'delete'
-				, url: '/user' + (deletingSelf ? 's/' + ctx.params.username : '')
+				, url: '/user' + (deletingSelf ? '' : 's/' + ctx.params.username)
 				}).promise.then(function(res) {
 					if(res.status < 300) {
-						sessionStorage.setItem('msg', button.getAttribute('data-txt-completed'))
+						sessionStorage.setItem('msg', button.getAttribute('data-txt-deleted'))
 						location.href = deletingSelf ? '/event' : '/users'
 					}
 					console.log(res)
