@@ -48,4 +48,14 @@
 	{{#is-logged-in}}{{#l10n}}users, BTN UPDATE{{/l10n}}{{/is-logged-in}}
 	{{^is-logged-in}}{{#l10n}}users, BTN SIGNUP{{/l10n}}{{/is-logged-in}}
 	</button>
+	<button class="js-btn-del-user"
+		data-txt-confirm="{{#l10n}}users, CONFIRM DELETE{{/l10n}}"
+		{{#other-user}}
+		data-txt-deleted="{{#l10n}}users, DELETED OTHER{{/l10n}}"
+		{{/other-user}}
+		{{^other-user}}
+		data-txt-deleted="{{#l10n}}users, DELETED SELF{{/l10n}}"
+		{{/other-user}}
+		type=button
+	>{{#l10n}}users, BTN DELETE USER{{/l10n}}</button>
 </form>

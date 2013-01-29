@@ -3,6 +3,7 @@ module.exports =
 , get: get
 , getAll: getAll
 , update: update
+, remove: remove
 , auth: auth
 , reset: reset
 }
@@ -64,6 +65,21 @@ function add(data) {
 					return new User(data[0]).resolveDependencies()
 				})
 		})
+}
+
+function remove(user) {
+	var query = { username: user.username || user }
+	return get(query).then(function(user) {
+		return require('../storage').events.getAll()
+			.then(function(events) {
+				return Q.all(events.map(function(event) {
+					return event.unseatUser(user)
+				}))
+			})
+			.then(function() {
+				return collection().invoke('remove', query)
+			})
+	})
 }
 
 function update(user, data) {

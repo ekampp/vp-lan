@@ -19,20 +19,13 @@ function getSeats(req, res) {
 
 function unoccupySeat(req, res) {
 	var event = req.params.event
-	  , userId = req.user.id
-	storage.events.get(event).then(function(event) {
-		var seat = event.seats.find(function(seat) {
-			return seat.occupant == userId
+	  , user = req.user
+	return storage.events.get(event)
+		.invoke('unseatUser', user)
+		.then(function() {
+			res.send(204)
 		})
-		if(!seat) {
-			return
-		}
-		seat.occupant = null
-		return storage.events.update(event)
-	})
-	.then(function() {
-		res.send(204)
-	})
+		.done()
 }
 
 function occupySeat(req, res) {
