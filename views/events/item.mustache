@@ -6,7 +6,10 @@
 {{>login}}
 {{/is-logged-in}}
 
+{{#is-logged-in}}
 <button disabled type=button class="js-btn-occupy-seat">{{#l10n}}events, BTN SELECT SEAT{{/l10n}}</button>
+<button type=button class="js-btn-unoccupy-seat">{{#l10n}}events, BTN UNOCCUPY SEAT{{/l10n}}</button>
+{{/is-logged-in}}
 <div class="venue">
 
 	<div class="venue__bar">Bar</div>
@@ -18,4 +21,7 @@
 	<div class="venue__scene">Scene</div>
 
 </div>
+{{#is-logged-in}}
 <button disabled type=button class="js-btn-occupy-seat">{{#l10n}}events, BTN SELECT SEAT{{/l10n}}</button>
+<button type=button class="js-btn-unoccupy-seat">{{#l10n}}events, BTN UNOCCUPY SEAT{{/l10n}}</button>
+{{/is-logged-in}}

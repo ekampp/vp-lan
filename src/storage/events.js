@@ -81,6 +81,10 @@ function getAll() {
 		})
 }
 function update(id, event) {
+	if(!event) {
+		event = id
+		id = event.id
+	}
 	var query = { id: +id }
 	  , options = { new: true, upsert: true }
 	  , sort = []
