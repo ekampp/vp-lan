@@ -1,6 +1,7 @@
 { "events":
   { "NEED LOGIN": "Det er nødvendigt at logge ind før du kan registere for et event.\n\nDette gør det muligt for os at opdatere dig om ændringer, samt du kan vælge et andet sæde hvis du ønsker"
   , "BTN SELECT SEAT": "Vælg sæde"
+  , "BTN UNOCCUPY SEAT": "Annullér sædereservation"
   , "SEAT LEGEND TITLE": "Forklaring"
   , "SEAT LEGEND OCCUPIED": "Optaget"
   , "SEAT LEGEND UNOCCUPIED": "Ledig"

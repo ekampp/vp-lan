@@ -49,13 +49,22 @@ VP.seats = (function() {
 				{ url: '/seats/' + event
 				, method: 'post'
 				, json: { seat: seatId }
-				}, function() {
-					$.ajax('/seats/' + event, function(res) {
-						var compiled = $.to_html(view, { 'tables': tablesArr(res.body) } )
-						$('.event-seats').html(compiled)
-					})
-				})
+				}, reloadSeats)
 		}.bind(this))
+
+		$('.js-btn-unoccupy-seat').on('click', function() {
+			$.ajax(
+			{ url: '/seats/' + event
+			, method: 'delete'
+			}, reloadSeats)
+		})
+
+		function reloadSeats() {
+			$.ajax('/seats/' + event, function(res) {
+				var compiled = $.to_html(view, { 'tables': tablesArr(res.body) } )
+				$('.event-seats').html(compiled)
+			})
+		}
 	}
 
 	function tablesArr(seats) {
