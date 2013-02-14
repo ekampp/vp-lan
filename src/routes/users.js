@@ -39,8 +39,9 @@ function createUser(req, res) {
 				req.finc.status = 'ok'
 				req.params.id = null
 				getUser(req, res)
-			}, function() {
-				res.send(400)
+			},
+			function(error) {
+				res.send(400, error)
 			})
 	} else {
 		return storage.users.add(req.body)
@@ -48,8 +49,8 @@ function createUser(req, res) {
 				res.cookie('x-user-token', user.id)
 				res.redirect('/event')
 			},
-			function() {
-				res.send(400)
+			function(error) {
+				res.send(400, error)
 			})
 	}
 }
